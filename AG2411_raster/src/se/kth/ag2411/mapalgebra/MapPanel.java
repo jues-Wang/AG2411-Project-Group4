@@ -26,5 +26,10 @@ public class MapPanel extends JPanel {
 		super.paintComponent(g); // first, do what JPanel would normally do. Then do:
 		g.drawImage(image, 0, 0, image.getWidth()*scale, image.getHeight()*scale, this);
 	}
+	
+	public void setExtendedState(int maximizedBoth) {
+		// TODO Auto-generated method stub
+		
+	}
 	// The @Override tag will be ignored by the complier. It just signifies that MapPanel modifies JPanel’s paintComponent() method.
 }
