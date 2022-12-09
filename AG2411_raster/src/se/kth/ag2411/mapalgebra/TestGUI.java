@@ -33,7 +33,6 @@ import javax.swing.SpinnerNumberModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
-//import com.jgoodies.forms.factories.DefaultComponentFactory;
 import java.awt.Label;
 import se.kth.ag2411.mapalgebra.RoundedBorder;
 
@@ -161,7 +160,7 @@ public class TestGUI extends JFrame {
 		
 			// Fill head panel:
 			// Menu bar
-			int radius = 20;  	// Define radius for Buttons in the menu bar.
+			int radius = 20;  	// Define radius for border of buttons in the menu bar.
 			
 			javax.swing.JMenuBar menuBar = new javax.swing.JMenuBar();
 			menuBar.setBorderPainted(false);
@@ -225,6 +224,15 @@ public class TestGUI extends JFrame {
 			mnToolbox.add(mnLocal);
 			
 			JMenuItem mnLocalSum = new JMenuItem("LocalSum");
+			mnLocalSum.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					JFrame popUp = new JFrame();
+					JPanel popUpWindow = null;
+					popUp.add(popUpWindow);
+					
+				}
+			});
 			mnLocal.add(mnLocalSum);
 			
 			JMenuItem mnLocalDiff = new JMenuItem("LocalDiff");
@@ -274,7 +282,6 @@ public class TestGUI extends JFrame {
 			// HELP = MANUAL
 			JMenu mnHelp = new JMenu("Help");
 			mnHelp.setForeground(mainColor2);
-			//mnHelp.setBackground(mainColor);
 			mnHelp.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
 			mnHelp.setBorder(new LineBorder(mainColor2, 1, true));
 			mnHelp.setBorder(new RoundedBorder(radius));
@@ -400,19 +407,13 @@ public class TestGUI extends JFrame {
 			Component horizontalStrut_2 = Box.createHorizontalStrut(40);
 			bottomPanel.add(horizontalStrut_2);
 			
-			JTextArea txtrSelectedCell = new JTextArea();
-			txtrSelectedCell.setText("Selected Cell:");
-			txtrSelectedCell.setTabSize(40);
-			txtrSelectedCell.setOpaque(false);
-			txtrSelectedCell.setForeground(new Color(187, 202, 192));
-			txtrSelectedCell.setFont(new Font("Brandon Grotesque Regular", Font.BOLD, 12));
-			bottomPanel.add(txtrSelectedCell);
-			
-			Label label_2 = new Label("01");
-			label_2.setAlignment(Label.RIGHT);
-			label_2.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-			label_2.setBackground(Color.WHITE);
-			bottomPanel.add(label_2);
+			JTextArea txtr_sC = new JTextArea();
+			txtr_sC.setText("Selected Cell");
+			txtr_sC.setTabSize(40);
+			txtr_sC.setOpaque(false);
+			txtr_sC.setForeground(new Color(187, 202, 192));
+			txtr_sC.setFont(new Font("Brandon Grotesque Regular", Font.BOLD, 12));
+			bottomPanel.add(txtr_sC);
 			
 			JTextArea txtrValue = new JTextArea();
 			txtrValue.setText("value:");
@@ -422,52 +423,52 @@ public class TestGUI extends JFrame {
 			txtrValue.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
 			bottomPanel.add(txtrValue);
 			
-			Label label_3 = new Label("01");
-			label_3.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-			label_3.setBackground(Color.WHITE);
-			label_3.setAlignment(Label.RIGHT);
-			bottomPanel.add(label_3);
+			Label sC_value_label = new Label("01");
+			sC_value_label.setAlignment(Label.RIGHT);
+			sC_value_label.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			sC_value_label.setBackground(Color.WHITE);
+			bottomPanel.add(sC_value_label);
 			
-			JTextArea txtrId = new JTextArea();
-			txtrId.setText("ID:");
-			txtrId.setTabSize(40);
-			txtrId.setOpaque(false);
-			txtrId.setForeground(new Color(187, 202, 192));
-			txtrId.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-			bottomPanel.add(txtrId);
+			JTextArea sC_ID = new JTextArea();
+			sC_ID.setText("ID:");
+			sC_ID.setTabSize(40);
+			sC_ID.setOpaque(false);
+			sC_ID.setForeground(new Color(187, 202, 192));
+			sC_ID.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			bottomPanel.add(sC_ID);
 			
-			Label label = new Label("01");
-			label.setAlignment(Label.RIGHT);
-			label.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-			label.setBackground(Color.WHITE);
-			bottomPanel.add(label);
+			Label sC_ID_label = new Label("01");
+			sC_ID_label.setAlignment(Label.RIGHT);
+			sC_ID_label.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			sC_ID_label.setBackground(Color.WHITE);
+			bottomPanel.add(sC_ID_label);
 			
-			JTextArea txtrX = new JTextArea();
-			txtrX.setText("x:");
-			txtrX.setTabSize(40);
-			txtrX.setOpaque(false);
-			txtrX.setForeground(new Color(187, 202, 192));
-			txtrX.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-			bottomPanel.add(txtrX);
+			JTextArea sC_x = new JTextArea();
+			sC_x.setText("x:");
+			sC_x.setTabSize(40);
+			sC_x.setOpaque(false);
+			sC_x.setForeground(new Color(187, 202, 192));
+			sC_x.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			bottomPanel.add(sC_x);
 			
-			Label label_1 = new Label("333");
-			label_1.setAlignment(Label.RIGHT);
-			label_1.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-			label_1.setBackground(Color.WHITE);
-			bottomPanel.add(label_1);
+			Label sC_x_label = new Label("333");
+			sC_x_label.setAlignment(Label.RIGHT);
+			sC_x_label.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			sC_x_label.setBackground(Color.WHITE);
+			bottomPanel.add(sC_x_label);
 			
-			JTextArea txtrY = new JTextArea();
-			txtrY.setText("y:");
-			txtrY.setTabSize(40);
-			txtrY.setOpaque(false);
-			txtrY.setForeground(new Color(187, 202, 192));
-			txtrY.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-			bottomPanel.add(txtrY);
+			JTextArea sC_y = new JTextArea();
+			sC_y.setText("y:");
+			sC_y.setTabSize(40);
+			sC_y.setOpaque(false);
+			sC_y.setForeground(new Color(187, 202, 192));
+			sC_y.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			bottomPanel.add(sC_y);
 			
-			Label label_1_1 = new Label("2");
-			label_1_1.setAlignment(Label.RIGHT);
-			label_1_1.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-			label_1_1.setBackground(Color.WHITE);
-			bottomPanel.add(label_1_1);
+			Label sC_y_label = new Label("2");
+			sC_y_label.setAlignment(Label.RIGHT);
+			sC_y_label.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			sC_y_label.setBackground(Color.WHITE);
+			bottomPanel.add(sC_y_label);
 	}
 }

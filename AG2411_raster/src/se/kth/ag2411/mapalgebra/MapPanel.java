@@ -7,6 +7,10 @@ import javax.swing.JPanel;
 public class MapPanel extends JPanel {
 	// MapPanel is a subclass of JPanel and thus inherits all its attributes and methods.
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// ATTRIBUTES
 	// All the attributes of JPanel (which are automatically inherited), plus:
 	public BufferedImage image;
