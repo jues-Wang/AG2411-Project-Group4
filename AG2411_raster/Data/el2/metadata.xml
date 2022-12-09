@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xml:lang="sv"><Esri><CreaDate>20221107</CreaDate><CreaTime>16104500</CreaTime><ArcGISFormat>1.0</ArcGISFormat><SyncOnce>TRUE</SyncOnce><DataProperties><lineage><Process ToolSource="c:\program files (x86)\arcgis\desktop10.8\ArcToolbox\Toolboxes\Conversion Tools.tbx\ASCIIToRaster" Date="20221107" Time="161045">ASCIIToRaster C:\Users\cvbos\eclipse-workspace\AG2411_raster\Data\elevation.txt C:\Users\cvbos\eclipse-workspace\AG2411_raster\Data\el2 FLOAT</Process></lineage></DataProperties></Esri></metadata>
