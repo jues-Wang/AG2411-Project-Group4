@@ -34,6 +34,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JLabel;
 import java.awt.Label;
 import se.kth.ag2411.mapalgebra.RoundedBorder;
 
@@ -227,13 +228,15 @@ public class TestGUI extends JFrame {
 			mnToolbox.add(mnLocal);
 			
 			JMenuItem mnLocalSum = new JMenuItem("LocalSum");
-			mnLocalSum.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					LocalWindow frame = new LocalWindow();	
-					frame.NewWindow(null);
+			mnLocalSum.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					JFrame popUp = new JFrame();
+					JPanel popUpWindow = null;
+					popUp.add(popUpWindow);
+					
 				}
 			});
-			
 			mnLocal.add(mnLocalSum);
 			
 			JMenuItem mnLocalDiff = new JMenuItem("LocalDiff");
