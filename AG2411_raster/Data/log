@@ -1,0 +1,4 @@
+202211041656   0     0     0cvbos C:\Users\cvbos\eclipse-workspace\AG2411_raster\Data\elevation_out = ASCIIGRID( C:\Users\cvbos\ECLIPS~1\AG2411~1\Data\ELEVAT~2.TX
+202211041657   0     0     0cvbos C:\Users\cvbos\eclipse-workspace\AG2411_raster\Data\veg_out = ASCIIGRID( C:\Users\cvbos\ECLIPS~1\AG2411~1\Data\VEGETA~2.TXT, INT
+202211071610   0     0     0cvbos C:\Users\cvbos\eclipse-workspace\AG2411_raster\Data\el2 = ASCIIGRID( C:\Users\cvbos\ECLIPS~1\AG2411~1\Data\ELEVAT~1.TXT, FLOAT)
+202211071611   0     0     0cvbos C:\Users\cvbos\eclipse-workspace\AG2411_raster\Data\el2_out = ASCIIGRID( C:\Users\cvbos\ECLIPS~1\AG2411~1\Data\ELEVAT~3.TXT, FLO

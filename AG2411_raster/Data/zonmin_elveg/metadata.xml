@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xml:lang="sv"><Esri><CreaDate>20221119</CreaDate><CreaTime>10520600</CreaTime><ArcGISFormat>1.0</ArcGISFormat><SyncOnce>TRUE</SyncOnce><DataProperties><lineage><Process ToolSource="c:\program files (x86)\arcgis\desktop10.8\ArcToolbox\Toolboxes\Spatial Analyst Tools.tbx\ZonalStatistics" Date="20221119" Time="105206">ZonalStatistics vegetation.txt Value elevation.txt C:\Users\cvbos\eclipse-workspace\AG2411_raster\Data\zonmin_elveg MINIMUM DATA</Process></lineage></DataProperties></Esri></metadata>
