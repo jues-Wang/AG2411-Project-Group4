@@ -11,6 +11,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JFileChooser;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.awt.event.ActionEvent;
 import javax.swing.JLayeredPane;
 import java.awt.CardLayout;
@@ -23,6 +24,8 @@ import javax.swing.JTextArea;
 import javax.swing.Box;
 import javax.swing.SwingConstants;
 import java.awt.Component;
+import java.awt.Dimension;
+
 import javax.swing.JToggleButton;
 import java.awt.Button;
 import javax.swing.JSpinner;
@@ -107,27 +110,47 @@ public class TestGUI extends JFrame {
 		splitPane.setBackground(new Color(255, 255, 255));
 		contentPanel.add(splitPane);
 		
-			final JPanel panelTOC = new JPanel();
-			panelTOC.setBackground(mainColor2);
-			splitPane.setLeftComponent(panelTOC);
-			panelTOC.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-			
-			JTextArea txtTOC = new JTextArea();
-			txtTOC.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-			txtTOC.setText("Observation rasters");
-			txtTOC.setOpaque(false);
-			txtTOC.setForeground(mainColor);
-			txtTOC.setTabSize(40);
-			panelTOC.add(txtTOC);
-			
-			final JPanel panelMAP = new JPanel();
-			panelMAP.setBackground(new Color(255, 255, 255));
-			splitPane.setRightComponent(panelMAP);
-			panelMAP.setLayout(new CardLayout(0, 0));
-			
-			final JLayeredPane layeredPanel = new JLayeredPane();	// to LAYER the maps ??
-			panelMAP.add(layeredPanel, "name_927277592538900");
-			layeredPanel.setLayout(new CardLayout(0, 0));			// Layout is important
+		final JPanel panelTOC = new JPanel();
+		panelTOC.setBackground(mainColor2);
+		splitPane.setLeftComponent(panelTOC);
+		panelTOC.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		JTextArea txtTOC = new JTextArea();
+		txtTOC.setText("                              ");
+		txtTOC.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+		txtTOC.setOpaque(false);
+		txtTOC.setForeground(mainColor);
+		txtTOC.setTabSize(40);
+		panelTOC.add(txtTOC);
+
+		final JPanel panelMAP = new JPanel();
+//		panelMAP.setBackground(new Color(255, 255, 255));
+		splitPane.setRightComponent(panelMAP);
+		panelMAP.setLayout(new CardLayout(0, 0));
+
+		final JLayeredPane layeredPanel = new JLayeredPane();	// to LAYER the maps ??
+		panelMAP.add(layeredPanel, "name_927277592538900");
+//		layeredPanel.setLayout(new CardLayout(0, 0));			// Layout is important
+		
+		// Initializing
+		int[] backgroundColor = new int[3];
+		backgroundColor[0] = 255;
+		backgroundColor[1] = 255;
+		backgroundColor[2] = 255;
+		int width = 600;
+		int height = 400;
+		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); // Dimensions?
+		WritableRaster raster = image.getRaster();
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				raster.setPixel(i, j, backgroundColor);
+			}
+		}
+		int scale = 3;
+		MapPanel mapPanel = new MapPanel(image, scale);
+		layeredPanel.add(mapPanel, BorderLayout.CENTER);
+		mapPanel.setBounds(200, 200, 300, 300);	
+		mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		// Create head Panel.
 		JPanel headPanel = new JPanel();
@@ -267,23 +290,43 @@ public class TestGUI extends JFrame {
 					
 					int result = fileChooser.showOpenDialog(TestGUI.this);
 					int scale = 3;
-					if (result == JFileChooser.APPROVE_OPTION) {
-						File[] selectedFiles = fileChooser.getSelectedFiles();
-						for (int i = 0; i < selectedFiles.length; i++) {
-							System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
-							Layer layer = new Layer ("layer", selectedFiles[i].getAbsolutePath());
-							
-							BufferedImage layerImage;
-							layerImage = layer.toImage();
-							
-							MapPanel mapPanel = new MapPanel(layerImage, scale);
-							layeredPanel.add(mapPanel, BorderLayout.CENTER);
-							mapPanel.setBounds(200, 200, 300, 300);	
-							mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
-						
-							//panelTOC.add(, selectedFiles[i].getName());
-						}
+					if (result != JFileChooser.APPROVE_OPTION) { // File chooser accepts .java and .class files for some reason
+						System.out.println("Incorrect file type.");
+						System.exit(0);
 					}
+//					layeredPanel.remove(mapPanel);
+					File[] selectedFiles = fileChooser.getSelectedFiles();
+					for (int i = 0; i < selectedFiles.length; i++) {
+						System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
+						Layer layer = new Layer ("layer", selectedFiles[i].getAbsolutePath());
+						
+						BufferedImage layerImage;
+						layerImage = layer.toImage();
+						
+						MapPanel mapPanel = new MapPanel(layerImage, scale);
+						layeredPanel.add(mapPanel, i); // BorderLayout.CENTER
+						mapPanel.setBounds(200, 200, 300, 300);	
+						mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+					}
+					
+//					if (result == JFileChooser.APPROVE_OPTION) {
+//						layeredPanel.remove(mapPanel);
+//						File[] selectedFiles = fileChooser.getSelectedFiles();
+//						for (int i = 0; i < selectedFiles.length; i++) {
+//							System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
+//							Layer layer = new Layer ("layer", selectedFiles[i].getAbsolutePath());
+//							
+//							BufferedImage layerImage;
+//							layerImage = layer.toImage();
+//							
+//							MapPanel mapPanel = new MapPanel(layerImage, scale);
+//							layeredPanel.add(mapPanel, BorderLayout.CENTER);
+//							mapPanel.setBounds(200, 200, 300, 300);	
+//							mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//							layeredPanel.pack();
+//							panelTOC.add(, selectedFiles[i].getName());
+//						}
+//					}
 				}
 			});
 			
