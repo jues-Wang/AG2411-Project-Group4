@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JFileChooser;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -22,6 +23,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -41,7 +43,9 @@ public class TestGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPanel;
-	
+	public static MapPanel mPanel;
+	public static int zoomLvl = 4;
+    public static TestGUI app;
 	
 	// Launch the application.
 	public static void main(String[] args) {
@@ -55,6 +59,33 @@ public class TestGUI extends JFrame {
 				}
 			}
 		});
+	}
+	
+	public static void render(BufferedImage image, int scale){
+		System.out.println("render triggered");
+		mPanel = new MapPanel(image, scale);
+
+		app.getContentPane().add(mPanel, BorderLayout.CENTER);
+		app.revalidate();
+	}
+
+
+	public static void zoom(int change){
+		if (mPanel != null){
+			zoomLvl = zoomLvl+ change;
+			mPanel.scale = zoomLvl;
+			mPanel.revalidate();
+			mPanel.repaint();
+			System.out.println("zoom triggered, new zoom lvl = "+zoomLvl);
+
+		} else {
+			JOptionPane.showMessageDialog(
+					app,
+					"Unable to preform action: no layer loaded",
+					"No Layer",
+					JOptionPane.OK_OPTION
+					);
+		}
 	}
 	
 	public TestGUI() {
@@ -124,33 +155,31 @@ public class TestGUI extends JFrame {
 		panelTOC.add(txtTOC);
 
 		final JPanel panelMAP = new JPanel();
-//		panelMAP.setBackground(new Color(255, 255, 255));
 		splitPane.setRightComponent(panelMAP);
 		panelMAP.setLayout(new CardLayout(0, 0));
 
 		final JLayeredPane layeredPanel = new JLayeredPane();	// to LAYER the maps ??
 		panelMAP.add(layeredPanel, "name_927277592538900");
-//		layeredPanel.setLayout(new CardLayout(0, 0));			// Layout is important
 		
 		// Initializing
-		int[] backgroundColor = new int[3];
-		backgroundColor[0] = 255;
-		backgroundColor[1] = 255;
-		backgroundColor[2] = 255;
-		int width = 600;
-		int height = 400;
-		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); // Dimensions?
-		WritableRaster raster = image.getRaster();
-		for (int i = 0; i < width; i++) {
-			for (int j = 0; j < height; j++) {
-				raster.setPixel(i, j, backgroundColor);
-			}
-		}
-		int scale = 3;
-		MapPanel mapPanel = new MapPanel(image, scale);
-		layeredPanel.add(mapPanel, BorderLayout.CENTER);
-		mapPanel.setBounds(200, 200, 300, 300);	
-		mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//		int[] backgroundColor = new int[3];
+//		backgroundColor[0] = 255;
+//		backgroundColor[1] = 255;
+//		backgroundColor[2] = 255;
+//		int width = 600;
+//		int height = 400;
+//		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); // Dimensions?
+//		WritableRaster raster = image.getRaster();
+//		for (int i = 0; i < width; i++) {
+//			for (int j = 0; j < height; j++) {
+//				raster.setPixel(i, j, backgroundColor);
+//			}
+//		}
+//		int scale = 3;
+//		MapPanel mapPanel = new MapPanel(image, scale);
+//		layeredPanel.add(mapPanel, BorderLayout.CENTER);
+//		mapPanel.setBounds(200, 200, 300, 300);	
+//		mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		// Create head Panel.
 		JPanel headPanel = new JPanel();
@@ -292,7 +321,7 @@ public class TestGUI extends JFrame {
 					int scale = 3;
 					
 					if (result == JFileChooser.APPROVE_OPTION) {
-						layeredPanel.remove(mapPanel);
+//						layeredPanel.remove(mapPanel);
 						File[] selectedFiles = fileChooser.getSelectedFiles();
 						for (int i = 0; i < selectedFiles.length; i++) {
 							System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
@@ -301,10 +330,10 @@ public class TestGUI extends JFrame {
 							BufferedImage layerImage;
 							layerImage = layer.toImage();
 							
-							MapPanel mapPanel = new MapPanel(layerImage, scale);
-							layeredPanel.add(mapPanel, BorderLayout.CENTER);
-							mapPanel.setBounds(200, 200, 300, 300);	
-							mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+							mPanel = new MapPanel(layerImage, scale);
+							layeredPanel.add(mPanel, BorderLayout.CENTER);
+							mPanel.setBounds(0, 0, 2000, 2000);	
+							mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						}
 					}
 				}
@@ -317,6 +346,27 @@ public class TestGUI extends JFrame {
 			
 			JMenuItem mntmExit = new JMenuItem("Exit");
 			mnFile.add(mntmExit);
+			
+			JButton btnZoomIn = new JButton("ZoomIn");
+			btnZoomIn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
+			btnZoomIn.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				zoom(1);}
+			});
+			menuBar.add(btnZoomIn);
+
+			JButton btnZoomOut = new JButton("ZoomOut");
+			btnZoomOut.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					zoom(-1);
+				}
+			});
+			menuBar.add(btnZoomOut);
 			
 			Component verticalStrut = Box.createVerticalStrut(9);
 			headPanel.add(verticalStrut, BorderLayout.NORTH);
