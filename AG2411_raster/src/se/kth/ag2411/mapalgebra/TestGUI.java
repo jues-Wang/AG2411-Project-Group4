@@ -251,9 +251,17 @@ public class TestGUI extends JFrame {
 			// Local operations
 			JMenu mnLocal = new JMenu("Local operations");
 			mnToolbox.add(mnLocal);
-			
+		
+			// J start
 			JMenuItem mnLocalSum = new JMenuItem("LocalSum");
+			mnLocalSum.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					LocalWindow frame = new LocalWindow();	
+					frame.NewWindow(null);
+				}
+			});
 			mnLocal.add(mnLocalSum);
+			// J end
 			
 			JMenuItem mnLocalDiff = new JMenuItem("LocalDiff");
 			mnLocal.add(mnLocalDiff);
