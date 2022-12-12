@@ -47,11 +47,7 @@ public class zooming extends JFrame {
             Logger.getLogger(zooming.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        infoLabel = new JLabel("Roll to zoom. Click and drag to move.", JLabel.CENTER);
-        infoLabel.setFont(new Font(infoLabel.getFont().getFontName(), Font.PLAIN, 26));
-        infoLabel.setBounds(50, height - 180, width - 100, 80);
-        this.add(infoLabel);
-        infoLabel.setVisible(true);
+       
 
     }
 
