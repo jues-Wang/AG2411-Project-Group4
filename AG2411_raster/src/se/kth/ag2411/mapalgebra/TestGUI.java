@@ -35,6 +35,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 //import com.jgoodies.forms.factories.DefaultComponentFactory;
 import java.awt.Label;
+import se.kth.ag2411.mapalgebra.RoundedBorder;
 
 
 public class TestGUI extends JFrame {
