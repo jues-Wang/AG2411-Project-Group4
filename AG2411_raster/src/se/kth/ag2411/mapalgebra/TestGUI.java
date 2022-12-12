@@ -118,9 +118,9 @@ public class TestGUI extends JFrame {
 		splitPane.setLeftComponent(panelTOC);
 		panelTOC.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		JTextArea txtTOC = new JTextArea();
-		txtTOC.setText("                              ");
-		txtTOC.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+		JTextArea txtTOC = new JTextArea();	// need to change it (now we can edit the text lol)
+		txtTOC.setFont(new Font(mainFont, Font.PLAIN, 12));
+		txtTOC.setText("Observation rasters");
 		txtTOC.setOpaque(false);
 		txtTOC.setForeground(mainColor);
 		txtTOC.setTabSize(40);
