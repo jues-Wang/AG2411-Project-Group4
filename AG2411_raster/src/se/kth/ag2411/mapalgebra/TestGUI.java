@@ -359,6 +359,24 @@ public class TestGUI extends JFrame {
 			
 			// Fill up bottom panel:
 			Button fullExtent = new Button("Full Extent");
+			fullExtent.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int scale = 3;
+						File[] selectedFiles = fileChooser.getSelectedFiles();
+						for (int i = 0; i < selectedFiles.length; i++) {
+							System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
+							Layer layer = new Layer ("layer", selectedFiles[i].getAbsolutePath());
+							
+							BufferedImage layerImage;
+							layerImage = layer.toImage();
+							
+							MapPanel mapPanel = new MapPanel(layerImage, scale);
+							layeredPanel.add(mapPanel, BorderLayout.CENTER);
+							mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+						}
+					}
+				
+			});
 			fullExtent.setBackground(mainColor2);
 			fullExtent.setForeground(mainColor);
 			fullExtent.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
