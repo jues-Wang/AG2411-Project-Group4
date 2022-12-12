@@ -1,1 +1,4 @@
 /.metadata/
+
+#ignore all compiled java classes
+.class
