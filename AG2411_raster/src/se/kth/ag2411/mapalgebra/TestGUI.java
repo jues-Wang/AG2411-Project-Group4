@@ -35,7 +35,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 //import com.jgoodies.forms.factories.DefaultComponentFactory;
 import java.awt.Label;
-import se.kth.ag2411.mapalgebra.RoundedBorder;
 
 
 public class TestGUI extends JFrame {
@@ -291,43 +290,23 @@ public class TestGUI extends JFrame {
 					
 					int result = fileChooser.showOpenDialog(TestGUI.this);
 					int scale = 3;
-					if (result != JFileChooser.APPROVE_OPTION) { // File chooser accepts .java and .class files for some reason
-						System.out.println("Incorrect file type.");
-						System.exit(0);
-					}
-//					layeredPanel.remove(mapPanel);
-					File[] selectedFiles = fileChooser.getSelectedFiles();
-					for (int i = 0; i < selectedFiles.length; i++) {
-						System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
-						Layer layer = new Layer ("layer", selectedFiles[i].getAbsolutePath());
-						
-						BufferedImage layerImage;
-						layerImage = layer.toImage();
-						
-						MapPanel mapPanel = new MapPanel(layerImage, scale);
-						layeredPanel.add(mapPanel, i); // BorderLayout.CENTER
-						mapPanel.setBounds(200, 200, 300, 300);	
-						mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
-					}
 					
-//					if (result == JFileChooser.APPROVE_OPTION) {
-//						layeredPanel.remove(mapPanel);
-//						File[] selectedFiles = fileChooser.getSelectedFiles();
-//						for (int i = 0; i < selectedFiles.length; i++) {
-//							System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
-//							Layer layer = new Layer ("layer", selectedFiles[i].getAbsolutePath());
-//							
-//							BufferedImage layerImage;
-//							layerImage = layer.toImage();
-//							
-//							MapPanel mapPanel = new MapPanel(layerImage, scale);
-//							layeredPanel.add(mapPanel, BorderLayout.CENTER);
-//							mapPanel.setBounds(200, 200, 300, 300);	
-//							mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//							layeredPanel.pack();
-//							panelTOC.add(, selectedFiles[i].getName());
-//						}
-//					}
+					if (result == JFileChooser.APPROVE_OPTION) {
+						layeredPanel.remove(mapPanel);
+						File[] selectedFiles = fileChooser.getSelectedFiles();
+						for (int i = 0; i < selectedFiles.length; i++) {
+							System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
+							Layer layer = new Layer ("layer", selectedFiles[i].getAbsolutePath());
+							
+							BufferedImage layerImage;
+							layerImage = layer.toImage();
+							
+							MapPanel mapPanel = new MapPanel(layerImage, scale);
+							layeredPanel.add(mapPanel, BorderLayout.CENTER);
+							mapPanel.setBounds(200, 200, 300, 300);	
+							mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+						}
+					}
 				}
 			});
 			

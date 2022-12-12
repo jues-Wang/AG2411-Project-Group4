@@ -10,7 +10,7 @@ public class RoundedBorder implements Border {
 	
 	private int radius;
 	
-	public RoundedBorder(int radius){
+	RoundedBorder(int radius){
 		this.radius = radius;
 	}
 
