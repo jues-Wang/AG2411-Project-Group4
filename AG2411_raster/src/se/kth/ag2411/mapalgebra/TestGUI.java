@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JFileChooser;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -32,15 +33,18 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 //import com.jgoodies.forms.factories.DefaultComponentFactory;
 import java.awt.Label;
+import javax.swing.JButton;
 
 
 public class TestGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPanel;
-	
-	
-	// Launch the application.
+	public static MapPanel mPanel;
+	public static int zoomLvl = 4;
+    public static TestGUI app;
+
+		// Launch the application.
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -53,6 +57,34 @@ public class TestGUI extends JFrame {
 			}
 		});
 	}
+	
+    public static void render(BufferedImage image, int scale){
+        System.out.println("render triggered");
+        mPanel = new MapPanel(image, scale);
+
+        app.getContentPane().add(mPanel, BorderLayout.CENTER);
+        app.revalidate();
+    }
+	
+	
+	   public static void zoom(int change){
+	        if (mPanel != null){
+	            zoomLvl = zoomLvl+ change;
+	            mPanel.scale = zoomLvl;
+	            mPanel.revalidate();
+	            mPanel.repaint();
+	            System.out.println("zoom triggered, new zoom lvl = "+zoomLvl);
+
+	        } else {
+	            JOptionPane.showMessageDialog(
+	                app,
+	                "Unable to preform action: no layer loaded",
+	                "No Layer",
+	                JOptionPane.OK_OPTION
+	            );
+	        }
+	        }
+
 	
 	public TestGUI() {
 		
@@ -74,8 +106,8 @@ public class TestGUI extends JFrame {
 		// Choose main colors for GUI:
 		Color mainColor = projectDarkBlue4;		// for background color in head & bottom panel
 		Color mainColor2 = projectLightGreen;	// for text, borders, ...
-		
-		// Choosing a file.
+	      
+	    // Choosing a file.
 		final JFileChooser fileChooser = new JFileChooser();
 		fileChooser.addChoosableFileFilter(new FileFilter() {
 			
@@ -94,6 +126,11 @@ public class TestGUI extends JFrame {
 		
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 		fileChooser.setMultiSelectionEnabled(true);
+		
+		        
+
+
+		
 		
 		// Create the content panel.
 		contentPanel = new JPanel();
@@ -281,8 +318,18 @@ public class TestGUI extends JFrame {
 							mapPanel.setBounds(200, 200, 300, 300);	
 							mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						
+<<<<<<< Updated upstream
 							//panelTOC.add(, selectedFiles[i].getName());
 						}
+=======
+						BufferedImage layerImage;
+						layerImage = layer.toImage();
+						
+						mPanel = new MapPanel(layerImage, scale);
+						layeredPanel.add(mPanel, i); // BorderLayout.CENTER
+						mPanel.setBounds(0, 0, 2000, 2000);	
+						mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+>>>>>>> Stashed changes
 					}
 				}
 			});
@@ -295,6 +342,27 @@ public class TestGUI extends JFrame {
 			JMenuItem mntmExit = new JMenuItem("Exit");
 			mnFile.add(mntmExit);
 			
+			JButton btnZoomIn = new JButton("ZoomIn");
+			btnZoomIn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
+			btnZoomIn.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				zoom(1);}
+			});
+			menuBar.add(btnZoomIn);
+			
+			JButton btnZoomOut = new JButton("ZoomOut");
+			btnZoomOut.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					zoom(-1);
+				}
+			});
+			menuBar.add(btnZoomOut);
+						
 			Component verticalStrut = Box.createVerticalStrut(9);
 			headPanel.add(verticalStrut, BorderLayout.NORTH);
 			
@@ -308,7 +376,8 @@ public class TestGUI extends JFrame {
 			modeOnOff.setForeground(mainColor);
 			headPanel.add(modeOnOff, BorderLayout.EAST);
 			contentPanel.setBounds(10,10,10,10);	
-		
+				
+			
 		// Create bottom Panel.
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setBackground(mainColor);
