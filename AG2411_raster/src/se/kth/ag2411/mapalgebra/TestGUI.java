@@ -3,6 +3,8 @@ package se.kth.ag2411.mapalgebra;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.io.File;
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
@@ -32,7 +34,6 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JLabel;
 import java.awt.Label;
 import se.kth.ag2411.mapalgebra.RoundedBorder;
 
@@ -75,11 +76,13 @@ public class TestGUI extends JFrame {
 		Color projectYellow = new Color (255, 208, 47);
 		
 		// Choose main colors for GUI:
-		Color mainColor = projectDarkBlue4;		// for background color in head & bottom panel
-		Color mainColor2 = projectLightGreen;	// for text, borders, ...
+		final Color mainColor = projectDarkBlue4;		// for background color in head & bottom panel
+		final Color mainColor2 = projectLightGreen;	// for text, borders, ...
+		
+		final String mainFont = new String ("Brandon Grotesque Regular");
 		
 		// Choosing a file.
-		final JFileChooser fileChooser = new JFileChooser();
+		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.addChoosableFileFilter(new FileFilter() {
 			
 			public String getDescription() {
@@ -174,7 +177,7 @@ public class TestGUI extends JFrame {
 			JMenu mnFile = new JMenu("File");
 			mnFile.setHorizontalAlignment(SwingConstants.CENTER);
 			mnFile.setForeground(mainColor2);
-			mnFile.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
+			mnFile.setFont(new Font(mainFont, Font.PLAIN, 14));
 			mnFile.setBorder(new LineBorder(mainColor2, 1, true));
 			mnFile.setBorder(new RoundedBorder(radius));
 			menuBar.add(mnFile);
@@ -185,7 +188,7 @@ public class TestGUI extends JFrame {
 			// EDIT
 			JMenu mnEdit = new JMenu("Edit");
 			mnEdit.setForeground(mainColor2);
-			mnEdit.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
+			mnEdit.setFont(new Font(mainFont, Font.PLAIN, 14));
 			mnEdit.setBorder(new LineBorder(mainColor2, 1, true));
 			mnEdit.setBorder(new RoundedBorder(radius));
 			menuBar.add(mnEdit);
@@ -214,7 +217,7 @@ public class TestGUI extends JFrame {
 			// TOOLBOX
 			JMenu mnToolbox = new JMenu("Toolbox");
 			mnToolbox.setForeground(mainColor2);
-			mnToolbox.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
+			mnToolbox.setFont(new Font(mainFont, Font.PLAIN, 14));
 			mnToolbox.setBorder(new LineBorder(mainColor2, 1, true));
 			mnToolbox.setBorder(new RoundedBorder(radius));
 			menuBar.add(mnToolbox);
@@ -224,15 +227,13 @@ public class TestGUI extends JFrame {
 			mnToolbox.add(mnLocal);
 			
 			JMenuItem mnLocalSum = new JMenuItem("LocalSum");
-			mnLocalSum.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					JFrame popUp = new JFrame();
-					JPanel popUpWindow = null;
-					popUp.add(popUpWindow);
-					
+			mnLocalSum.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					LocalWindow frame = new LocalWindow();	
+					frame.NewWindow(null);
 				}
 			});
+			
 			mnLocal.add(mnLocalSum);
 			
 			JMenuItem mnLocalDiff = new JMenuItem("LocalDiff");
@@ -282,7 +283,7 @@ public class TestGUI extends JFrame {
 			// HELP = MANUAL
 			JMenu mnHelp = new JMenu("Help");
 			mnHelp.setForeground(mainColor2);
-			mnHelp.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
+			mnHelp.setFont(new Font(mainFont, Font.PLAIN, 14));
 			mnHelp.setBorder(new LineBorder(mainColor2, 1, true));
 			mnHelp.setBorder(new RoundedBorder(radius));
 			menuBar.add(mnHelp);
@@ -352,10 +353,10 @@ public class TestGUI extends JFrame {
 			Component verticalStrut_1 = Box.createVerticalStrut(9);
 			headPanel.add(verticalStrut_1, BorderLayout.SOUTH);
 			
-			JToggleButton modeOnOff = new JToggleButton("OBSERVATION MODE (on/off)");
+			JToggleButton modeOnOff = new JToggleButton("LEARNING MODE (on/off)");
 			modeOnOff.setSelected(true);
 			modeOnOff.setBackground(projectYellow);
-			modeOnOff.setFont(new Font("Sitka Heading", Font.BOLD, 14));
+			modeOnOff.setFont(new Font(mainFont, Font.BOLD, 14));
 			modeOnOff.setForeground(mainColor);
 			headPanel.add(modeOnOff, BorderLayout.EAST);
 			contentPanel.setBounds(10,10,10,10);	
@@ -369,7 +370,7 @@ public class TestGUI extends JFrame {
 			Button fullExtent = new Button("Full Extent");
 			fullExtent.setBackground(mainColor2);
 			fullExtent.setForeground(mainColor);
-			fullExtent.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
+			fullExtent.setFont(new Font(mainFont, Font.PLAIN, 14));
 			bottomPanel.add(fullExtent);
 			
 			Component horizontalStrut = Box.createHorizontalStrut(40);
@@ -380,11 +381,11 @@ public class TestGUI extends JFrame {
 			magnifier.setTabSize(40);
 			magnifier.setOpaque(false);
 			magnifier.setForeground(mainColor2);
-			magnifier.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			magnifier.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(magnifier);
 			
 			JSpinner spinner = new JSpinner();
-			spinner.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			spinner.setFont(new Font(mainFont, Font.PLAIN, 12));
 			spinner.setModel(new SpinnerNumberModel(100, 0, 500, 25));	// insert % ??
 			bottomPanel.add(spinner);
 			
@@ -396,11 +397,11 @@ public class TestGUI extends JFrame {
 			txtrScale.setTabSize(40);
 			txtrScale.setOpaque(false);
 			txtrScale.setForeground(new Color(187, 202, 192));
-			txtrScale.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			txtrScale.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(txtrScale);
 			
 			JSpinner spinner_1 = new JSpinner();
-			spinner_1.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			spinner_1.setFont(new Font(mainFont, Font.PLAIN, 12));
 			spinner_1.setModel(new SpinnerNumberModel(1000, 1, 100000, 500));
 			bottomPanel.add(spinner_1);
 			
@@ -412,7 +413,7 @@ public class TestGUI extends JFrame {
 			txtr_sC.setTabSize(40);
 			txtr_sC.setOpaque(false);
 			txtr_sC.setForeground(new Color(187, 202, 192));
-			txtr_sC.setFont(new Font("Brandon Grotesque Regular", Font.BOLD, 12));
+			txtr_sC.setFont(new Font(mainFont, Font.BOLD, 12));
 			bottomPanel.add(txtr_sC);
 			
 			JTextArea txtrValue = new JTextArea();
@@ -420,12 +421,12 @@ public class TestGUI extends JFrame {
 			txtrValue.setTabSize(40);
 			txtrValue.setOpaque(false);
 			txtrValue.setForeground(new Color(187, 202, 192));
-			txtrValue.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			txtrValue.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(txtrValue);
 			
 			Label sC_value_label = new Label("01");
 			sC_value_label.setAlignment(Label.RIGHT);
-			sC_value_label.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			sC_value_label.setFont(new Font(mainFont, Font.PLAIN, 12));
 			sC_value_label.setBackground(Color.WHITE);
 			bottomPanel.add(sC_value_label);
 			
@@ -434,12 +435,12 @@ public class TestGUI extends JFrame {
 			sC_ID.setTabSize(40);
 			sC_ID.setOpaque(false);
 			sC_ID.setForeground(new Color(187, 202, 192));
-			sC_ID.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			sC_ID.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(sC_ID);
 			
 			Label sC_ID_label = new Label("01");
 			sC_ID_label.setAlignment(Label.RIGHT);
-			sC_ID_label.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			sC_ID_label.setFont(new Font(mainFont, Font.PLAIN, 12));
 			sC_ID_label.setBackground(Color.WHITE);
 			bottomPanel.add(sC_ID_label);
 			
@@ -448,12 +449,12 @@ public class TestGUI extends JFrame {
 			sC_x.setTabSize(40);
 			sC_x.setOpaque(false);
 			sC_x.setForeground(new Color(187, 202, 192));
-			sC_x.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			sC_x.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(sC_x);
 			
 			Label sC_x_label = new Label("333");
 			sC_x_label.setAlignment(Label.RIGHT);
-			sC_x_label.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			sC_x_label.setFont(new Font(mainFont, Font.PLAIN, 12));
 			sC_x_label.setBackground(Color.WHITE);
 			bottomPanel.add(sC_x_label);
 			
@@ -462,12 +463,12 @@ public class TestGUI extends JFrame {
 			sC_y.setTabSize(40);
 			sC_y.setOpaque(false);
 			sC_y.setForeground(new Color(187, 202, 192));
-			sC_y.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			sC_y.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(sC_y);
 			
 			Label sC_y_label = new Label("2");
 			sC_y_label.setAlignment(Label.RIGHT);
-			sC_y_label.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			sC_y_label.setFont(new Font(mainFont, Font.PLAIN, 12));
 			sC_y_label.setBackground(Color.WHITE);
 			bottomPanel.add(sC_y_label);
 	}
