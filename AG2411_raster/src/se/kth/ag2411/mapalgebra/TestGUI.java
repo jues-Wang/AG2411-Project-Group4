@@ -35,6 +35,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 //import com.jgoodies.forms.factories.DefaultComponentFactory;
 import java.awt.Label;
+import java.awt.event.MouseWheelListener;
+import java.awt.event.MouseWheelEvent;
+import javax.swing.JCheckBox;
+import javax.swing.JRadioButton;
 
 
 public class TestGUI extends JFrame {
@@ -101,7 +105,7 @@ public class TestGUI extends JFrame {
 		// Create the content panel.
 		contentPanel = new JPanel();
 		contentPanel.setForeground(Color.WHITE);
-		contentPanel.setBackground(Color.DARK_GRAY);
+		contentPanel.setBackground(Color.WHITE);
 		setContentPane(contentPanel);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		
@@ -114,6 +118,9 @@ public class TestGUI extends JFrame {
 		panelTOC.setBackground(mainColor2);
 		splitPane.setLeftComponent(panelTOC);
 		panelTOC.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JCheckBox chckbxNewCheckBox = new JCheckBox("New check box");
+		panelTOC.add(chckbxNewCheckBox);
 
 		JTextArea txtTOC = new JTextArea();
 		txtTOC.setText("                              ");
@@ -124,11 +131,15 @@ public class TestGUI extends JFrame {
 		panelTOC.add(txtTOC);
 
 		final JPanel panelMAP = new JPanel();
-//		panelMAP.setBackground(new Color(255, 255, 255));
+		panelMAP.setBackground(new Color(255, 255, 255));
 		splitPane.setRightComponent(panelMAP);
 		panelMAP.setLayout(new CardLayout(0, 0));
 
 		final JLayeredPane layeredPanel = new JLayeredPane();	// to LAYER the maps ??
+		layeredPanel.addMouseWheelListener(new MouseWheelListener() {
+			public void mouseWheelMoved(MouseWheelEvent e) {
+			}
+		});
 		panelMAP.add(layeredPanel, "name_927277592538900");
 //		layeredPanel.setLayout(new CardLayout(0, 0));			// Layout is important
 		
@@ -149,7 +160,7 @@ public class TestGUI extends JFrame {
 		int scale = 3;
 		MapPanel mapPanel = new MapPanel(image, scale);
 		layeredPanel.add(mapPanel, BorderLayout.CENTER);
-		mapPanel.setBounds(200, 200, 300, 300);	
+		mapPanel.setBounds(0, 0, 600, 600);	
 		mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		// Create head Panel.
@@ -305,8 +316,10 @@ public class TestGUI extends JFrame {
 						
 						MapPanel mapPanel = new MapPanel(layerImage, scale);
 						layeredPanel.add(mapPanel, i); // BorderLayout.CENTER
-						mapPanel.setBounds(200, 200, 300, 300);	
+						mapPanel.setBounds(0, 0, 500, 500);	
 						mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+					
+						
 					}
 					
 //					if (result == JFileChooser.APPROVE_OPTION) {
@@ -372,6 +385,7 @@ public class TestGUI extends JFrame {
 							
 							MapPanel mapPanel = new MapPanel(layerImage, scale);
 							layeredPanel.add(mapPanel, BorderLayout.CENTER);
+							mapPanel.setBounds(0, 0, 600, 600);	
 							mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						}
 					}
@@ -486,5 +500,10 @@ public class TestGUI extends JFrame {
 			label_1_1.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
 			label_1_1.setBackground(Color.WHITE);
 			bottomPanel.add(label_1_1);
+	}
+
+	protected Object zoom(int i) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

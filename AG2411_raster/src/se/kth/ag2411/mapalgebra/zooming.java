@@ -16,8 +16,6 @@ import javax.swing.*;
 public class zooming extends JFrame {
 
     private MainPanel mainPanel;
-    private JLabel infoLabel;
-
     public zooming() {
         initComponents();
     }
@@ -79,4 +77,5 @@ public class zooming extends JFrame {
             }
         });
     }
+   
 }
