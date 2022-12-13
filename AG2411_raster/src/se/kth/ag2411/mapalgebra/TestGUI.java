@@ -3,10 +3,12 @@ package se.kth.ag2411.mapalgebra;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -24,10 +26,13 @@ import java.awt.Font;
 import javax.swing.border.LineBorder;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
 import java.awt.Component;
 import java.awt.Dimension;
 
@@ -45,7 +50,10 @@ import java.awt.Label;
 import java.awt.Point;
 import javax.swing.JList;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.JComboBox;
+import javax.swing.event.PopupMenuEvent;
 
 public class TestGUI extends JFrame {
 
@@ -63,6 +71,7 @@ public class TestGUI extends JFrame {
 			public void run() {
 				try {
 					TestGUI frame = new TestGUI();
+					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -126,6 +135,8 @@ public class TestGUI extends JFrame {
 		// Choose main colors for GUI:
 		Color mainColor = projectDarkBlue4;		// for background color in head & bottom panel
 		Color mainColor2 = projectLightGreen;	// for text, borders, ...
+		Color highlightColor = projectYellow;
+		Color crazyColor = projectRed;
 		
 		// Choosing a file.
 		final JFileChooser fileChooser = new JFileChooser();
@@ -163,8 +174,6 @@ public class TestGUI extends JFrame {
 		panelTOC.setBackground(mainColor2);
 		splitPane.setLeftComponent(panelTOC);
 		panelTOC.setLayout(new FlowLayout(FlowLayout.CENTER, 75, 5));
-		
-		
 
 		final JPanel panelMAP = new JPanel();
 		splitPane.setRightComponent(panelMAP);
@@ -173,12 +182,23 @@ public class TestGUI extends JFrame {
 		final JLayeredPane layeredPane = new JLayeredPane();	// to LAYER the maps ??
 		panelMAP.add(layeredPane, "name_927277592538900");
 		
+		// Defining the pop-up menu on right click
+		final JPopupMenu popupMenuRC = new JPopupMenu();
+		JMenuItem mntmSaveRC = new JMenuItem("Save");
+		popupMenuRC.add(mntmSaveRC);
+		JMenuItem mntmDeleteRC = new JMenuItem("Delete");
+		popupMenuRC.add(mntmDeleteRC);
+		JMenuItem mntmExportRC = new JMenuItem("Export");
+		popupMenuRC.add(mntmExportRC);
+		
+		// Display TOC
 		DefaultListModel<String> layerNameList = new DefaultListModel<String>();
 		LinkedList<Layer> layerList = new LinkedList<Layer>();
 		JList<String> displayList = new JList<String>(layerNameList);
 		displayList.addMouseListener(new MouseAdapter() {
-		    public void mouseClicked(MouseEvent e) {
-		        if (e.getClickCount() == 2) {
+			public void mouseClicked(MouseEvent e) {
+		        // Visualize a layer by double clicking it
+				if (e.getClickCount() == 2) {
 		        	layeredPane.remove(mPanel);
 		            int index = displayList.locationToIndex(e.getPoint());
 		            int scale = 3;
@@ -192,11 +212,93 @@ public class TestGUI extends JFrame {
 					mPanel.setBounds(0, 0, 2000, 2000);	
 					mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		        }
+		        
+		        // Open pop-up menu
+		        if (SwingUtilities.isRightMouseButton(e)) {
+		        	int index = displayList.locationToIndex(e.getPoint());
+		        	popupMenuRC.setLocation(getMousePosition());
+		        	popupMenuRC.setVisible(true);
+		        	popupMenuRC.setLabel(index + "");
+		        }
 		    }
 		});
 		displayList.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
 		displayList.setBackground(mainColor2);
 		panelTOC.add(displayList);
+		
+		// Save event handler
+		mntmSaveRC.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int index = Integer.parseInt(popupMenuRC.getLabel());
+				popupMenuRC.setVisible(false);
+				layerList.get(index).save(layerNameList.get(index) + ".txt");
+			}
+		});
+		
+		// Delete event handler
+		mntmDeleteRC.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int index = Integer.parseInt(popupMenuRC.getLabel());
+				popupMenuRC.setVisible(false);
+				
+				// Remove image if shown
+				boolean shownLayer = false;
+				if(layerNameList.get(index).equals(aboveLayer.name)) {
+					shownLayer = true;
+					layeredPane.remove(mPanel);
+					layeredPane.setVisible(true);
+				}
+				
+				// Remove the layer
+				layerNameList.remove(index);
+				layerList.remove(index);
+				
+				// Display new image if needed (layer top of TOC)
+				if (! layerList.isEmpty() && shownLayer) {
+					int scale = 3;
+					aboveLayer = layerList.get(0);
+					BufferedImage layerImage;
+					layerImage = aboveLayer.toImage();
+					
+					mPanel = new MapPanel(layerImage, scale);
+					layeredPane.add(mPanel, BorderLayout.CENTER);
+					mPanel.setBounds(0, 0, 2000, 2000);	
+					mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+					layeredPane.setVisible(true);
+				}
+			}
+		});
+		
+		// Export event handler
+		mntmExportRC.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int index = Integer.parseInt(popupMenuRC.getLabel());
+				popupMenuRC.setVisible(false);
+				
+				Layer outputLayer = layerList.get(index);
+				BufferedImage outputImage = outputLayer.toImage();
+
+				File outputfile = new File(outputLayer.name + ".jpg");
+				try {
+					ImageIO.write(outputImage, "jpg", outputfile);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		// Remove pop-up menu
+		panelTOC.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+		        if (SwingUtilities.isLeftMouseButton(e)) {
+		        	popupMenuRC.setVisible(false);
+		        }
+		    }
+		});
 		
 		// Create head Panel.
 		JPanel headPanel = new JPanel();
@@ -219,9 +321,9 @@ public class TestGUI extends JFrame {
 			//FILE
 			JMenu mnFile = new JMenu("File");
 			mnFile.setHorizontalAlignment(SwingConstants.CENTER);
-			mnFile.setForeground(mainColor2);
+			mnFile.setForeground(highlightColor);
 			mnFile.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
-			mnFile.setBorder(new LineBorder(mainColor2, 1, true));
+			mnFile.setBorder(new LineBorder(highlightColor, 1, true));
 			mnFile.setBorder(new RoundedBorder(radius));
 			menuBar.add(mnFile);
 			
@@ -230,9 +332,9 @@ public class TestGUI extends JFrame {
 			
 			// EDIT
 			JMenu mnEdit = new JMenu("Edit");
-			mnEdit.setForeground(mainColor2);
+			mnEdit.setForeground(highlightColor);
 			mnEdit.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
-			mnEdit.setBorder(new LineBorder(mainColor2, 1, true));
+			mnEdit.setBorder(new LineBorder(highlightColor, 1, true));
 			mnEdit.setBorder(new RoundedBorder(radius));
 			menuBar.add(mnEdit);
 			
@@ -259,9 +361,9 @@ public class TestGUI extends JFrame {
 			
 			// TOOLBOX
 			JMenu mnToolbox = new JMenu("Toolbox");
-			mnToolbox.setForeground(mainColor2);
+			mnToolbox.setForeground(highlightColor);
 			mnToolbox.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
-			mnToolbox.setBorder(new LineBorder(mainColor2, 1, true));
+			mnToolbox.setBorder(new LineBorder(highlightColor, 1, true));
 			mnToolbox.setBorder(new RoundedBorder(radius));
 			menuBar.add(mnToolbox);
 			
@@ -325,10 +427,10 @@ public class TestGUI extends JFrame {
 			
 			// HELP = MANUAL
 			JMenu mnHelp = new JMenu("Help");
-			mnHelp.setForeground(mainColor2);
+			mnHelp.setForeground(highlightColor);
 			//mnHelp.setBackground(mainColor);
 			mnHelp.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
-			mnHelp.setBorder(new LineBorder(mainColor2, 1, true));
+			mnHelp.setBorder(new LineBorder(highlightColor, 1, true));
 			mnHelp.setBorder(new RoundedBorder(radius));
 			menuBar.add(mnHelp);
 			
@@ -352,9 +454,10 @@ public class TestGUI extends JFrame {
 						File[] selectedFiles = fileChooser.getSelectedFiles();
 						for (int i = 0; i < selectedFiles.length; i++) {
 							System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
-							aboveLayer = new Layer ("layer", selectedFiles[i].getAbsolutePath());//abovelayer = layer
+							String layerName = getFileName(selectedFiles[i].getAbsolutePath());
+							aboveLayer = new Layer (layerName, selectedFiles[i].getAbsolutePath());//abovelayer = layer
 							
-							layerList.add(new Layer ("layer", selectedFiles[i].getAbsolutePath()));
+							layerList.add(new Layer (layerName, selectedFiles[i].getAbsolutePath()));
 							
 							BufferedImage layerImage;
 							layerImage = aboveLayer.toImage();
@@ -363,8 +466,6 @@ public class TestGUI extends JFrame {
 							layeredPane.add(mPanel, BorderLayout.CENTER);
 							mPanel.setBounds(0, 0, 2000, 2000);	
 							mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
-							
-							String layerName = getFileName(selectedFiles[i].getAbsolutePath());
 							
 							// Add to TOC if does not exist already
 							boolean inList = false;
@@ -415,7 +516,7 @@ public class TestGUI extends JFrame {
 			
 			JToggleButton modeOnOff = new JToggleButton("OBSERVATION MODE (on/off)");
 			modeOnOff.setSelected(true);
-			modeOnOff.setBackground(projectYellow);
+			modeOnOff.setBackground(crazyColor);
 			modeOnOff.setFont(new Font("Sitka Heading", Font.BOLD, 14));
 			modeOnOff.setForeground(mainColor);
 			headPanel.add(modeOnOff, BorderLayout.EAST);
