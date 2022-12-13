@@ -126,6 +126,8 @@ public class TestGUI extends JFrame {
 		// Choose main colors for GUI:
 		Color mainColor = projectDarkBlue4;		// for background color in head & bottom panel
 		Color mainColor2 = projectLightGreen;	// for text, borders, ...
+		Color highlightColor = projectYellow;
+		Color crazyColor = projectRed;
 		
 		// Choosing a file.
 		final JFileChooser fileChooser = new JFileChooser();
@@ -219,9 +221,9 @@ public class TestGUI extends JFrame {
 			//FILE
 			JMenu mnFile = new JMenu("File");
 			mnFile.setHorizontalAlignment(SwingConstants.CENTER);
-			mnFile.setForeground(mainColor2);
+			mnFile.setForeground(highlightColor);
 			mnFile.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
-			mnFile.setBorder(new LineBorder(mainColor2, 1, true));
+			mnFile.setBorder(new LineBorder(highlightColor, 1, true));
 			mnFile.setBorder(new RoundedBorder(radius));
 			menuBar.add(mnFile);
 			
@@ -230,9 +232,9 @@ public class TestGUI extends JFrame {
 			
 			// EDIT
 			JMenu mnEdit = new JMenu("Edit");
-			mnEdit.setForeground(mainColor2);
+			mnEdit.setForeground(highlightColor);
 			mnEdit.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
-			mnEdit.setBorder(new LineBorder(mainColor2, 1, true));
+			mnEdit.setBorder(new LineBorder(highlightColor, 1, true));
 			mnEdit.setBorder(new RoundedBorder(radius));
 			menuBar.add(mnEdit);
 			
@@ -259,9 +261,9 @@ public class TestGUI extends JFrame {
 			
 			// TOOLBOX
 			JMenu mnToolbox = new JMenu("Toolbox");
-			mnToolbox.setForeground(mainColor2);
+			mnToolbox.setForeground(highlightColor);
 			mnToolbox.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
-			mnToolbox.setBorder(new LineBorder(mainColor2, 1, true));
+			mnToolbox.setBorder(new LineBorder(highlightColor, 1, true));
 			mnToolbox.setBorder(new RoundedBorder(radius));
 			menuBar.add(mnToolbox);
 			
@@ -325,10 +327,10 @@ public class TestGUI extends JFrame {
 			
 			// HELP = MANUAL
 			JMenu mnHelp = new JMenu("Help");
-			mnHelp.setForeground(mainColor2);
+			mnHelp.setForeground(highlightColor);
 			//mnHelp.setBackground(mainColor);
 			mnHelp.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
-			mnHelp.setBorder(new LineBorder(mainColor2, 1, true));
+			mnHelp.setBorder(new LineBorder(highlightColor, 1, true));
 			mnHelp.setBorder(new RoundedBorder(radius));
 			menuBar.add(mnHelp);
 			
@@ -415,7 +417,7 @@ public class TestGUI extends JFrame {
 			
 			JToggleButton modeOnOff = new JToggleButton("OBSERVATION MODE (on/off)");
 			modeOnOff.setSelected(true);
-			modeOnOff.setBackground(projectYellow);
+			modeOnOff.setBackground(crazyColor);
 			modeOnOff.setFont(new Font("Sitka Heading", Font.BOLD, 14));
 			modeOnOff.setForeground(mainColor);
 			headPanel.add(modeOnOff, BorderLayout.EAST);
