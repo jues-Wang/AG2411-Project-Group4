@@ -164,33 +164,39 @@ public class TestGUI extends JFrame {
 		splitPane.setLeftComponent(panelTOC);
 		panelTOC.setLayout(new FlowLayout(FlowLayout.CENTER, 75, 5));
 		
-		DefaultListModel<String> layerNameList = new DefaultListModel<String>();
 		
-//		JTextArea txtTOC0 = new JTextArea();
-//		txtTOC0.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-//		txtTOC0.setOpaque(false);
-//		txtTOC0.setForeground(mainColor);
-//		txtTOC0.setTabSize(40);
-//		panelTOC.add(txtTOC0);
-		
-		JList<String> displayList = new JList<String>(layerNameList);
-//		displayList.addListSelectionListener(new ListSelectionListener() {
-//			public void valueChanged(ListSelectionEvent e) {
-//				if (e.getValueIsAdjusting()){
-//                    System.out.println("Eventhandler called");
-//                  return;
-//                }
-//			}
-//		});
-		displayList.setBackground(mainColor2);
-		panelTOC.add(displayList);
 
 		final JPanel panelMAP = new JPanel();
 		splitPane.setRightComponent(panelMAP);
 		panelMAP.setLayout(new CardLayout(0, 0));
 
-		final JLayeredPane layeredPanel = new JLayeredPane();	// to LAYER the maps ??
-		panelMAP.add(layeredPanel, "name_927277592538900");
+		final JLayeredPane layeredPane = new JLayeredPane();	// to LAYER the maps ??
+		panelMAP.add(layeredPane, "name_927277592538900");
+		
+		DefaultListModel<String> layerNameList = new DefaultListModel<String>();
+		LinkedList<Layer> layerList = new LinkedList<Layer>();
+		JList<String> displayList = new JList<String>(layerNameList);
+		displayList.addMouseListener(new MouseAdapter() {
+		    public void mouseClicked(MouseEvent e) {
+		        if (e.getClickCount() == 2) {
+		        	layeredPane.remove(mPanel);
+		            int index = displayList.locationToIndex(e.getPoint());
+		            int scale = 3;
+		            
+		            aboveLayer = layerList.get(index);
+		            BufferedImage layerImage;
+					layerImage = aboveLayer.toImage();
+					
+					mPanel = new MapPanel(layerImage, scale);
+					layeredPane.add(mPanel, BorderLayout.CENTER);
+					mPanel.setBounds(0, 0, 2000, 2000);	
+					mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		        }
+		    }
+		});
+		displayList.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+		displayList.setBackground(mainColor2);
+		panelTOC.add(displayList);
 		
 		// Create head Panel.
 		JPanel headPanel = new JPanel();
@@ -339,22 +345,26 @@ public class TestGUI extends JFrame {
 					int scale = 3;
 					
 					if (result == JFileChooser.APPROVE_OPTION) {
+						if (mPanel != null) {
+							layeredPane.remove(mPanel);
+						}
+						
 						File[] selectedFiles = fileChooser.getSelectedFiles();
 						for (int i = 0; i < selectedFiles.length; i++) {
 							System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
-							Layer layer = new Layer ("layer", selectedFiles[i].getAbsolutePath());
 							aboveLayer = new Layer ("layer", selectedFiles[i].getAbsolutePath());//abovelayer = layer
+							
+							layerList.add(new Layer ("layer", selectedFiles[i].getAbsolutePath()));
 							
 							BufferedImage layerImage;
 							layerImage = aboveLayer.toImage();
 							
 							mPanel = new MapPanel(layerImage, scale);
-							layeredPanel.add(mPanel, BorderLayout.CENTER);
+							layeredPane.add(mPanel, BorderLayout.CENTER);
 							mPanel.setBounds(0, 0, 2000, 2000);	
 							mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
 							
 							String layerName = getFileName(selectedFiles[i].getAbsolutePath());
-							System.out.println(layerName);
 							
 							// Add to TOC if does not exist already
 							boolean inList = false;
@@ -532,7 +542,7 @@ public class TestGUI extends JFrame {
 			label_1_1.setBackground(Color.WHITE);
 			bottomPanel.add(label_1_1);
 			
-			layeredPanel.addMouseMotionListener(new MouseMotionAdapter() {
+			layeredPane.addMouseMotionListener(new MouseMotionAdapter() {
 				@Override
 				public void mouseMoved(MouseEvent e) {
 					if(mPanel!=null) {
