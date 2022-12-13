@@ -3,6 +3,8 @@ package se.kth.ag2411.mapalgebra;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.io.File;
+import java.util.LinkedList;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
@@ -23,6 +25,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.Box;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.Component;
@@ -40,6 +43,9 @@ import javax.swing.JLabel;
 //import com.jgoodies.forms.factories.DefaultComponentFactory;
 import java.awt.Label;
 import java.awt.Point;
+import javax.swing.JList;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 
 public class TestGUI extends JFrame {
 
@@ -48,7 +54,7 @@ public class TestGUI extends JFrame {
 	public static MapPanel mPanel;
 	public static int zoomLvl = 4;
     public static TestGUI app;
-    public Layer abovelayer; // the layer that is shown currently 
+    public Layer aboveLayer; // the layer that is shown currently 
 	public String[] pixel = {"Nan","Nan","Nan","Nan",};
 	
 	// Launch the application.
@@ -89,6 +95,15 @@ public class TestGUI extends JFrame {
 					JOptionPane.OK_OPTION
 					);
 		}
+	}
+	
+	private String getFileName(String path) {
+		String[] tokens = path.split("\\\\");
+		int i = tokens.length - 1;
+		String fileName = tokens[i];
+		String[] nameTokens = fileName.split("[.]", 0);
+		String name = nameTokens[0];
+		return name;
 	}
 	
 	public TestGUI() {
@@ -147,15 +162,28 @@ public class TestGUI extends JFrame {
 		final JPanel panelTOC = new JPanel();
 		panelTOC.setBackground(mainColor2);
 		splitPane.setLeftComponent(panelTOC);
-		panelTOC.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-
-		JTextArea txtTOC = new JTextArea();
-		txtTOC.setText("                              ");
-		txtTOC.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-		txtTOC.setOpaque(false);
-		txtTOC.setForeground(mainColor);
-		txtTOC.setTabSize(40);
-		panelTOC.add(txtTOC);
+		panelTOC.setLayout(new FlowLayout(FlowLayout.CENTER, 75, 5));
+		
+		DefaultListModel<String> layerNameList = new DefaultListModel<String>();
+		
+//		JTextArea txtTOC0 = new JTextArea();
+//		txtTOC0.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+//		txtTOC0.setOpaque(false);
+//		txtTOC0.setForeground(mainColor);
+//		txtTOC0.setTabSize(40);
+//		panelTOC.add(txtTOC0);
+		
+		JList<String> displayList = new JList<String>(layerNameList);
+//		displayList.addListSelectionListener(new ListSelectionListener() {
+//			public void valueChanged(ListSelectionEvent e) {
+//				if (e.getValueIsAdjusting()){
+//                    System.out.println("Eventhandler called");
+//                  return;
+//                }
+//			}
+//		});
+		displayList.setBackground(mainColor2);
+		panelTOC.add(displayList);
 
 		final JPanel panelMAP = new JPanel();
 		splitPane.setRightComponent(panelMAP);
@@ -315,15 +343,30 @@ public class TestGUI extends JFrame {
 						for (int i = 0; i < selectedFiles.length; i++) {
 							System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
 							Layer layer = new Layer ("layer", selectedFiles[i].getAbsolutePath());
-							abovelayer = new Layer ("layer", selectedFiles[i].getAbsolutePath());//abovelayer = layer
+							aboveLayer = new Layer ("layer", selectedFiles[i].getAbsolutePath());//abovelayer = layer
 							
 							BufferedImage layerImage;
-							layerImage = layer.toImage();
+							layerImage = aboveLayer.toImage();
 							
 							mPanel = new MapPanel(layerImage, scale);
 							layeredPanel.add(mPanel, BorderLayout.CENTER);
 							mPanel.setBounds(0, 0, 2000, 2000);	
 							mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+							
+							String layerName = getFileName(selectedFiles[i].getAbsolutePath());
+							System.out.println(layerName);
+							
+							// Add to TOC if does not exist already
+							boolean inList = false;
+							for (int j = 0; j < layerNameList.size(); j++) {
+								if (layerNameList.get(i).equals(layerName)) {
+									inList = true;
+									break;
+								}
+							}
+							if (! inList) {
+								layerNameList.addElement(layerName);
+							}
 						}
 					}
 				}
@@ -498,9 +541,9 @@ public class TestGUI extends JFrame {
 						Point mPanelLocation = mPanel.getLocation();//[x=0,y=0]
 
 						int x_start = mPanelLocation.x; // from left to right
-						int x_end = mPanelLocation.x + abovelayer.nCols*zoomLvl;
+						int x_end = mPanelLocation.x + aboveLayer.nCols*zoomLvl;
 						int y_start = mPanelLocation.y; //from up to bottom
-						int y_end = mPanelLocation.y + abovelayer.nRows*zoomLvl;
+						int y_end = mPanelLocation.y + aboveLayer.nRows*zoomLvl;
 						
 						if(x_screen > x_start & x_screen < x_end & y_screen > y_start & y_screen < y_end) {
 							// index 
@@ -508,8 +551,8 @@ public class TestGUI extends JFrame {
 							int y = (y_screen - y_start)/zoomLvl;
 
 							//message of this pixel
-							pixel[0] = Double.toString(abovelayer.values[x][y]);//value
-							pixel[1] = Integer.toString(x*abovelayer.nCols+y);//id
+							pixel[0] = Double.toString(aboveLayer.values[x][y]);//value
+							pixel[1] = Integer.toString(x*aboveLayer.nCols+y);//id
 							pixel[2] = Integer.toString(x);
 							pixel[3] = Integer.toString(y);
 

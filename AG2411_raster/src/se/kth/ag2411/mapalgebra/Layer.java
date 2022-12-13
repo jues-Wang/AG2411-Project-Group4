@@ -720,7 +720,7 @@ public class Layer {
 	}
 
 	// Used to slow down animations for raster3x4.txt
-	private String getFileName(String path) {
+	public String getFileName(String path) {
 		String[] tokens = path.split("/");
 		int i = tokens.length - 1;
 		String fileName = tokens[i];
