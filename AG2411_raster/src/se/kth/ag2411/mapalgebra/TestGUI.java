@@ -240,6 +240,13 @@ public class TestGUI extends JFrame {
 			JMenuItem mnLocalSum = new JMenuItem("LocalSum");
 			mnLocal.add(mnLocalSum);
 			
+			mnLocalSum.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					LocalWindow frame = new LocalWindow();	
+					frame.NewWindow(null);
+				}
+			});
+			
 			JMenuItem mnLocalDiff = new JMenuItem("LocalDiff");
 			mnLocal.add(mnLocalDiff);
 			
