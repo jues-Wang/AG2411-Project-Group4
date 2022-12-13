@@ -56,6 +56,7 @@ public class TestGUI extends JFrame {
     public static TestGUI app;
     public Layer aboveLayer; // the layer that is shown currently 
 	public String[] pixel = {"Nan","Nan","Nan","Nan",};
+	public int xx,xy;
 	
 	// Launch the application.
 	public static void main(String[] args) {
@@ -361,7 +362,7 @@ public class TestGUI extends JFrame {
 							
 							mPanel = new MapPanel(layerImage, scale);
 							layeredPane.add(mPanel, BorderLayout.CENTER);
-							mPanel.setBounds(0, 0, 2000, 2000);	
+							mPanel.setBounds(0, 0, 2000, 3000);	
 							mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
 							
 							String layerName = getFileName(selectedFiles[i].getAbsolutePath());
@@ -573,6 +574,25 @@ public class TestGUI extends JFrame {
 							label_1_1.setText(pixel[3]);//y
 						}
 					}
+				}
+			});
+			
+			// Moving the whole map when mouse pressed // NOT WORKING COMPLITELY
+			panelMAP.addMouseListener(new MouseAdapter() {
+				
+				public void mousePressed(MouseEvent e) {
+
+					xx = e.getX();
+					xy = e.getY();
+				}
+			});
+			layeredPane.addMouseMotionListener(new MouseMotionAdapter() {
+				@Override
+				public void mouseDragged(MouseEvent arg0) {
+
+					int x = arg0.getXOnScreen();
+					int y = arg0.getYOnScreen();
+					layeredPane.setLocation(x - xx, y - xy);  
 				}
 			});
 	}
