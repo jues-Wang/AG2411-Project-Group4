@@ -3,6 +3,7 @@ package se.kth.ag2411.mapalgebra;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 
 import javax.swing.JFrame;
@@ -25,6 +26,7 @@ import java.awt.Font;
 import javax.swing.border.LineBorder;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -266,7 +268,6 @@ public class TestGUI extends JFrame {
 					mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
 					layeredPane.setVisible(true);
 				}
-				
 			}
 		});
 		
@@ -276,6 +277,17 @@ public class TestGUI extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				int index = Integer.parseInt(popupMenuRC.getLabel());
 				popupMenuRC.setVisible(false);
+				
+				Layer outputLayer = layerList.get(index);
+				BufferedImage outputImage = outputLayer.toImage();
+
+				File outputfile = new File(outputLayer.name + ".jpg");
+				try {
+					ImageIO.write(outputImage, "jpg", outputfile);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
