@@ -195,6 +195,7 @@ public class TestGUI extends JFrame {
 		// Display TOC
 		DefaultListModel<String> layerNameList = new DefaultListModel<String>();
 		LinkedList<Layer> layerList = new LinkedList<Layer>();
+		LinkedList<BufferedImage> imageList = new LinkedList<BufferedImage>();
 		JList<String> displayList = new JList<String>(layerNameList);
 		displayList.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -204,10 +205,7 @@ public class TestGUI extends JFrame {
 		            int index = displayList.locationToIndex(e.getPoint());
 		            int scale = 3;
 		            
-		            aboveLayer = layerList.get(index);
-		            BufferedImage layerImage;
-					layerImage = aboveLayer.toImage();
-					
+					BufferedImage layerImage = imageList.get(index);
 					mPanel = new MapPanel(layerImage, scale);
 					layeredPane.add(mPanel, BorderLayout.CENTER);
 					mPanel.setBounds(0, 0, 2000, 2000);	
@@ -233,6 +231,7 @@ public class TestGUI extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				int index = Integer.parseInt(popupMenuRC.getLabel());
 				popupMenuRC.setVisible(false);
+				mntmSaveRC.setBackground(buttonColor);
 				layerList.get(index).save(layerNameList.get(index) + ".txt");
 			}
 
@@ -253,8 +252,10 @@ public class TestGUI extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				int index = Integer.parseInt(popupMenuRC.getLabel());
 				popupMenuRC.setVisible(false);
+				mntmDeleteRC.setBackground(buttonColor);
 				
 				// Remove image if shown
+				int scale = 3;
 				boolean shownLayer = false;
 				if(layerNameList.get(index).equals(aboveLayer.name)) {
 					shownLayer = true;
@@ -265,19 +266,17 @@ public class TestGUI extends JFrame {
 				// Remove the layer
 				layerNameList.remove(index);
 				layerList.remove(index);
+				imageList.remove(index);
 				
 				// Display new image if needed (layer top of TOC)
 				if (! layerList.isEmpty() && shownLayer) {
-					int scale = 3;
 					aboveLayer = layerList.get(0);
-					BufferedImage layerImage;
-					layerImage = aboveLayer.toImage();
+					BufferedImage layerImage = imageList.get(0);
 					
 					mPanel = new MapPanel(layerImage, scale);
 					layeredPane.add(mPanel, BorderLayout.CENTER);
 					mPanel.setBounds(0, 0, 2000, 2000);	
 					mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
-					layeredPane.setVisible(true);
 				}
 			}
 			
@@ -298,11 +297,10 @@ public class TestGUI extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				int index = Integer.parseInt(popupMenuRC.getLabel());
 				popupMenuRC.setVisible(false);
+				mntmExportRC.setBackground(buttonColor);
 				
-				Layer outputLayer = layerList.get(index);
-				BufferedImage outputImage = outputLayer.toImage();
-
-				File outputfile = new File(outputLayer.name + ".jpg");
+				BufferedImage outputImage = imageList.get(index);
+				File outputfile = new File(layerNameList.get(index) + ".jpg");
 				try {
 					ImageIO.write(outputImage, "jpg", outputfile);
 				} catch (IOException e1) {
@@ -486,9 +484,7 @@ public class TestGUI extends JFrame {
 						for (int i = 0; i < selectedFiles.length; i++) {
 							System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
 							String layerName = getFileName(selectedFiles[i].getAbsolutePath());
-							aboveLayer = new Layer (layerName, selectedFiles[i].getAbsolutePath());//abovelayer = layer
-							
-							layerList.add(new Layer (layerName, selectedFiles[i].getAbsolutePath()));
+							aboveLayer = new Layer(layerName, selectedFiles[i].getAbsolutePath());//abovelayer = layer
 							
 							BufferedImage layerImage;
 							layerImage = aboveLayer.toImage();
@@ -508,6 +504,8 @@ public class TestGUI extends JFrame {
 							}
 							if (! inList) {
 								layerNameList.addElement(layerName);
+								layerList.add(new Layer (layerName, selectedFiles[i].getAbsolutePath()));
+								imageList.add(aboveLayer.toImage());
 							}
 						}
 					}
