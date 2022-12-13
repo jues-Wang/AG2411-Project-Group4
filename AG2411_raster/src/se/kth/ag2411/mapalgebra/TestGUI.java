@@ -41,7 +41,6 @@ import javax.swing.JLabel;
 import java.awt.Label;
 import java.awt.Point;
 
-
 public class TestGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -73,7 +72,6 @@ public class TestGUI extends JFrame {
 		app.getContentPane().add(mPanel, BorderLayout.CENTER);
 		app.revalidate();
 	}
-
 
 	public static void zoom(int change){
 		if (mPanel != null){
@@ -313,7 +311,6 @@ public class TestGUI extends JFrame {
 					int scale = 3;
 					
 					if (result == JFileChooser.APPROVE_OPTION) {
-//						layeredPanel.remove(mapPanel);
 						File[] selectedFiles = fileChooser.getSelectedFiles();
 						for (int i = 0; i < selectedFiles.length; i++) {
 							System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
