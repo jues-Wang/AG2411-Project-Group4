@@ -131,6 +131,7 @@ public class TestGUI extends JFrame {
 		Color projectDarkBlue3 = new Color (5, 0, 56);
 		Color projectDarkBlue4 = new Color (0, 41, 61);
 		Color projectYellow = new Color (255, 208, 47);
+		Color buttonColor = new Color(238, 238, 238);
 		
 		// Choose main colors for GUI:
 		Color mainColor = projectDarkBlue4;		// for background color in head & bottom panel
@@ -234,6 +235,16 @@ public class TestGUI extends JFrame {
 				popupMenuRC.setVisible(false);
 				layerList.get(index).save(layerNameList.get(index) + ".txt");
 			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				mntmSaveRC.setBackground(crazyColor);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				mntmSaveRC.setBackground(buttonColor);
+			}
 		});
 		
 		// Delete event handler
@@ -269,6 +280,16 @@ public class TestGUI extends JFrame {
 					layeredPane.setVisible(true);
 				}
 			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				mntmDeleteRC.setBackground(crazyColor);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				mntmDeleteRC.setBackground(buttonColor);
+			}
 		});
 		
 		// Export event handler
@@ -288,6 +309,16 @@ public class TestGUI extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				mntmExportRC.setBackground(crazyColor);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				mntmExportRC.setBackground(buttonColor);
 			}
 		});
 		
