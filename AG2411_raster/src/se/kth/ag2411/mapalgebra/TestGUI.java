@@ -64,6 +64,11 @@ public class TestGUI extends JFrame {
     public static TestGUI app;
     public Layer aboveLayer; // the layer that is shown currently 
 	public String[] pixel = {"Nan","Nan","Nan","Nan",};
+	public int xx,xy;
+	public int mousePrevX;
+	public int mousePrevY;
+	public int panelMapX;
+	public int panelMapY;
 	
 	// Launch the application.
 	public static void main(String[] args) {
@@ -491,7 +496,7 @@ public class TestGUI extends JFrame {
 							
 							mPanel = new MapPanel(layerImage, scale);
 							layeredPane.add(mPanel, BorderLayout.CENTER);
-							mPanel.setBounds(0, 0, 2000, 2000);	
+							mPanel.setBounds(0, 0, 2000, 3000);	
 							mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
 							
 							// Add to TOC if does not exist already
@@ -703,6 +708,40 @@ public class TestGUI extends JFrame {
 							label_1_1.setText(pixel[3]);//y
 						}
 					}
+				}
+			});
+			
+			// Moving the whole map when mouse pressed // NOT WORKING COMPLITELY
+			label.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+
+					xx = e.getX();
+					xy = e.getY();
+				}
+			});
+			
+			layeredPane.addMouseMotionListener(new MouseMotionAdapter() {
+				@Override
+				public void mouseDragged(MouseEvent e) {
+//					// position of mouse position
+//					int xx = e.getX();
+//					int xy = e.getY();
+
+					// calculate distance moved
+//					int dx = xx - mousePrevX;
+//					int dy = xy - mousePrevY;
+//
+//					mousePrevX = xx;
+//					mousePrevY = xy;
+//
+//					panelMapX += dx;
+//					panelMapY += dy;
+					int x = e.getXOnScreen();
+					int y = e.getYOnScreen();
+					
+					layeredPane.setLocation(x - xx, y - xy);
+					//layeredPane.setLocation(xx - dx, xy - dy);  
 				}
 			});
 	}
