@@ -34,9 +34,12 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+
 import javax.swing.JLabel;
 //import com.jgoodies.forms.factories.DefaultComponentFactory;
 import java.awt.Label;
+import java.awt.Point;
 
 
 public class TestGUI extends JFrame {
@@ -46,6 +49,8 @@ public class TestGUI extends JFrame {
 	public static MapPanel mPanel;
 	public static int zoomLvl = 4;
     public static TestGUI app;
+    public Layer abovelayer; // the layer that is shown currently 
+	public String[] pixel = {"Nan","Nan","Nan","Nan",};
 	
 	// Launch the application.
 	public static void main(String[] args) {
@@ -160,26 +165,6 @@ public class TestGUI extends JFrame {
 
 		final JLayeredPane layeredPanel = new JLayeredPane();	// to LAYER the maps ??
 		panelMAP.add(layeredPanel, "name_927277592538900");
-		
-		// Initializing
-//		int[] backgroundColor = new int[3];
-//		backgroundColor[0] = 255;
-//		backgroundColor[1] = 255;
-//		backgroundColor[2] = 255;
-//		int width = 600;
-//		int height = 400;
-//		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); // Dimensions?
-//		WritableRaster raster = image.getRaster();
-//		for (int i = 0; i < width; i++) {
-//			for (int j = 0; j < height; j++) {
-//				raster.setPixel(i, j, backgroundColor);
-//			}
-//		}
-//		int scale = 3;
-//		MapPanel mapPanel = new MapPanel(image, scale);
-//		layeredPanel.add(mapPanel, BorderLayout.CENTER);
-//		mapPanel.setBounds(200, 200, 300, 300);	
-//		mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		// Create head Panel.
 		JPanel headPanel = new JPanel();
@@ -326,6 +311,7 @@ public class TestGUI extends JFrame {
 						for (int i = 0; i < selectedFiles.length; i++) {
 							System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
 							Layer layer = new Layer ("layer", selectedFiles[i].getAbsolutePath());
+							abovelayer = new Layer ("layer", selectedFiles[i].getAbsolutePath());//abovelayer = layer
 							
 							BufferedImage layerImage;
 							layerImage = layer.toImage();
@@ -348,10 +334,6 @@ public class TestGUI extends JFrame {
 			mnFile.add(mntmExit);
 			
 			JButton btnZoomIn = new JButton("ZoomIn");
-			btnZoomIn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
 			btnZoomIn.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -451,7 +433,8 @@ public class TestGUI extends JFrame {
 			txtrValue.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
 			bottomPanel.add(txtrValue);
 			
-			Label label_3 = new Label("01");
+			Label label_3 = new Label(pixel[0]);//value
+			label_3.setText(pixel[0]);
 			label_3.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
 			label_3.setBackground(Color.WHITE);
 			label_3.setAlignment(Label.RIGHT);
@@ -465,7 +448,8 @@ public class TestGUI extends JFrame {
 			txtrId.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
 			bottomPanel.add(txtrId);
 			
-			Label label = new Label("01");
+			Label label = new Label(pixel[1]);//id
+			label.setText(pixel[1]);
 			label.setAlignment(Label.RIGHT);
 			label.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
 			label.setBackground(Color.WHITE);
@@ -479,7 +463,8 @@ public class TestGUI extends JFrame {
 			txtrX.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
 			bottomPanel.add(txtrX);
 			
-			Label label_1 = new Label("333");
+			Label label_1 = new Label(pixel[2]);
+			label_1.setText(pixel[2]);
 			label_1.setAlignment(Label.RIGHT);
 			label_1.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
 			label_1.setBackground(Color.WHITE);
@@ -493,10 +478,45 @@ public class TestGUI extends JFrame {
 			txtrY.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
 			bottomPanel.add(txtrY);
 			
-			Label label_1_1 = new Label("2");
+			Label label_1_1 = new Label(pixel[3]);
+			label_1_1.setText(pixel[3]);
 			label_1_1.setAlignment(Label.RIGHT);
 			label_1_1.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
 			label_1_1.setBackground(Color.WHITE);
 			bottomPanel.add(label_1_1);
+			
+			layeredPanel.addMouseMotionListener(new MouseMotionAdapter() {
+				@Override
+				public void mouseMoved(MouseEvent e) {
+					if(mPanel!=null) {
+						int x_screen = e.getX();//x&y are started from the left-up corner of layeredPanel
+						int y_screen = e.getY();
+						Point mPanelLocation = mPanel.getLocation();//[x=0,y=0]
+
+						int x_start = mPanelLocation.x; // from left to right
+						int x_end = mPanelLocation.x + abovelayer.nCols*zoomLvl;
+						int y_start = mPanelLocation.y; //from up to bottom
+						int y_end = mPanelLocation.y + abovelayer.nRows*zoomLvl;
+						
+						if(x_screen > x_start & x_screen < x_end & y_screen > y_start & y_screen < y_end) {
+							// index 
+							int x = (x_screen - x_start)/zoomLvl;
+							int y = (y_screen - y_start)/zoomLvl;
+
+							//message of this pixel
+							pixel[0] = Double.toString(abovelayer.values[x][y]);//value
+							pixel[1] = Integer.toString(x*abovelayer.nCols+y);//id
+							pixel[2] = Integer.toString(x);
+							pixel[3] = Integer.toString(y);
+
+							//visualization
+							label_3.setText(pixel[0]);//value
+							label.setText(pixel[1]);//id
+							label_1.setText(pixel[2]);//x
+							label_1_1.setText(pixel[3]);//y
+						}
+					}
+				}
+			});
 	}
 }
