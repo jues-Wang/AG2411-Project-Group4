@@ -62,7 +62,7 @@ public class TestGUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPanel;
 	public static MapPanel mPanel;
-	public static int zoomLvl = 4;
+	public static int zoomLvl = 3;
     public static TestGUI app;
     public static Layer aboveLayer; // the layer that is shown currently 
 	public String[] pixel = {"Nan","Nan","Nan","Nan",};
@@ -114,11 +114,10 @@ public class TestGUI extends JFrame {
 
 	public static void zoom(int change){
 		if (mPanel != null){
-			zoomLvl = zoomLvl+ change;
+			zoomLvl = Math.max(zoomLvl + change, 1);
 			mPanel.scale = zoomLvl;
 			mPanel.revalidate();
 			mPanel.repaint();
-			System.out.println("zoom triggered, new zoom lvl = "+zoomLvl);
 
 		} else {
 			JOptionPane.showMessageDialog(
