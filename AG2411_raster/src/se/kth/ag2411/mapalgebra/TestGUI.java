@@ -43,6 +43,8 @@ import javax.swing.SpinnerNumberModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.JLabel;
 //import com.jgoodies.forms.factories.DefaultComponentFactory;
@@ -203,6 +205,11 @@ public class TestGUI extends JFrame {
 		panelMAP.setLayout(new CardLayout(0, 0));
 
 		final JLayeredPane layeredPane = new JLayeredPane();	// to LAYER the maps ??
+		layeredPane.addMouseWheelListener(new MouseWheelListener() {
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				zoom(e.getWheelRotation());
+			}
+		});
 		panelMAP.add(layeredPane, "name_927277592538900");
 		
 		// Defining the pop-up menu on right click
