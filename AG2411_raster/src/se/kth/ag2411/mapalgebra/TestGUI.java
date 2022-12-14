@@ -223,13 +223,16 @@ public class TestGUI extends JFrame {
 		        	layeredPane.remove(mPanel);
 		            int index = displayList.locationToIndex(e.getPoint());
 		            int scale = 3;
+		            layeredPane.remove(mPanel);
+		            
+		            aboveLayer = layerList.get(index);
 		            
 					BufferedImage layerImage = imageList.get(index);
 					mPanel = new MapPanel(layerImage, scale);
 					layeredPane.add(mPanel, BorderLayout.CENTER);
 					mPanel.setBounds(0, 0, 2000, 2000);	
 					mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
-					layeredPane.remove(mPanel);
+					
 		        }
 		        
 		        // Open pop-up menu
