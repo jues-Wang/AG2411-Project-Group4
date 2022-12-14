@@ -3,3 +3,4 @@
 #ignore all compiled java classes
 .class
 *.class
+*.class
