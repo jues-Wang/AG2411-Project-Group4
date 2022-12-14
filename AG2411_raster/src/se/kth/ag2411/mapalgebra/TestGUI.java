@@ -76,11 +76,35 @@ public class TestGUI extends JFrame {
 
 	public static void zoom(int change){
 		if (mPanel != null){
-			zoomLvl = zoomLvl+ change;
-			mPanel.scale = zoomLvl;
-			mPanel.revalidate();
-			mPanel.repaint();
-			System.out.println("zoom triggered, new zoom lvl = "+zoomLvl);
+			if(zoomLvl+ change >=0) {
+				zoomLvl = zoomLvl+ change;
+				mPanel.scale = zoomLvl;
+				mPanel.revalidate();
+				mPanel.repaint();
+				System.out.println("zoom triggered, new zoom lvl = "+zoomLvl);
+			}
+			
+
+		} else {
+			JOptionPane.showMessageDialog(
+					app,
+					"Unable to preform action: no layer loaded",
+					"No Layer",
+					JOptionPane.OK_OPTION
+					);
+		}
+	}
+	
+	public static void zoomlvl(int change){
+		if (mPanel != null){
+			if(change >=0) {
+				zoomLvl = change;
+				mPanel.scale = zoomLvl;
+				mPanel.revalidate();
+				mPanel.repaint();
+				System.out.println("zoom triggered, new zoom lvl = "+zoomLvl);
+			}
+			
 
 		} else {
 			JOptionPane.showMessageDialog(
@@ -360,7 +384,7 @@ public class TestGUI extends JFrame {
 		contentPanel.add(bottomPanel, BorderLayout.SOUTH);
 			
 			// Fill up bottom panel:
-			Button fullExtent = new Button("Full Extent");
+
 			fullExtent.setBackground(mainColor2);
 			fullExtent.setForeground(mainColor);
 			fullExtent.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
@@ -379,7 +403,7 @@ public class TestGUI extends JFrame {
 			
 			JSpinner spinner = new JSpinner();
 			spinner.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-			spinner.setModel(new SpinnerNumberModel(100, 0, 500, 25));	// insert % ??
+			spinner.setModel(new SpinnerNumberModel(100*zoomLvl, 0, 800, 100));	// insert % ??
 			bottomPanel.add(spinner);
 			
 			Component horizontalStrut_1 = Box.createHorizontalStrut(20);
@@ -476,6 +500,17 @@ public class TestGUI extends JFrame {
 			label_1_1.setBackground(Color.WHITE);
 			bottomPanel.add(label_1_1);
 			
+			Button fullExtent = new Button("Full Extent");
+			fullExtent.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					zoomLvl = 3;
+					zoomlvl(zoomLvl);
+					spinner.setValue((int)zoomLvl*100);
+					spinner_1.setValue((int)zoomLvl*abovelayer.resolution);
+				}
+			});
+			
 			layeredPanel.addMouseMotionListener(new MouseMotionAdapter() {
 				@Override
 				public void mouseMoved(MouseEvent e) {
@@ -548,7 +583,11 @@ public class TestGUI extends JFrame {
 			btnZoomIn.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-				zoom(1);}
+				zoom(1);
+				
+				spinner.setValue((int)zoomLvl*100);
+				spinner_1.setValue((int)zoomLvl*abovelayer.resolution);
+				}
 			});
 			menuBar.add(btnZoomIn);
 
@@ -557,6 +596,8 @@ public class TestGUI extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					zoom(-1);
+					spinner.setValue((int)zoomLvl*100);
+					spinner_1.setValue((int)zoomLvl*abovelayer.resolution);
 				}
 			});
 			menuBar.add(btnZoomOut);
