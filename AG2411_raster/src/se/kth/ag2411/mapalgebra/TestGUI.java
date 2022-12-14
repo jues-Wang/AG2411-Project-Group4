@@ -49,7 +49,8 @@ public class TestGUI extends JFrame {
 	public static int zoomLvl = 4;
     public static TestGUI app;
     public Layer abovelayer; // the layer that is shown currently 
-	public String[] pixel = {"Nan","Nan","Nan","Nan",};
+	public String[] pixel = {" "," "," "," "};
+	public String[] pixel_selected = {" "," "," "," "};
 	
 	// Launch the application.
 	public static void main(String[] args) {
@@ -424,6 +425,7 @@ public class TestGUI extends JFrame {
 			bottomPanel.add(txtrSelectedCell);
 			
 			Label label_2 = new Label("01");
+			label_2.setText(pixel_selected[1]);
 			label_2.setAlignment(Label.RIGHT);
 			label_2.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
 			label_2.setBackground(Color.WHITE);
@@ -522,5 +524,41 @@ public class TestGUI extends JFrame {
 					}
 				}
 			});
+
+			
+			layeredPanel.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if(mPanel!=null) {
+						int x_screen = e.getX();//x&y are started from the left-up corner of layeredPanel
+						int y_screen = e.getY();
+						Point mPanelLocation = mPanel.getLocation();//[x=0,y=0]
+
+						int x_start = mPanelLocation.x; // from left to right
+						int x_end = mPanelLocation.x + abovelayer.nCols*zoomLvl;
+						int y_start = mPanelLocation.y; //from up to bottom
+						int y_end = mPanelLocation.y + abovelayer.nRows*zoomLvl;
+						
+						if(x_screen > x_start & x_screen < x_end & y_screen > y_start & y_screen < y_end) {
+							// index 
+							int x = (x_screen - x_start)/zoomLvl;
+							int y = (y_screen - y_start)/zoomLvl;
+
+							//message of this pixel
+							pixel_selected[0] = Double.toString(abovelayer.values[x][y]);//value
+							pixel_selected[1] = Integer.toString(x*abovelayer.nCols+y);//id
+							pixel_selected[2] = Integer.toString(x);
+							pixel_selected[3] = Integer.toString(y);
+
+							//visualization
+							label_2.setText(pixel_selected[1]);//id
+
+						}
+					}
+				}
+				
+			});
+			
+
 	}
 }
