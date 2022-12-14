@@ -62,6 +62,7 @@ public class TestGUI extends JFrame {
 	public static MapPanel mPanel;
 	public static int zoomLvl = 4;
     public static TestGUI app;
+	public static String[] layerNameList;
     public Layer aboveLayer; // the layer that is shown currently 
 	public String[] pixel = {"Nan","Nan","Nan","Nan",};
 	
@@ -119,7 +120,7 @@ public class TestGUI extends JFrame {
 		
 		// Create the frame.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 500);
+		//setBounds(100, 100, 900, 500);
 		
 		// NICE COLORS:
 		Color projectDarkBlue = new Color (39, 55, 115);
@@ -162,7 +163,7 @@ public class TestGUI extends JFrame {
 		// Create the content panel.
 		contentPanel = new JPanel();
 		contentPanel.setForeground(Color.WHITE);
-		contentPanel.setBackground(Color.DARK_GRAY);
+	//	contentPanel.setBackground(Color.DARK_GRAY);
 		setContentPane(contentPanel);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		
@@ -193,7 +194,7 @@ public class TestGUI extends JFrame {
 		popupMenuRC.add(mntmExportRC);
 		
 		// Display TOC
-		DefaultListModel<String> layerNameList = new DefaultListModel<String>();
+		final DefaultListModel<String> layerNameList = new DefaultListModel<String>();
 		LinkedList<Layer> layerList = new LinkedList<Layer>();
 		LinkedList<BufferedImage> imageList = new LinkedList<BufferedImage>();
 		JList<String> displayList = new JList<String>(layerNameList);
@@ -397,59 +398,22 @@ public class TestGUI extends JFrame {
 			menuBar.add(mnToolbox);
 			
 			// Local operations
-			JMenu mnLocal = new JMenu("Local operations");
+			JMenuItem mnLocal = new JMenuItem("Local operations");
 			mnToolbox.add(mnLocal);
 			
-			JMenuItem mnLocalSum = new JMenuItem("LocalSum");
-			mnLocal.add(mnLocalSum);
-			
-			mnLocalSum.addActionListener(new ActionListener() {
+			mnLocal.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					LocalWindow frame = new LocalWindow();	
-					frame.NewWindow(null);
+					LocalWindow.main();
 				}
 			});
-			
-			JMenuItem mnLocalDiff = new JMenuItem("LocalDiff");
-			mnLocal.add(mnLocalDiff);
-			
+
 			// Focal operations
-			JMenu mnFocal = new JMenu("Focal operations");
+			JMenuItem mnFocal = new JMenuItem("Focal operations");
 			mnToolbox.add(mnFocal);
 			
-			JMenuItem mnFocalSum = new JMenuItem("FocalSum");
-			mnFocal.add(mnFocalSum);
-			
-			JMenuItem mnFocalVariety = new JMenuItem("FocalVariety");
-			mnFocal.add(mnFocalVariety);
-			
-			JMenuItem mnFocalProduct = new JMenuItem("FocalProduct");
-			mnFocal.add(mnFocalProduct);
-			
-			JMenuItem mnFocalRanking = new JMenuItem("FocalRanking");
-			mnFocal.add(mnFocalRanking);
-			
 			// Zonal operations
-			JMenu mnZonal = new JMenu("Zonal operations");
+			JMenuItem mnZonal = new JMenuItem("Zonal operations");
 			mnToolbox.add(mnZonal);
-			
-			JMenuItem mnZonalSum = new JMenuItem("ZonalSum");
-			mnZonal.add(mnZonalSum);
-			
-			JMenuItem mnZonalVariety = new JMenuItem("ZonalVariety");
-			mnZonal.add(mnZonalVariety);
-			
-			JMenuItem mnZonalProduct = new JMenuItem("ZonalProduct");
-			mnZonal.add(mnZonalProduct);
-			
-			JMenuItem mnZonalMean = new JMenuItem("ZonalMean");
-			mnZonal.add(mnZonalMean);
-			
-			JMenuItem mnZonalMin = new JMenuItem("ZonalMinimum");
-			mnZonal.add(mnZonalMin);
-			
-			JMenuItem mnZonalMax = new JMenuItem("ZonalMaximum");
-			mnZonal.add(mnZonalMax);
 			
 			Component gap4 = Box.createHorizontalStrut(20);
 			menuBar.add(gap4);
