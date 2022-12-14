@@ -33,8 +33,10 @@ import javax.swing.JComboBox;
 
 import java.awt.BorderLayout;
 import java.awt.Choice;
+import javax.swing.JCheckBox;
+import javax.swing.SwingConstants;
 
-public class LocalWindow extends JFrame {
+public class FocalWindow extends JFrame {
 
 	/**
 	 * 
@@ -49,6 +51,9 @@ public class LocalWindow extends JFrame {
 	private JTextField tfOutputFile;
 	public String statisticType;
 	public static Layer outLayer;
+	public JTextField txtRadius;
+	public int radius;
+	public boolean isSquare;
 	
 	/**
 	 * Launch the application.
@@ -57,7 +62,7 @@ public class LocalWindow extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LocalWindow window = new LocalWindow();
+					FocalWindow window = new FocalWindow();
 					window.newWindow.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -69,11 +74,10 @@ public class LocalWindow extends JFrame {
 	/**
 	 * Create the application.
 	 */
-	public LocalWindow() {
-		setTitle("MAP ALGEBRA: Local Operations");
+	public FocalWindow() {
 
 		newWindow = new JFrame();
-		newWindow.setTitle("MAP ALGEBRA: Local Operation");
+		newWindow.setTitle("MAP ALGEBRA: Focal Operation");
 		newWindow.setBounds(400, 100, 400, 420);
 		
 		JPanel panel = new JPanel();
@@ -91,27 +95,24 @@ public class LocalWindow extends JFrame {
 		cbInputFile.setBounds(20, 67, 250, 23);
 		GridBagConstraints gbc_cbInputFile = new GridBagConstraints();
 		panel.add(cbInputFile, gbc_cbInputFile);
-	
-		// !!!   Drop down input files (not working. no access to the list?)  !!!!!
-		// RUN IT FIRST WITHOUT THIS PART ;)
-			for(String i:TestGUI.layerNames) {
-				cbInputFile.addItem(i);
-			}
-			
-			inputFile=(String) cbInputFile.getItemAt(0); 	//default
+
+		for(String i:TestGUI.layerNames) {
+			cbInputFile.addItem(i);
+		}
+
+		inputFile=(String) cbInputFile.getItemAt(0); 	//default
 
 			cbInputFile.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
-					inputFile = (String) cbInputFile.getSelectedItem();
-					//System.out.println("选择的选项是: " + selectedItem);								
+					inputFile = (String) cbInputFile.getSelectedItem();							
 				}			
 			});	
 				
 		final DefaultListModel<String> fileListModel = new DefaultListModel<String>();
 		final JList<String> listFileList = new JList<String>(fileListModel);
-		listFileList.setBounds(23, 101, 247, 53);
+		listFileList.setBounds(23, 101, 247, 23);
 		GridBagConstraints gbc_listFileList = new GridBagConstraints();
 		panel.add(listFileList, gbc_listFileList);
 		
@@ -119,7 +120,6 @@ public class LocalWindow extends JFrame {
 		btnAdd.setBounds(277, 67, 88, 23);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				if(fileListModel.getSize()<2) {
 					String selectItem=(String) cbInputFile.getSelectedItem();
 					fileListModel.addElement(selectItem);
@@ -131,7 +131,7 @@ public class LocalWindow extends JFrame {
 		
 		JLabel lblOutput = new JLabel("Output file name and location:");
 		lblOutput.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
-		lblOutput.setBounds(23, 168, 239, 14);
+		lblOutput.setBounds(23, 290, 239, 14);
 		panel.add(lblOutput);
 		
 		JButton btnDelete = new JButton ("Delete");
@@ -139,7 +139,6 @@ public class LocalWindow extends JFrame {
 		btnDelete.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				int index = listFileList.getSelectedIndex();
 				if(index>=0) {
 					fileListModel.remove(index);
@@ -152,7 +151,6 @@ public class LocalWindow extends JFrame {
 		btnDelete.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				int index = listFileList.getSelectedIndex();
 				if(index>=0) {
 					fileListModel.remove(index);
@@ -162,7 +160,7 @@ public class LocalWindow extends JFrame {
 		});
 
 		tfOutputFile = new JTextField();
-		tfOutputFile.setBounds(23, 193, 247, 23);
+		tfOutputFile.setBounds(23, 315, 247, 23);
 		
 		// Output file
 		GridBagConstraints gbc_tfOutputFile = new GridBagConstraints();
@@ -174,7 +172,7 @@ public class LocalWindow extends JFrame {
 		tfOutputFile.setColumns(10);
 
 		JButton btnOutputFile = new JButton("Choose");
-		btnOutputFile.setBounds(277, 193, 88, 23);
+		btnOutputFile.setBounds(277, 315, 88, 23);
 		GridBagConstraints gbc_btnOutputFile = new GridBagConstraints();
 		gbc_btnOutputFile.insets = new Insets(0, 0, 5, 5);
 		gbc_btnOutputFile.gridx = 1;
@@ -200,7 +198,7 @@ public class LocalWindow extends JFrame {
 		btnOutputFile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {		
-				int result = fileChooser.showSaveDialog(LocalWindow.this);
+				int result = fileChooser.showSaveDialog(FocalWindow.this);
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					outputFileName=fileChooser.getSelectedFile().getPath();
 					
@@ -216,28 +214,71 @@ public class LocalWindow extends JFrame {
 			}
 		});
 
+		// Parameters
+		JLabel lblNeighborhoodType = new JLabel("Neighborhood type:");
+		lblNeighborhoodType.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
+		lblNeighborhoodType.setBounds(23, 143, 120, 14);
+		panel.add(lblNeighborhoodType);
+		
+		JComboBox<String> cbNeighborhood = new JComboBox<String>();
+		cbNeighborhood.setBounds(149, 140, 120, 23);
+		panel.add(cbNeighborhood);
+		
+		cbNeighborhood.addItem("SQUARE");
+		cbNeighborhood.addItem("CIRCLE");
+		
+		isSquare = false;
+		cbNeighborhood.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				String selectedItem = (String) cbNeighborhood.getSelectedItem();
+				if (selectedItem.equals("Square")) {
+					isSquare = true;
+				} else {
+					isSquare = false;
+				}
+			}
+		});
+		
+		JLabel lblRadius = new JLabel("Radius:");
+		lblRadius.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
+		lblRadius.setBounds(23, 175, 120, 14);
+		panel.add(lblRadius);
+		
+		txtRadius = new JTextField();
+		txtRadius.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtRadius.setBounds(149, 174, 121, 23);
+		panel.add(txtRadius);
+		
+		txtRadius.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String text = txtRadius.getText();
+				if(!text.equals("")) {
+					radius = Integer.parseInt(text);
+					System.out.println(radius);
+				}
+			}
+		});
 		
 		// Statistic operation
-				JLabel lblStatisticOperation = new JLabel("Statistic Operation:");
+		JLabel lblStatisticOperation = new JLabel("Statistic Operation:");
 		lblStatisticOperation.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
-		lblStatisticOperation.setBounds(23, 227, 239, 14);
+		lblStatisticOperation.setBounds(23, 223, 239, 14);
 		panel.add(lblStatisticOperation);
 		
 		final JComboBox <String> cbStatisticType = new JComboBox<String>();
-		cbStatisticType.setBounds(23, 252, 247, 23);
+		cbStatisticType.setBounds(23, 248, 247, 23);
 		panel.add(cbStatisticType);
 		
-
-		
 		cbStatisticType.addItem("SUM");
-		cbStatisticType.addItem("DIFF");
-		
+		cbStatisticType.addItem("VARIETY");
+		cbStatisticType.addItem("PRODUCT");
+		cbStatisticType.addItem("RANKING");
+				
 		statisticType=(String) cbStatisticType.getItemAt(0); 
 
 		cbStatisticType.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub				
+			public void actionPerformed(ActionEvent e) {			
 				statisticType = (String) cbStatisticType.getSelectedItem();
 				System.out.println(statisticType);
 			}			
@@ -245,47 +286,36 @@ public class LocalWindow extends JFrame {
 		
 		// Run or Cancel
 		JButton btnRun = new JButton("RUN");
+		btnRun.setBounds(277, 349, 88, 23);
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (TestGUI.layers.length == 0) {
-					newWindow.dispose();
+				
+				if(radius < 0 || outputFileName == null) {
+					JOptionPane.showMessageDialog(new JFrame(),"fail");
+					return;
 				}
+			
 				Layer layer1 = TestGUI.layers[0];
-				Layer layer2 = TestGUI.layers[0];
+			
+			
 				// Match the layer names with the layers
 				for(int i = 0; i < TestGUI.layers.length; i++) {
 					if(TestGUI.layers[i].name == fileListModel.get(0)) {
 						layer1 = TestGUI.layers[i];
 					}
-					if(TestGUI.layers[i].name == fileListModel.get(1)) {
-						layer2 = TestGUI.layers[i];
-					}
 				}
-				int scale = 3;
-				
+			
 				// Perform the selected operation
-				if(statisticType == "SUM") {
-					TestGUI.layerList.add(layer1.localSum(layer2, outLayerName));
-					TestGUI.imageList.add(layer1.localSum(layer2, outLayerName).toImage());
-					
-					TestGUI.mPanel = new MapPanel(layer1.localSum(layer2, outLayerName).toImage(), scale);
-					TestGUI.aboveLayer = layer1.localSum(layer2, outLayerName);
-
-					
-				} else if (statisticType == "DIFF") {
-					TestGUI.layerList.add(layer1.localDifference(layer2, outLayerName));
-					TestGUI.imageList.add(layer1.localDifference(layer2, outLayerName).toImage());
-					
-					TestGUI.mPanel = new MapPanel(layer1.localDifference(layer2, outLayerName).toImage(), scale);
-					TestGUI.aboveLayer = layer1.localDifference(layer2, outLayerName);
-				}
-				
-				TestGUI.mPanel.repaint();
-				TestGUI.layerNameList.addElement(outLayerName);
-				newWindow.dispose();
+				if(statisticType == "SUM") { 
+					TestGUI.layerList.add(layer1.focalSum(radius, isSquare, outLayerName));
+					TestGUI.imageList.add(layer1.focalSum(radius, isSquare, outLayerName).toImage());
+					System.out.println(outLayerName);
+//				} else if (statisticType == "VARIETY") {	
+//				}
+				// HERE IS A LOT STILL MISSING
 			}
-		});
-		btnRun.setBounds(277, 349, 88, 23);
+			}
+			});
 		panel.add(btnRun);
 		
 		JButton btnCancel = new JButton("Cancel");

@@ -121,7 +121,7 @@ public class TestGUI extends JFrame {
 		} else {
 			JOptionPane.showMessageDialog(
 					app,
-					"Unable to preform action: no layer loaded",
+					"Unable to perform action: no layer loaded",
 					"No Layer",
 					JOptionPane.OK_OPTION
 					);
@@ -229,6 +229,7 @@ public class TestGUI extends JFrame {
 					layeredPane.add(mPanel, BorderLayout.CENTER);
 					mPanel.setBounds(0, 0, 2000, 2000);	
 					mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+					layeredPane.remove(mPanel);
 		        }
 		        
 		        // Open pop-up menu
@@ -430,10 +431,23 @@ public class TestGUI extends JFrame {
 			// Focal operations
 			JMenuItem mnFocal = new JMenuItem("Focal operations");
 			mnToolbox.add(mnFocal);
+			mnFocal.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					getLayerNames(layerNameList);
+					getLayers(layerList);
+					FocalWindow.main();
+				}
+			});
 			
 			// Zonal operations
 			JMenuItem mnZonal = new JMenuItem("Zonal operations");
 			mnToolbox.add(mnZonal);
+			
+			JMenuItem mnDistance = new JMenuItem("Distance");
+			mnToolbox.add(mnDistance);
+			
+			JMenuItem mnShortestPath = new JMenuItem("Shortest Path");
+			mnToolbox.add(mnShortestPath);
 			
 			Component gap4 = Box.createHorizontalStrut(20);
 			menuBar.add(gap4);
@@ -481,7 +495,7 @@ public class TestGUI extends JFrame {
 							// Add to TOC if does not exist already
 							boolean inList = false;
 							for (int j = 0; j < layerNameList.size(); j++) {
-								if (layerNameList.get(i).equals(layerName)) {
+								if (layerNameList.get(j).equals(layerName)) {
 									inList = true;
 									break;
 								}
