@@ -46,7 +46,7 @@ public class TestGUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPanel;
 	public static MapPanel mPanel;
-	public static int zoomLvl = 4;
+	public static int zoomLvl = 3;
     public static TestGUI app;
     public Layer abovelayer; // the layer that is shown currently 
 	public String[] pixel = {" "," "," "," "};
@@ -309,7 +309,7 @@ public class TestGUI extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					
 					int result = fileChooser.showOpenDialog(TestGUI.this);
-					int scale = 3;
+					int scale = zoomLvl;
 					
 					if (result == JFileChooser.APPROVE_OPTION) {
 						File[] selectedFiles = fileChooser.getSelectedFiles();
@@ -338,22 +338,7 @@ public class TestGUI extends JFrame {
 			JMenuItem mntmExit = new JMenuItem("Exit");
 			mnFile.add(mntmExit);
 			
-			JButton btnZoomIn = new JButton("ZoomIn");
-			btnZoomIn.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-				zoom(1);}
-			});
-			menuBar.add(btnZoomIn);
 
-			JButton btnZoomOut = new JButton("ZoomOut");
-			btnZoomOut.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					zoom(-1);
-				}
-			});
-			menuBar.add(btnZoomOut);
 			
 			Component verticalStrut = Box.createVerticalStrut(9);
 			headPanel.add(verticalStrut, BorderLayout.NORTH);
@@ -559,6 +544,22 @@ public class TestGUI extends JFrame {
 				
 			});
 			
+			JButton btnZoomIn = new JButton("ZoomIn");
+			btnZoomIn.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				zoom(1);}
+			});
+			menuBar.add(btnZoomIn);
+
+			JButton btnZoomOut = new JButton("ZoomOut");
+			btnZoomOut.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					zoom(-1);
+				}
+			});
+			menuBar.add(btnZoomOut);
 
 	}
 }
