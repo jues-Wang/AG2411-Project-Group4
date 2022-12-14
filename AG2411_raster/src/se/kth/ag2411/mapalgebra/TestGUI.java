@@ -54,13 +54,15 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.JComboBox;
 import javax.swing.event.PopupMenuEvent;
+import java.awt.event.MouseWheelListener;
+import java.awt.event.MouseWheelEvent;
 
 public class TestGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPanel;
 	public static MapPanel mPanel;
-	public static int zoomLvl = 4;
+	public static int zoomLvl = 3;
     public static TestGUI app;
     public Layer aboveLayer; // the layer that is shown currently 
 	public String[] pixel = {"Nan","Nan","Nan","Nan",};
@@ -90,11 +92,11 @@ public class TestGUI extends JFrame {
 
 	public static void zoom(int change){
 		if (mPanel != null){
-			zoomLvl = zoomLvl+ change;
+			zoomLvl = Math.max(zoomLvl+ change, 1);
 			mPanel.scale = zoomLvl;
 			mPanel.revalidate();
 			mPanel.repaint();
-			System.out.println("zoom triggered, new zoom lvl = "+zoomLvl);
+//			System.out.println("zoom triggered, new zoom lvl = "+zoomLvl);
 
 		} else {
 			JOptionPane.showMessageDialog(
@@ -131,11 +133,14 @@ public class TestGUI extends JFrame {
 		Color projectDarkBlue3 = new Color (5, 0, 56);
 		Color projectDarkBlue4 = new Color (0, 41, 61);
 		Color projectYellow = new Color (255, 208, 47);
-		Color buttonColor = new Color(238, 238, 238);
+		
 		
 		// Choose main colors for GUI:
 		Color mainColor = projectDarkBlue4;		// for background color in head & bottom panel
 		Color mainColor2 = projectLightGreen;	// for text, borders, ...
+		
+		// Other colors
+		Color buttonColor = new Color(238, 238, 238);
 		Color highlightColor = projectYellow;
 		Color crazyColor = projectRed;
 		
@@ -181,6 +186,11 @@ public class TestGUI extends JFrame {
 		panelMAP.setLayout(new CardLayout(0, 0));
 
 		final JLayeredPane layeredPane = new JLayeredPane();	// to LAYER the maps ??
+		layeredPane.addMouseWheelListener(new MouseWheelListener() {
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				zoom(e.getWheelRotation());
+			}
+		});
 		panelMAP.add(layeredPane, "name_927277592538900");
 		
 		// Defining the pop-up menu on right click
@@ -260,7 +270,8 @@ public class TestGUI extends JFrame {
 				if(layerNameList.get(index).equals(aboveLayer.name)) {
 					shownLayer = true;
 					layeredPane.remove(mPanel);
-					layeredPane.setVisible(true);
+					BufferedImage tempImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+					mPanel = new MapPanel(tempImage, scale);
 				}
 				
 				// Remove the layer
@@ -277,6 +288,7 @@ public class TestGUI extends JFrame {
 					layeredPane.add(mPanel, BorderLayout.CENTER);
 					mPanel.setBounds(0, 0, 2000, 2000);	
 					mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+					mPanel.revalidate();
 				}
 			}
 			
@@ -521,6 +533,10 @@ public class TestGUI extends JFrame {
 			mnFile.add(mntmExit);
 			
 			JButton btnZoomIn = new JButton("ZoomIn");
+			btnZoomIn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				}
+			});
 			btnZoomIn.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -558,6 +574,14 @@ public class TestGUI extends JFrame {
 			
 			// Fill up bottom panel:
 			Button fullExtent = new Button("Full Extent");
+			fullExtent.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					mPanel.scale = 3;
+					mPanel.revalidate();
+					mPanel.repaint();
+				}
+			});
 			fullExtent.setBackground(mainColor2);
 			fullExtent.setForeground(mainColor);
 			fullExtent.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
