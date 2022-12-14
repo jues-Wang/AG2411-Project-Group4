@@ -250,7 +250,7 @@ public class Layer {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		for(int i = 0; i < nRows; i++){
 			for (int j = 0; j < nCols; j++) {
-				outLayer.values[i][j] = Math.abs(values[i][j] - inLayer.values[i][j]);
+				outLayer.values[i][j] = values[i][j] - inLayer.values[i][j];
 			}
 		}
 		return outLayer;

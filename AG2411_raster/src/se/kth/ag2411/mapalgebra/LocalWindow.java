@@ -45,8 +45,10 @@ public class LocalWindow extends JFrame {
 	public String inputFile;
 	public String outputFileName;
 	public String fileName;
+	public String outLayerName;
 	private JTextField tfOutputFile;
 	public String statisticType;
+	public static Layer outLayer;
 	
 	/**
 	 * Launch the application.
@@ -92,20 +94,20 @@ public class LocalWindow extends JFrame {
 	
 		// !!!   Drop down input files (not working. no access to the list?)  !!!!!
 		// RUN IT FIRST WITHOUT THIS PART ;)
-//			for(String i:TestGUI.layerNameList) {
-//				cbInputFile.addItem(i);
-//			}
-//			
-//			inputFile=(String) cbInputFile.getItemAt(0); 	//default
-//
-//			cbInputFile.addActionListener(new ActionListener() {
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					// TODO Auto-generated method stub
-//					inputFile = (String) cbInputFile.getSelectedItem();
-//					//System.out.println("选择的选项是: " + selectedItem);								
-//				}			
-//			});	
+			for(String i:TestGUI.layerNames) {
+				cbInputFile.addItem(i);
+			}
+			
+			inputFile=(String) cbInputFile.getItemAt(0); 	//default
+
+			cbInputFile.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					inputFile = (String) cbInputFile.getSelectedItem();
+					//System.out.println("选择的选项是: " + selectedItem);								
+				}			
+			});	
 				
 		final DefaultListModel<String> fileListModel = new DefaultListModel<String>();
 		final JList<String> listFileList = new JList<String>(fileListModel);
@@ -202,7 +204,8 @@ public class LocalWindow extends JFrame {
 				if (result == JFileChooser.APPROVE_OPTION) {					
 					outputFileName=fileChooser.getSelectedFile().getPath();
 					
-					fileName=fileChooser.getSelectedFile().getName();					
+					fileName=fileChooser.getSelectedFile().getName();
+					outLayerName = fileName;
 					if(fileName.indexOf(".txt")==-1) {
 						outputFileName=outputFileName+".txt";
 						fileName=fileName+".txt";
@@ -235,12 +238,50 @@ public class LocalWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub				
-				statisticType = (String) cbStatisticType.getSelectedItem();				
+				statisticType = (String) cbStatisticType.getSelectedItem();
+				System.out.println(statisticType);
 			}			
 		});
 		
 		// Run or Cancel
 		JButton btnRun = new JButton("RUN");
+		btnRun.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (TestGUI.layers.length == 0) {
+					newWindow.dispose();
+				}
+				Layer layer1 = TestGUI.layers[0];
+				Layer layer2 = TestGUI.layers[0];
+				// Match the layer names with the layers
+				for(int i = 0; i < TestGUI.layers.length; i++) {
+					if(TestGUI.layers[i].name == fileListModel.get(0)) {
+						layer1 = TestGUI.layers[i];
+					}
+					if(TestGUI.layers[i].name == fileListModel.get(1)) {
+						layer2 = TestGUI.layers[i];
+					}
+				}
+				int scale = 3;
+				// Perform the selected operation
+				if(statisticType == "SUM") {
+					TestGUI.layerList.add(layer1.localSum(layer2, outLayerName));
+					TestGUI.imageList.add(layer1.localSum(layer2, outLayerName).toImage());
+					
+					TestGUI.mPanel = new MapPanel(layer1.localSum(layer2, outLayerName).toImage(), scale);
+					TestGUI.aboveLayer = layer1.localSum(layer2, outLayerName);
+				} else if (statisticType == "DIFF") {
+					TestGUI.layerList.add(layer1.localDifference(layer2, outLayerName));
+					TestGUI.imageList.add(layer1.localDifference(layer2, outLayerName).toImage());
+					
+					TestGUI.mPanel = new MapPanel(layer1.localDifference(layer2, outLayerName).toImage(), scale);
+					TestGUI.aboveLayer = layer1.localDifference(layer2, outLayerName);
+				}
+				
+				TestGUI.mPanel.repaint();
+				TestGUI.layerNameList.addElement(outLayerName);
+				newWindow.dispose();
+			}
+		});
 		btnRun.setBounds(277, 349, 88, 23);
 		// btnRun.addMouseListener(new MouseListener() { CONNECT TO ALL THE LOCAL OPERATONS
 		panel.add(btnRun);

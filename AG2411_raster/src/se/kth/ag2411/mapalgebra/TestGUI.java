@@ -62,9 +62,30 @@ public class TestGUI extends JFrame {
 	public static MapPanel mPanel;
 	public static int zoomLvl = 4;
     public static TestGUI app;
-	public static String[] layerNameList;
-    public Layer aboveLayer; // the layer that is shown currently 
+    public static Layer aboveLayer; // the layer that is shown currently 
 	public String[] pixel = {"Nan","Nan","Nan","Nan",};
+	
+	// For operations in other windows
+	public static DefaultListModel<String> layerNameList = new DefaultListModel<String>();
+	public static LinkedList<Layer> layerList = new LinkedList<Layer>();
+	public static LinkedList<BufferedImage> imageList = new LinkedList<BufferedImage>();
+    public static String[] layerNames = new String[1];
+    public static Layer[] layers = new Layer[1];
+    public static BufferedImage[] images = new BufferedImage[1];
+	
+    public static void getLayerNames(DefaultListModel<String> layerNameList) {
+		layerNames = new String[layerNameList.size()];
+		for (int i = 0; i < layerNameList.size(); i++) {
+			layerNames[i] = layerNameList.get(i);
+		}
+	}
+	
+	public static void getLayers(LinkedList<Layer> layerList) {
+		layers = new Layer[layerList.size()];
+		for (int i = 0; i < layerList.size(); i++) {
+			layers[i] = layerList.get(i);
+		}
+	}
 	
 	// Launch the application.
 	public static void main(String[] args) {
@@ -120,7 +141,7 @@ public class TestGUI extends JFrame {
 		
 		// Create the frame.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//setBounds(100, 100, 900, 500);
+		setBounds(100, 100, 900, 500);
 		
 		// NICE COLORS:
 		Color projectDarkBlue = new Color (39, 55, 115);
@@ -194,9 +215,6 @@ public class TestGUI extends JFrame {
 		popupMenuRC.add(mntmExportRC);
 		
 		// Display TOC
-		final DefaultListModel<String> layerNameList = new DefaultListModel<String>();
-		LinkedList<Layer> layerList = new LinkedList<Layer>();
-		LinkedList<BufferedImage> imageList = new LinkedList<BufferedImage>();
 		JList<String> displayList = new JList<String>(layerNameList);
 		displayList.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -403,6 +421,8 @@ public class TestGUI extends JFrame {
 			
 			mnLocal.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					getLayerNames(layerNameList);
+					getLayers(layerList);
 					LocalWindow.main();
 				}
 			});
