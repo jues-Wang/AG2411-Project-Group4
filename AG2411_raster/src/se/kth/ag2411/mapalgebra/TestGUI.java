@@ -62,8 +62,30 @@ public class TestGUI extends JFrame {
 	public static MapPanel mPanel;
 	public static int zoomLvl = 4;
     public static TestGUI app;
-    public Layer aboveLayer; // the layer that is shown currently 
+    public static Layer aboveLayer; // the layer that is shown currently 
 	public String[] pixel = {"Nan","Nan","Nan","Nan",};
+	
+	// For operations in other windows
+	public static DefaultListModel<String> layerNameList = new DefaultListModel<String>();
+	public static LinkedList<Layer> layerList = new LinkedList<Layer>();
+	public static LinkedList<BufferedImage> imageList = new LinkedList<BufferedImage>();
+    public static String[] layerNames = new String[1];
+    public static Layer[] layers = new Layer[1];
+    public static BufferedImage[] images = new BufferedImage[1];
+	
+    public static void getLayerNames(DefaultListModel<String> layerNameList) {
+		layerNames = new String[layerNameList.size()];
+		for (int i = 0; i < layerNameList.size(); i++) {
+			layerNames[i] = layerNameList.get(i);
+		}
+	}
+	
+	public static void getLayers(LinkedList<Layer> layerList) {
+		layers = new Layer[layerList.size()];
+		for (int i = 0; i < layerList.size(); i++) {
+			layers[i] = layerList.get(i);
+		}
+	}
 	
 	// Launch the application.
 	public static void main(String[] args) {
@@ -99,7 +121,7 @@ public class TestGUI extends JFrame {
 		} else {
 			JOptionPane.showMessageDialog(
 					app,
-					"Unable to preform action: no layer loaded",
+					"Unable to perform action: no layer loaded",
 					"No Layer",
 					JOptionPane.OK_OPTION
 					);
@@ -162,7 +184,7 @@ public class TestGUI extends JFrame {
 		// Create the content panel.
 		contentPanel = new JPanel();
 		contentPanel.setForeground(Color.WHITE);
-		contentPanel.setBackground(Color.DARK_GRAY);
+	//	contentPanel.setBackground(Color.DARK_GRAY);
 		setContentPane(contentPanel);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		
@@ -193,9 +215,6 @@ public class TestGUI extends JFrame {
 		popupMenuRC.add(mntmExportRC);
 		
 		// Display TOC
-		DefaultListModel<String> layerNameList = new DefaultListModel<String>();
-		LinkedList<Layer> layerList = new LinkedList<Layer>();
-		LinkedList<BufferedImage> imageList = new LinkedList<BufferedImage>();
 		JList<String> displayList = new JList<String>(layerNameList);
 		displayList.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -204,12 +223,16 @@ public class TestGUI extends JFrame {
 		        	layeredPane.remove(mPanel);
 		            int index = displayList.locationToIndex(e.getPoint());
 		            int scale = 3;
+		            layeredPane.remove(mPanel);
+		            
+		            aboveLayer = layerList.get(index);
 		            
 					BufferedImage layerImage = imageList.get(index);
 					mPanel = new MapPanel(layerImage, scale);
 					layeredPane.add(mPanel, BorderLayout.CENTER);
 					mPanel.setBounds(0, 0, 2000, 2000);	
 					mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+					
 		        }
 		        
 		        // Open pop-up menu
@@ -397,59 +420,37 @@ public class TestGUI extends JFrame {
 			menuBar.add(mnToolbox);
 			
 			// Local operations
-			JMenu mnLocal = new JMenu("Local operations");
+			JMenuItem mnLocal = new JMenuItem("Local operations");
 			mnToolbox.add(mnLocal);
 			
-			JMenuItem mnLocalSum = new JMenuItem("LocalSum");
-			mnLocal.add(mnLocalSum);
-			
-			mnLocalSum.addActionListener(new ActionListener() {
+			mnLocal.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					LocalWindow frame = new LocalWindow();	
-					frame.NewWindow(null);
+					getLayerNames(layerNameList);
+					getLayers(layerList);
+					LocalWindow.main();
+				}
+			});
+
+			// Focal operations
+			JMenuItem mnFocal = new JMenuItem("Focal operations");
+			mnToolbox.add(mnFocal);
+			mnFocal.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					getLayerNames(layerNameList);
+					getLayers(layerList);
+					FocalWindow.main();
 				}
 			});
 			
-			JMenuItem mnLocalDiff = new JMenuItem("LocalDiff");
-			mnLocal.add(mnLocalDiff);
-			
-			// Focal operations
-			JMenu mnFocal = new JMenu("Focal operations");
-			mnToolbox.add(mnFocal);
-			
-			JMenuItem mnFocalSum = new JMenuItem("FocalSum");
-			mnFocal.add(mnFocalSum);
-			
-			JMenuItem mnFocalVariety = new JMenuItem("FocalVariety");
-			mnFocal.add(mnFocalVariety);
-			
-			JMenuItem mnFocalProduct = new JMenuItem("FocalProduct");
-			mnFocal.add(mnFocalProduct);
-			
-			JMenuItem mnFocalRanking = new JMenuItem("FocalRanking");
-			mnFocal.add(mnFocalRanking);
-			
 			// Zonal operations
-			JMenu mnZonal = new JMenu("Zonal operations");
+			JMenuItem mnZonal = new JMenuItem("Zonal operations");
 			mnToolbox.add(mnZonal);
 			
-			JMenuItem mnZonalSum = new JMenuItem("ZonalSum");
-			mnZonal.add(mnZonalSum);
+			JMenuItem mnDistance = new JMenuItem("Distance");
+			mnToolbox.add(mnDistance);
 			
-			JMenuItem mnZonalVariety = new JMenuItem("ZonalVariety");
-			mnZonal.add(mnZonalVariety);
-			
-			JMenuItem mnZonalProduct = new JMenuItem("ZonalProduct");
-			mnZonal.add(mnZonalProduct);
-			
-			JMenuItem mnZonalMean = new JMenuItem("ZonalMean");
-			mnZonal.add(mnZonalMean);
-			
-			JMenuItem mnZonalMin = new JMenuItem("ZonalMinimum");
-			mnZonal.add(mnZonalMin);
-			
-			JMenuItem mnZonalMax = new JMenuItem("ZonalMaximum");
-			mnZonal.add(mnZonalMax);
+			JMenuItem mnShortestPath = new JMenuItem("Shortest Path");
+			mnToolbox.add(mnShortestPath);
 			
 			Component gap4 = Box.createHorizontalStrut(20);
 			menuBar.add(gap4);
@@ -497,7 +498,7 @@ public class TestGUI extends JFrame {
 							// Add to TOC if does not exist already
 							boolean inList = false;
 							for (int j = 0; j < layerNameList.size(); j++) {
-								if (layerNameList.get(i).equals(layerName)) {
+								if (layerNameList.get(j).equals(layerName)) {
 									inList = true;
 									break;
 								}
