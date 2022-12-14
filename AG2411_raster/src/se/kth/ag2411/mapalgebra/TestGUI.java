@@ -559,6 +559,14 @@ public class TestGUI extends JFrame {
 			
 			// Fill up bottom panel:
 			Button fullExtent = new Button("Full Extent");
+			fullExtent.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					mPanel.scale = 3;
+					mPanel.revalidate();
+					mPanel.repaint();
+				}
+			});
 			fullExtent.setBackground(mainColor2);
 			fullExtent.setForeground(mainColor);
 			fullExtent.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
