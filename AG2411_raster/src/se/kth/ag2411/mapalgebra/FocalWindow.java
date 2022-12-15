@@ -117,8 +117,6 @@ public class FocalWindow extends JFrame {
 		lblOutput.setFont(new Font(mainFont, Font.PLAIN, 14));
 		lblOutput.setBounds(23, 267, 239, 14);
 		panel.add(lblOutput);
-
-
 		
 		// Output file
 		tfOutputFile = new JTextField();
@@ -223,7 +221,7 @@ public class FocalWindow extends JFrame {
 		cbStatisticType.addItem("SUM");
 		cbStatisticType.addItem("VARIETY");
 		cbStatisticType.addItem("PRODUCT");
-//		cbStatisticType.addItem("RANKING");
+		cbStatisticType.addItem("RANKING");
 				
 		statisticType=(String) cbStatisticType.getItemAt(0); 
 
@@ -272,14 +270,14 @@ public class FocalWindow extends JFrame {
 					outputLayer = inputLayer.focalProduct(radius, isSquare, outLayerName);
 					TestGUI.aboveLayer = inputLayer.focalSum(radius, isSquare, outLayerName);
 				}
+				else if (statisticType == "RANKING") {
+					outputLayer = inputLayer.focalRanking(radius, isSquare, outLayerName);
+					TestGUI.aboveLayer = inputLayer.focalRanking(radius, isSquare, outLayerName);
+				}
 				
 				TestGUI.layerList.add(outputLayer);
 				TestGUI.imageList.add(outputLayer.toImage());
 				TestGUI.layerNameList.addElement(outLayerName);
-				
-//				TestGUI.mPanel = new MapPanel(outputLayer.toImage(), scale);
-//				TestGUI.aboveLayer = outputLayer;
-//				TestGUI.mPanel.repaint();
 				
 				outputLayer.save(outputFileName);
 				
