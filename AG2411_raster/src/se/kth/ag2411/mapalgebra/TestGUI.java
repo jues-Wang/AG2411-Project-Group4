@@ -564,18 +564,29 @@ public class TestGUI extends JFrame {
 //			});
 //			menuBar.add(btnZoomOut);
 			
+			JButton btnGetLearnt = new JButton("GET LEARNT");
+			btnGetLearnt.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					GetLearntWindow.main();
+				}
+			});
+			btnGetLearnt.setBackground(crazyColor);
+			btnGetLearnt.setFont(new Font("Sitka Heading", Font.BOLD, 14));
+			headPanel.add(btnGetLearnt, BorderLayout.EAST);
+			
 			Component verticalStrut = Box.createVerticalStrut(9);
 			headPanel.add(verticalStrut, BorderLayout.NORTH);
 			
 			Component verticalStrut_1 = Box.createVerticalStrut(9);
 			headPanel.add(verticalStrut_1, BorderLayout.SOUTH);
-			
-			JToggleButton modeOnOff = new JToggleButton("OBSERVATION MODE (on/off)");
-			modeOnOff.setSelected(true);
-			modeOnOff.setBackground(crazyColor);
-			modeOnOff.setFont(new Font("Sitka Heading", Font.BOLD, 14));
-			modeOnOff.setForeground(mainColor);
-			headPanel.add(modeOnOff, BorderLayout.EAST);
+//			
+//			JToggleButton modeOnOff = new JToggleButton("OBSERVATION MODE (on/off)");
+//			modeOnOff.setSelected(true);
+//			modeOnOff.setBackground(crazyColor);
+//			modeOnOff.setFont(new Font("Sitka Heading", Font.BOLD, 14));
+//			modeOnOff.setForeground(mainColor);
+//			headPanel.add(modeOnOff, BorderLayout.EAST);
 			contentPanel.setBounds(10,10,10,10);	
 		
 		// Create bottom Panel.
