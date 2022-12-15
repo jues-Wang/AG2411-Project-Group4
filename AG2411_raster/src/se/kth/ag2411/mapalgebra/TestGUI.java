@@ -72,6 +72,8 @@ public class TestGUI extends JFrame {
 	public static LinkedList<Layer> layerList = new LinkedList<Layer>();
 	public static LinkedList<BufferedImage> imageList = new LinkedList<BufferedImage>();
 	
+	public static JLayeredPane layeredPane;
+	
 	// Launch the application.
 	public static void main (String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -187,7 +189,7 @@ public class TestGUI extends JFrame {
 		splitPane.setRightComponent(panelMAP);
 		panelMAP.setLayout(new CardLayout(0, 0));
 
-		final JLayeredPane layeredPane = new JLayeredPane();	// to LAYER the maps ??
+		layeredPane = new JLayeredPane();	// to LAYER the maps ??
 		layeredPane.addMouseWheelListener(new MouseWheelListener() {
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				zoom(e.getWheelRotation());

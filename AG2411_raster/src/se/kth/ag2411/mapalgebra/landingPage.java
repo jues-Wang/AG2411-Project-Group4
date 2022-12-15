@@ -98,12 +98,7 @@ public class landingPage extends JFrame {
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				try {
-					TestGUI.main(null);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				TestGUI.main(null);
 			}
 		});
 

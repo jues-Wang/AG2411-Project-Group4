@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -866,6 +867,38 @@ public class Layer {
 		map2.setBounds(xStart, yStart, xEnd, yEnd);
 //		layeredPane.setVisible(true);
 		map = map2;
+	}
+	
+	public LinkedList<MapPanel> localSumMaps(Layer inLayer, String outLayerName, int scale, double visitValue) {
+		LinkedList<MapPanel> mapList = new LinkedList<MapPanel>();
+		
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		Layer sumLayer = localSum(inLayer, outLayerName);
+		
+		double maxNum = sumLayer.getMax();
+		double minNum = sumLayer.getMin();
+		
+		BufferedImage image = outLayer.toImage();
+		mapList.add(new MapPanel(image, scale));
+		
+		for(int i = 0; i < nRows; i++){
+			for (int j = 0; j < nCols; j++) {
+                
+				outLayer.values[i][j] = visitValue;
+				image = outLayer.toImageLearning(maxNum, minNum, visitValue, visitValue - 10000);
+				mapList.add(new MapPanel(image, scale));
+				
+				outLayer.values[i][j] = values[i][j] + inLayer.values[i][j];
+			}
+		}
+		image = outLayer.toImageLearning(maxNum, minNum, visitValue, visitValue - 10000);
+		mapList.add(new MapPanel(image, scale));
+		
+//		MapPanel[] maps = new MapPanel[mapList.size()];
+//		for (int i = 0; i < mapList.size(); i++) {
+//			maps[i] = 
+//		}
+		return mapList;
 	}
 	
 	public void localSumLearning(Layer inLayer, String outLayerName, int scale, double visitValue, String path) throws InterruptedException {

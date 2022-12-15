@@ -3,6 +3,7 @@ package se.kth.ag2411.mapalgebra;
 import java.awt.EventQueue;
 import java.awt.Font;
 
+import javax.swing.Timer;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,6 +19,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -35,10 +38,10 @@ public class GetLearntWindow extends JFrame{
 	public static JLayeredPane layeredPane;
 	
 	// For visualizations
-	private int xStart = 280;
+	private int xStart = 300;
 	private int yStart = 109;
-	private int xEnd = 2000;
-	private int yEnd = 2000;
+	private int xEnd = 180;
+	private int yEnd = 240;
 	
 	// Launch the application
 	public static void main() {
@@ -53,6 +56,8 @@ public class GetLearntWindow extends JFrame{
 			}
 		});
 	}
+	
+	
 	
 	// Create the application
 	public GetLearntWindow() {
@@ -161,16 +166,10 @@ public class GetLearntWindow extends JFrame{
 		btnCancel.setVisible(false);
 		panel.add(btnCancel);
 		
-		// Canvas for showing animation previews
-//		JPanel panelMap = new JPanel();
-//		panelMap.setBounds(280, 109, 496, 261);
-//		panel.add(panelMap);
-		
-		int previewScale = 50;
+		int previewScale = 60;
 		
 		Layer previewLayer1 = new Layer("", "raster3x4.txt");
 		Layer previewLayer2 = new Layer("", "raster3x4.txt");
-		
 		
 		// Choosing operation
 		JButton btnLocal = new JButton("Local Operations");
@@ -198,31 +197,14 @@ public class GetLearntWindow extends JFrame{
 				
 				// Cancel button
 				btnCancel.setVisible(true);
-				
-				// Visualizations
+
+				// Visualization
 				if (mPanel != null) {
 					layeredPane.remove(mPanel);
 				}
-				
-					try {
-						previewLayer1.localSumLearning(previewLayer2, "", 50, -10000, "raster3x4.txt");
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				
-				// Preview
-//				try {
-//					previewLayer1.localSumLearningTest(
-//							previewLayer2, "", 
-//							previewScale, -10000, 
-//							"raster3x4.txt", layeredPane,
-//							xStart, yStart,
-//							xEnd, yEnd);
-//				} catch (InterruptedException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
+				mPanel = new MapPanel(previewLayer1.toImage(), previewScale);
+				layeredPane.add(mPanel);
+				mPanel.setBounds(xStart, yStart, xEnd, yEnd);
 			}
 		});
 		btnLocal.setBounds(10, 10, 225, 68);
@@ -252,6 +234,14 @@ public class GetLearntWindow extends JFrame{
 				
 				// Cancel button
 				btnCancel.setVisible(true);
+
+				// Visualization
+				if (mPanel != null) {
+					layeredPane.remove(mPanel);
+				}
+				mPanel = new MapPanel(previewLayer1.toImage(), previewScale);
+				layeredPane.add(mPanel);
+				mPanel.setBounds(xStart, yStart, xEnd, yEnd);
 			}
 		});
 		btnFocal.setBounds(280, 10, 225, 68);
@@ -282,13 +272,19 @@ public class GetLearntWindow extends JFrame{
 				
 				// Cancel button
 				btnCancel.setVisible(true);
+
+				// Visualization
+				if (mPanel != null) {
+					layeredPane.remove(mPanel);
+				}
+				mPanel = new MapPanel(previewLayer1.toImage(), previewScale);
+				layeredPane.add(mPanel);
+				mPanel.setBounds(xStart, yStart, xEnd, yEnd);
 			}
 		});
 		btnZonal.setBounds(551, 10, 225, 68);
 		btnZonal.setBackground(crazyColor);
 		panel.add(btnZonal);
-		
-		
 		
 		// Handling layer inputs
 		for (int i = 0; i < TestGUI.layerList.size(); i++) {
