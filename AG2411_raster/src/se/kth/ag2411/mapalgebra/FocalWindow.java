@@ -95,10 +95,15 @@ public class FocalWindow extends JFrame {
 		cbInputFile.setBounds(20, 67, 250, 23);
 		GridBagConstraints gbc_cbInputFile = new GridBagConstraints();
 		panel.add(cbInputFile, gbc_cbInputFile);
-
-		for(String i:TestGUI.layerNames) {
-			cbInputFile.addItem(i);
+		
+		for (int i = 0; i < TestGUI.layerList.size(); i++) {
+			String layerName = TestGUI.layerList.get(i).name;
+			cbInputFile.addItem(layerName);
 		}
+		
+//		for(String i:TestGUI.layerNames) {
+//			cbInputFile.addItem(i);
+//		}
 
 		inputFile=(String) cbInputFile.getItemAt(0); 	//default
 
@@ -272,7 +277,7 @@ public class FocalWindow extends JFrame {
 		cbStatisticType.addItem("SUM");
 		cbStatisticType.addItem("VARIETY");
 		cbStatisticType.addItem("PRODUCT");
-		cbStatisticType.addItem("RANKING");
+//		cbStatisticType.addItem("RANKING");
 				
 		statisticType=(String) cbStatisticType.getItemAt(0); 
 
@@ -280,7 +285,6 @@ public class FocalWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {			
 				statisticType = (String) cbStatisticType.getSelectedItem();
-				System.out.println(statisticType);
 			}			
 		});
 		
@@ -295,25 +299,39 @@ public class FocalWindow extends JFrame {
 					return;
 				}
 			
-				Layer layer1 = TestGUI.layers[0];
+				Layer inputLayer = TestGUI.layerList.get(0);
 			
 			
-				// Match the layer names with the layers
-				for(int i = 0; i < TestGUI.layers.length; i++) {
-					if(TestGUI.layers[i].name == fileListModel.get(0)) {
-						layer1 = TestGUI.layers[i];
+				// Match the layer name with the correct layer
+				for(int i = 0; i < TestGUI.layerList.size(); i++) {
+					if(TestGUI.layerList.get(i).name == fileListModel.get(0)) {
+						inputLayer = TestGUI.layerList.get(i);
 					}
 				}
+				
+				int scale = 3;
+				Layer outputLayer = TestGUI.layerList.get(0);
 			
 				// Perform the selected operation
 				if(statisticType == "SUM") { 
-					TestGUI.layerList.add(layer1.focalSum(radius, isSquare, outLayerName));
-					TestGUI.imageList.add(layer1.focalSum(radius, isSquare, outLayerName).toImage());
-					System.out.println(outLayerName);
-//				} else if (statisticType == "VARIETY") {	
-//				}
-				// HERE IS A LOT STILL MISSING
-			}
+					outputLayer = inputLayer.focalSum(radius, isSquare, outLayerName);
+				} else if (statisticType == "VARIETY") {
+					outputLayer = inputLayer.focalVariety(radius, isSquare, outLayerName);
+				} else if (statisticType == "PRODUCT") {
+					outputLayer = inputLayer.focalProduct(radius, isSquare, outLayerName);
+				}
+				
+				TestGUI.layerList.add(outputLayer);
+				TestGUI.imageList.add(outputLayer.toImage());
+				TestGUI.layerNameList.addElement(outLayerName);
+				
+				TestGUI.mPanel = new MapPanel(outputLayer.toImage(), scale);
+				TestGUI.aboveLayer = outputLayer;
+				TestGUI.mPanel.repaint();
+				
+				outputLayer.save(outputFileName);
+				
+				newWindow.dispose();
 			}
 			});
 		panel.add(btnRun);
