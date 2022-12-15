@@ -60,7 +60,7 @@ import javax.swing.event.PopupMenuEvent;
 public class TestGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPanel;
+	private JPanel contentPane;
 	public static MapPanel mPanel;
 	public static int zoomLvl = 3;
     public static TestGUI app;
@@ -167,16 +167,16 @@ public class TestGUI extends JFrame {
 		fileChooser.setMultiSelectionEnabled(true);
 		
 		// Create the content panel.
-		contentPanel = new JPanel();
-		contentPanel.setForeground(Color.WHITE);
+		contentPane = new JPanel();
+		contentPane.setForeground(Color.WHITE);
 	//	contentPanel.setBackground(Color.DARK_GRAY);
-		setContentPane(contentPanel);
-		contentPanel.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		// SPLIT PANEL = TOC (left) + Map Panel (right)
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setBackground(new Color(255, 255, 255));
-		contentPanel.add(splitPane);
+		contentPane.add(splitPane);
 		
 		final JPanel panelTOC = new JPanel();
 		panelTOC.setBackground(mainColor2);
@@ -345,7 +345,7 @@ public class TestGUI extends JFrame {
 		// Create head Panel.
 		JPanel headPanel = new JPanel();
 		headPanel.setBackground(mainColor);
-		contentPanel.add(headPanel, BorderLayout.NORTH);
+		contentPane.add(headPanel, BorderLayout.NORTH);
 		headPanel.setLayout(new BorderLayout(0, 0));
 		
 			// Fill head panel:
@@ -533,6 +533,17 @@ public class TestGUI extends JFrame {
 			});
 			menuBar.add(btnZoomOut);
 			
+			JButton btnGetLearnt = new JButton("GET LEARNT");
+			btnGetLearnt.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					GetLearntWindow.main();
+				}
+			});
+			btnGetLearnt.setBackground(crazyColor);
+			btnGetLearnt.setFont(new Font("Sitka Heading", Font.BOLD, 14));
+			headPanel.add(btnGetLearnt, BorderLayout.EAST);
+			
 			Component verticalStrut = Box.createVerticalStrut(9);
 			headPanel.add(verticalStrut, BorderLayout.NORTH);
 			
@@ -540,17 +551,17 @@ public class TestGUI extends JFrame {
 			headPanel.add(verticalStrut_1, BorderLayout.SOUTH);
 			
 			JToggleButton modeOnOff = new JToggleButton("OBSERVATION MODE (on/off)");
-			modeOnOff.setSelected(true);
-			modeOnOff.setBackground(crazyColor);
-			modeOnOff.setFont(new Font("Sitka Heading", Font.BOLD, 14));
-			modeOnOff.setForeground(mainColor);
-			headPanel.add(modeOnOff, BorderLayout.EAST);
-			contentPanel.setBounds(10,10,10,10);	
+//			modeOnOff.setSelected(true);
+//			modeOnOff.setBackground(crazyColor);
+//			modeOnOff.setFont(new Font("Sitka Heading", Font.BOLD, 14));
+//			modeOnOff.setForeground(mainColor);
+//			headPanel.add(modeOnOff, BorderLayout.EAST);
+			contentPane.setBounds(10,10,10,10);	
 		
 		// Create bottom Panel.
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setBackground(mainColor);
-		contentPanel.add(bottomPanel, BorderLayout.SOUTH);
+		contentPane.add(bottomPanel, BorderLayout.SOUTH);
 			
 			// Fill up bottom panel:
 			Button fullExtent = new Button("Full Extent");
