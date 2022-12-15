@@ -56,6 +56,8 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.JComboBox;
 import javax.swing.event.PopupMenuEvent;
+import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 
 public class TestGUI extends JFrame {
 
@@ -122,6 +124,8 @@ public class TestGUI extends JFrame {
 	}
 	
 	public TestGUI() {
+		setTitle("My Little FunGIS");
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\AG2411\\AG2411-Project-Group4\\AG2411_raster\\media\\logo-04.png"));
 		
 		// Create the frame.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -181,7 +185,6 @@ public class TestGUI extends JFrame {
 		final JPanel panelTOC = new JPanel();
 		panelTOC.setBackground(mainColor2);
 		splitPane.setLeftComponent(panelTOC);
-		panelTOC.setLayout(new FlowLayout(FlowLayout.CENTER, 75, 5));
 
 		final JPanel panelMAP = new JPanel();
 		splitPane.setRightComponent(panelMAP);
@@ -234,9 +237,17 @@ public class TestGUI extends JFrame {
 		        }
 		    }
 		});
+		panelTOC.setLayout(new BorderLayout(0, 0));
 		displayList.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
 		displayList.setBackground(mainColor2);
-		panelTOC.add(displayList);
+		panelTOC.add(displayList, BorderLayout.CENTER);
+		
+		JLabel lblNewLabel = new JLabel("   Table of Content          ");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		panelTOC.add(lblNewLabel, BorderLayout.NORTH);
+		
+		JLabel lblNewLabel_1 = new JLabel("   ");
+		panelTOC.add(lblNewLabel_1, BorderLayout.WEST);
 		
 		// Save event handler
 		mntmSaveRC.addMouseListener(new MouseAdapter() {
@@ -448,6 +459,7 @@ public class TestGUI extends JFrame {
 			
 			// HELP = MANUAL
 			JMenu mnHelp = new JMenu("Help");
+			mnHelp.setIcon(new ImageIcon("C:\\AG2411\\AG2411-Project-Group4\\AG2411_raster\\media\\icon-06.png"));
 			mnHelp.setForeground(highlightColor);
 			//mnHelp.setBackground(mainColor);
 			mnHelp.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
@@ -516,23 +528,6 @@ public class TestGUI extends JFrame {
 			JMenuItem mntmExit = new JMenuItem("Exit");
 			mnFile.add(mntmExit);
 			
-			JButton btnZoomIn = new JButton("ZoomIn");
-			btnZoomIn.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-				zoom(1);}
-			});
-			menuBar.add(btnZoomIn);
-
-			JButton btnZoomOut = new JButton("ZoomOut");
-			btnZoomOut.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					zoom(-1);
-				}
-			});
-			menuBar.add(btnZoomOut);
-			
 			Component verticalStrut = Box.createVerticalStrut(9);
 			headPanel.add(verticalStrut, BorderLayout.NORTH);
 			
@@ -570,6 +565,12 @@ public class TestGUI extends JFrame {
 			Component horizontalStrut = Box.createHorizontalStrut(40);
 			bottomPanel.add(horizontalStrut);
 			
+			JButton btnZoomIn = new JButton("+");
+			bottomPanel.add(btnZoomIn);
+			
+			JButton btnZoomOut = new JButton("-");
+			bottomPanel.add(btnZoomOut);
+			
 			JTextArea magnifier = new JTextArea();
 			magnifier.setText("Magnifier (%):");
 			magnifier.setTabSize(40);
@@ -603,18 +604,11 @@ public class TestGUI extends JFrame {
 			bottomPanel.add(horizontalStrut_2);
 			
 			JTextArea txtrSelectedCell = new JTextArea();
-			txtrSelectedCell.setText("Selected Cell:");
 			txtrSelectedCell.setTabSize(40);
 			txtrSelectedCell.setOpaque(false);
 			txtrSelectedCell.setForeground(new Color(187, 202, 192));
 			txtrSelectedCell.setFont(new Font("Brandon Grotesque Regular", Font.BOLD, 12));
 			bottomPanel.add(txtrSelectedCell);
-			
-			Label label_2 = new Label("01");
-			label_2.setAlignment(Label.RIGHT);
-			label_2.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-			label_2.setBackground(Color.WHITE);
-			bottomPanel.add(label_2);
 			
 			JTextArea txtrValue = new JTextArea();
 			txtrValue.setText("value:");
