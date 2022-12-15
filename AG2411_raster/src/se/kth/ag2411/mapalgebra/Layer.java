@@ -5,9 +5,12 @@ import java.awt.Dimension;
 import java.awt.image.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -293,34 +296,36 @@ public class Layer {
 		return outLayer;
 	}
 	
-//	public Layer focalRanking(int radius, boolean IsSquare, String outLayerName) {
-//		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
-//		outLayer.values = new double[nRows][nCols];
-//		for (int i = 0; i < nRows; i++) {
-//			for (int j = 0; j < nCols; j++) {
-//				int[][] neighborhood = getNeighborhood(i*nCols+j, radius, IsSquare);//the neighborhood’s shape is a square (if true) or a circle (if false)
-//				HashMap<Integer, Double> neighMap = new HashMap<Integer, Double>();
-//				double rank = -1;
-//				for (int k = 0; k < neighborhood.length; k++) {
-//					neighMap.put(neighborhood[k], values[neighborhood[k]]);
-//				}
-//				List<Map.Entry<Integer, Double>> list = new ArrayList<>(neighMap.entrySet());
-//				Collections.sort(list, new Comparator<Map.Entry<Integer, Double>>(){
-//					public int compare(Map.Entry<Integer, Double> o1,Map.Entry<Integer, Double> o2) {
-//						return o1.getKey().compareTo(o2.getKey());
-//					}
-//				});
-////				Arrays.sort(neighValues, Collections.reverseOrder());
-//				for(int ii=0;ii<list.size();ii++) {
-//					if(list.get(ii).getKey()==i*nCols+j){
-//						rank = list.size()-ii;
-//					}
-//				}
-//				outLayer.values[i*nCols+j] = rank;
-//			}
-//		}	
-//		return outLayer;
-//	}
+	public Layer focalRanking(int radius, boolean IsSquare, String outLayerName) {
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		outLayer.values = new double[nRows][nCols];
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				int[][] neighborhood = getNeighborhood(i*nCols+j, radius, IsSquare);//the neighborhood’s shape is a square (if true) or a circle (if false)
+				HashMap<Integer, Double> neighMap = new HashMap<Integer, Double>();
+				double rank = -1;
+				for (int k = 0; k < neighborhood.length; k++) {
+					int l = neighborhood[k][0];
+					int m = neighborhood[k][1];
+					neighMap.put(l*nCols+j, values[l][m]);
+				}
+				List<Map.Entry<Integer, Double>> list = new ArrayList<>(neighMap.entrySet());
+				Collections.sort(list, new Comparator<Map.Entry<Integer, Double>>(){
+					public int compare(Map.Entry<Integer, Double> o1,Map.Entry<Integer, Double> o2) {
+						return o1.getKey().compareTo(o2.getKey());
+					}
+				});
+//				Arrays.sort(neighValues, Collections.reverseOrder());
+				for(int ii=0;ii<list.size();ii++) {
+					if(list.get(ii).getKey()==i*nCols+j){
+						rank = list.size()-ii;
+					}
+				}
+				outLayer.values[i][j] = rank;
+			}
+		}	
+		return outLayer;
+	}
 	
 	public Layer focalVariety(int r, boolean isSquare, String outLayerName) {
 		 Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
