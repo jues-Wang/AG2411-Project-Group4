@@ -431,6 +431,11 @@ public class TestGUI extends JFrame {
 			// Zonal operations
 			JMenuItem mnZonal = new JMenuItem("Zonal operations");
 			mnToolbox.add(mnZonal);
+			mnZonal.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ZonalWindow.main();
+				}
+			});
 			
 			JMenuItem mnDistance = new JMenuItem("Distance");
 			mnToolbox.add(mnDistance);
