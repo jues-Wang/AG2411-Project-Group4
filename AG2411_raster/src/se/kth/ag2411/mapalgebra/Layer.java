@@ -14,6 +14,7 @@ import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 
 
 
@@ -237,7 +238,7 @@ public class Layer {
 	}
 	
 	// Local methods
-	public void localSumTest(Layer inLayer, String outLayerName, JLayeredPane layeredPane, int scale){
+	public void localSumTest(Layer inLayer, String outLayerName, int scale){
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		for(int i = 0; i < nRows; i++){
 			for (int j = 0; j < nCols; j++) {
@@ -246,7 +247,9 @@ public class Layer {
 		}
 		BufferedImage outImage = outLayer.toImage();
 		MapPanel map = new MapPanel(outImage, scale);
-		layeredPane.add(map);
+		GetLearntWindow.layeredPane.add(map);
+
+		map.setBounds(280, 109, 2000, 2000);
 	}
 	
 	public Layer localSum(Layer inLayer, String outLayerName){
@@ -702,7 +705,7 @@ public class Layer {
 			return set.size();
 		}
 	
-	private double getMax() {
+	public double getMax() {
 		double maxNum = Double.NEGATIVE_INFINITY;
 		for (int i = 0; i < nRows; i++) {
 			for (int j = 0; j < nCols; j++) {
@@ -714,7 +717,7 @@ public class Layer {
 		return maxNum;
 	}
 	
-	private double getMin() {
+	public double getMin() {
 		double minNum = Double.POSITIVE_INFINITY;
 		for (int i = 0; i < nRows; i++) {
 			for (int j = 0; j < nCols; j++) {
@@ -806,7 +809,12 @@ public class Layer {
 	
 	// Learning visualizations
 	
-	public void localSumLearningTest(Layer inLayer, String outLayerName, int scale, double visitValue, String path, JLayeredPane layeredPane) throws InterruptedException {
+	public void localSumLearningTest(
+			Layer inLayer, String outLayerName, 
+			int scale, double visitValue, 
+			String path, JLayeredPane layeredPane, 
+			int xStart, int yStart,
+			int xEnd, int yEnd) throws InterruptedException {
 //		JFrame appFrame = new JFrame();
 //		Dimension dimension = new Dimension(800, 500);
 //		appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -821,10 +829,11 @@ public class Layer {
 		
 		BufferedImage image = outLayer.toImage();
 		MapPanel map = new MapPanel(image, scale);
-		layeredPane.add(map);
+		GetLearntWindow.layeredPane.add(map);
+		map.setBounds(xStart, yStart, xEnd, yEnd);
 //		map.setPreferredSize(dimension);
 //		appFrame.pack();
-		layeredPane.setVisible(true);
+//		GetLearntWindow.layeredPane.setVisible(true);
 		
 		for(int i = 0; i < nRows; i++){
 			for (int j = 0; j < nCols; j++) {
@@ -836,9 +845,10 @@ public class Layer {
 				outLayer.values[i][j] = visitValue;
 				BufferedImage image2 = outLayer.toImageLearning(maxNum, minNum, visitValue, visitValue - 10000);
 				MapPanel map2 = new MapPanel(image2, scale);
-				layeredPane.remove(map);
-				layeredPane.add(map2);
-				layeredPane.setVisible(true);
+				GetLearntWindow.layeredPane.remove(map);
+				GetLearntWindow.layeredPane.add(map2);
+				map2.setBounds(xStart, yStart, xEnd, yEnd);
+//				layeredPane.setVisible(true);
 				map = map2;
 				
 				outLayer.values[i][j] = values[i][j] + inLayer.values[i][j];
@@ -851,9 +861,10 @@ public class Layer {
         }
 		BufferedImage image2 = outLayer.toImageLearning(maxNum, minNum, visitValue, visitValue - 10000);
 		MapPanel map2 = new MapPanel(image2, scale);
-		layeredPane.remove(map);
-		layeredPane.add(map2);
-		layeredPane.setVisible(true);
+		GetLearntWindow.layeredPane.remove(map);
+		GetLearntWindow.layeredPane.add(map2);
+		map2.setBounds(xStart, yStart, xEnd, yEnd);
+//		layeredPane.setVisible(true);
 		map = map2;
 	}
 	

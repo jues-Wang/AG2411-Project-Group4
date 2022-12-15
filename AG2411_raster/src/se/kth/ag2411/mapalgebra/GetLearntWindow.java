@@ -23,7 +23,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JLayeredPane;
 
-public class GetLearntWindow extends JFrame {
+public class GetLearntWindow extends JFrame{
 	
 	private static final long serialVersionUID = 1L;
 	private JFrame newWindow;
@@ -31,6 +31,14 @@ public class GetLearntWindow extends JFrame {
 	private JTextField textFieldRadius;
 	public String inputFile1;
 	public String inputFile2;
+	public static MapPanel mPanel;
+	public static JLayeredPane layeredPane;
+	
+	// For visualizations
+	private int xStart = 280;
+	private int yStart = 109;
+	private int xEnd = 2000;
+	private int yEnd = 2000;
 	
 	// Launch the application
 	public static void main() {
@@ -61,11 +69,15 @@ public class GetLearntWindow extends JFrame {
 		newWindow.setTitle("GET LEARNT");
 		newWindow.setBounds(400, 100, 800, 420);
 		
+		layeredPane = new JLayeredPane();
+		newWindow.setContentPane(layeredPane);
+		layeredPane.setLayout(null);
+		
 		JPanel panel = new JPanel();
-		panel.setBounds(0, 49, 465, 373);
+		panel.setBounds(0, 0, 786, 383);
 		panel.setLayout(null);
 		panel.setBackground(mainColor);
-		newWindow.setContentPane(panel);
+		layeredPane.add(panel);
 		
 		// Layer inputs
 		JLabel lblInput = new JLabel("Choose input layer:");
@@ -150,16 +162,15 @@ public class GetLearntWindow extends JFrame {
 		panel.add(btnCancel);
 		
 		// Canvas for showing animation previews
-		JLayeredPane layeredPane = new JLayeredPane();
-		layeredPane.setBounds(280, 352, 453, -240);
-
-		layeredPane.setVisible(true);
-		panel.add(layeredPane);
+//		JPanel panelMap = new JPanel();
+//		panelMap.setBounds(280, 109, 496, 261);
+//		panel.add(panelMap);
 		
 		int previewScale = 50;
 		
 		Layer previewLayer1 = new Layer("", "raster3x4.txt");
 		Layer previewLayer2 = new Layer("", "raster3x4.txt");
+		
 		
 		// Choosing operation
 		JButton btnLocal = new JButton("Local Operations");
@@ -188,15 +199,26 @@ public class GetLearntWindow extends JFrame {
 				// Cancel button
 				btnCancel.setVisible(true);
 				
-//				previewLayer1.localSumTest(previewLayer2, "", layeredPane, previewScale);
-				Layer testLayer = previewLayer1.localSum(previewLayer2, "");
-				BufferedImage testImage = testLayer.toImage();
-				MapPanel map = new MapPanel(testImage, previewScale);
-				layeredPane.add(map);
-				layeredPane.setVisible(true);
+				// Visualizations
+				if (mPanel != null) {
+					layeredPane.remove(mPanel);
+				}
+				
+					try {
+						previewLayer1.localSumLearning(previewLayer2, "", 50, -10000, "raster3x4.txt");
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				
 				// Preview
 //				try {
-//					previewLayer1.localSumLearningTest(previewLayer2, "", previewScale, -10000, "raster3x4.txt", layeredPane);
+//					previewLayer1.localSumLearningTest(
+//							previewLayer2, "", 
+//							previewScale, -10000, 
+//							"raster3x4.txt", layeredPane,
+//							xStart, yStart,
+//							xEnd, yEnd);
 //				} catch (InterruptedException e1) {
 //					// TODO Auto-generated catch block
 //					e1.printStackTrace();
@@ -265,6 +287,8 @@ public class GetLearntWindow extends JFrame {
 		btnZonal.setBounds(551, 10, 225, 68);
 		btnZonal.setBackground(crazyColor);
 		panel.add(btnZonal);
+		
+		
 		
 		// Handling layer inputs
 		for (int i = 0; i < TestGUI.layerList.size(); i++) {
