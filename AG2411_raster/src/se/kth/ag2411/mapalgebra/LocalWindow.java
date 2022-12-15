@@ -94,9 +94,14 @@ public class LocalWindow extends JFrame {
 	
 		// !!!   Drop down input files (not working. no access to the list?)  !!!!!
 		// RUN IT FIRST WITHOUT THIS PART ;)
-			for(String i:TestGUI.layerNames) {
-				cbInputFile.addItem(i);
-			}
+		for (int i = 0; i < TestGUI.layerList.size(); i++) {
+			String layerName = TestGUI.layerList.get(i).name;
+			cbInputFile.addItem(layerName);
+		}
+		
+//			for(String i:TestGUI.layerNames) {
+//				cbInputFile.addItem(i);
+//			}
 			
 			inputFile=(String) cbInputFile.getItemAt(0); 	//default
 
@@ -247,41 +252,47 @@ public class LocalWindow extends JFrame {
 		JButton btnRun = new JButton("RUN");
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (TestGUI.layers.length == 0) {
+				if (TestGUI.layerList.size() == 0) {
 					newWindow.dispose();
 				}
-				Layer layer1 = TestGUI.layers[0];
-				Layer layer2 = TestGUI.layers[0];
+				Layer layer1 = TestGUI.layerList.get(0);
+				Layer layer2 = TestGUI.layerList.get(0);
 				// Match the layer names with the layers
-				for(int i = 0; i < TestGUI.layers.length; i++) {
-					if(TestGUI.layers[i].name == fileListModel.get(0)) {
-						layer1 = TestGUI.layers[i];
+				for(int i = 0; i < TestGUI.layerList.size(); i++) {
+					if(TestGUI.layerList.get(i).name == fileListModel.get(0)) {
+						layer1 = TestGUI.layerList.get(i);
 					}
-					if(TestGUI.layers[i].name == fileListModel.get(1)) {
-						layer2 = TestGUI.layers[i];
+					if(TestGUI.layerList.get(i).name == fileListModel.get(1)) {
+						layer2 = TestGUI.layerList.get(i);
 					}
 				}
+				
 				int scale = 3;
+				Layer outputLayer = TestGUI.layerList.get(0);
 				
 				// Perform the selected operation
 				if(statisticType == "SUM") {
-					TestGUI.layerList.add(layer1.localSum(layer2, outLayerName));
-					TestGUI.imageList.add(layer1.localSum(layer2, outLayerName).toImage());
-					
-					TestGUI.mPanel = new MapPanel(layer1.localSum(layer2, outLayerName).toImage(), scale);
-					TestGUI.aboveLayer = layer1.localSum(layer2, outLayerName);
-
+					outputLayer = layer1.localSum(layer2, outLayerName);
 					
 				} else if (statisticType == "DIFF") {
-					TestGUI.layerList.add(layer1.localDifference(layer2, outLayerName));
-					TestGUI.imageList.add(layer1.localDifference(layer2, outLayerName).toImage());
+					outputLayer = layer1.localDifference(layer2, outLayerName);
 					
-					TestGUI.mPanel = new MapPanel(layer1.localDifference(layer2, outLayerName).toImage(), scale);
-					TestGUI.aboveLayer = layer1.localDifference(layer2, outLayerName);
+					TestGUI.layerList.add(outputLayer);
+					TestGUI.imageList.add(outputLayer.toImage());
+					
+					TestGUI.mPanel = new MapPanel(outputLayer.toImage(), scale);
+					TestGUI.aboveLayer = outputLayer;
 				}
-				
-				TestGUI.mPanel.repaint();
+				TestGUI.layerList.add(outputLayer);
+				TestGUI.imageList.add(outputLayer.toImage());
 				TestGUI.layerNameList.addElement(outLayerName);
+				
+				TestGUI.mPanel = new MapPanel(outputLayer.toImage(), scale);
+				TestGUI.aboveLayer = outputLayer;
+				TestGUI.mPanel.repaint();
+				
+				outputLayer.save(outputFileName);
+				
 				newWindow.dispose();
 			}
 		});

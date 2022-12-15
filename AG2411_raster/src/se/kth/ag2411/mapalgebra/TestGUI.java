@@ -71,23 +71,6 @@ public class TestGUI extends JFrame {
 	public static DefaultListModel<String> layerNameList = new DefaultListModel<String>();
 	public static LinkedList<Layer> layerList = new LinkedList<Layer>();
 	public static LinkedList<BufferedImage> imageList = new LinkedList<BufferedImage>();
-    public static String[] layerNames = new String[1];
-    public static Layer[] layers = new Layer[1];
-    public static BufferedImage[] images = new BufferedImage[1];
-	
-    public static void getLayerNames(DefaultListModel<String> layerNameList) {
-		layerNames = new String[layerNameList.size()];
-		for (int i = 0; i < layerNameList.size(); i++) {
-			layerNames[i] = layerNameList.get(i);
-		}
-	}
-	
-	public static void getLayers(LinkedList<Layer> layerList) {
-		layers = new Layer[layerList.size()];
-		for (int i = 0; i < layerList.size(); i++) {
-			layers[i] = layerList.get(i);
-		}
-	}
 	
 	// Launch the application.
 	public static void main(String[] args) {
@@ -154,11 +137,12 @@ public class TestGUI extends JFrame {
 		Color projectDarkBlue3 = new Color (5, 0, 56);
 		Color projectDarkBlue4 = new Color (0, 41, 61);
 		Color projectYellow = new Color (255, 208, 47);
-		Color buttonColor = new Color(238, 238, 238);
 		
 		// Choose main colors for GUI:
 		Color mainColor = projectDarkBlue4;		// for background color in head & bottom panel
 		Color mainColor2 = projectLightGreen;	// for text, borders, ...
+		
+		Color buttonColor = new Color(238, 238, 238);
 		Color highlightColor = projectYellow;
 		Color crazyColor = projectRed;
 		
@@ -431,8 +415,6 @@ public class TestGUI extends JFrame {
 			
 			mnLocal.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					getLayerNames(layerNameList);
-					getLayers(layerList);
 					LocalWindow.main();
 				}
 			});
@@ -442,8 +424,6 @@ public class TestGUI extends JFrame {
 			mnToolbox.add(mnFocal);
 			mnFocal.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					getLayerNames(layerNameList);
-					getLayers(layerList);
 					FocalWindow.main();
 				}
 			});
@@ -489,7 +469,7 @@ public class TestGUI extends JFrame {
 						
 						File[] selectedFiles = fileChooser.getSelectedFiles();
 						for (int i = 0; i < selectedFiles.length; i++) {
-							System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
+//							System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
 							String layerName = getFileName(selectedFiles[i].getAbsolutePath());
 							aboveLayer = new Layer(layerName, selectedFiles[i].getAbsolutePath());//abovelayer = layer
 							
