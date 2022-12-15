@@ -1,3 +1,0 @@
-19990312 823   0     1     0dtomlin g:\arcview\browns\bpveg = ASCIIGRID( g:\arcview\browns\export\bpvegetation.asc,INT)
-201703271719   0     0     0shirabe D:\test.FLT = GRIDFLOAT ( C:\Nobackup\from_D\KTH\Courses\GISAlgorithms\Data\BrownsPond\GRID-Vegetation\vegetation )
-202211041621   0     0     0cvbos C:\Users\cvbos\ECLIPS~1\AG2411~1\Data\vegetation.TXT = GRIDASCII ( C:\Users\cvbos\eclipse-workspace\AG2411_raster\Data\GRID-Vege
