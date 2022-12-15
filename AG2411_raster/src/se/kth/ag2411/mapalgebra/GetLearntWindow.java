@@ -1,8 +1,10 @@
 package se.kth.ag2411.mapalgebra;
 
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
@@ -36,14 +38,17 @@ public class GetLearntWindow extends JFrame {
 		newWindow = new JFrame();
 		newWindow.setTitle("GET LEARNT");
 		newWindow.setBounds(400, 100, 800, 420);
-
+		
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 49, 465, 373);
 		panel.setLayout(null);
 		newWindow.setContentPane(panel);
+		
+		JLabel lblInput = new JLabel("Choose input raster:");
+		lblInput.setFont(new Font(mainFont, Font.PLAIN, 14));
+		lblInput.setBounds(23, 42, 239, 14);
+		panel.add(lblInput);
 
-//		final JPanel headPanel = new JPanel();
-//		headPanel.setLayout(new BorderLayout(0, 0));
-//		panel.add(headPanel, BorderLayout.NORTH);
+
 	}
 }
