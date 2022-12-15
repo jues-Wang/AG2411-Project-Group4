@@ -24,9 +24,9 @@ public class ProjectTest {
 //		layer.zonalMinimumLearning(zoneLayer, "", 50, -10000, -20000, args[0]);
 		
 		// Dijkstra
-		Layer layer = new Layer("", args[0]);
-		Layer outLayer = layer.dijkstra("", false, 0);
+//		Layer layer = new Layer("", args[0]);
+//		Layer outLayer = layer.dijkstra("", false, 0);
 //		outLayer.print();
-		outLayer.save(args[1]);
+//		outLayer.save(args[1]);
 	}
 }

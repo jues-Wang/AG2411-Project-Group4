@@ -51,7 +51,6 @@ public class ZonalWindow extends JFrame {
 	public String outLayerName;
 	private JTextField tfOutputFile;
 	public String statisticType;
-	public static Layer outLayer;
 
 
 	/**
@@ -94,9 +93,10 @@ public class ZonalWindow extends JFrame {
 		JComboBox <String> cbInputValFile = new JComboBox<String>();
 		cbInputValFile.setBounds(10, 67, 250, 23);
 		panel.add(cbInputValFile);
-
-		for(String i:TestGUI.layerNames) {
-			cbInputValFile.addItem(i);
+		
+		for (int i = 0; i < TestGUI.layerList.size(); i++) {
+			String layerName = TestGUI.layerList.get(i).name;
+			cbInputValFile.addItem(layerName);
 		}
 
 		inputFile = (String) cbInputValFile.getItemAt(0); 	//default
@@ -119,8 +119,9 @@ public class ZonalWindow extends JFrame {
 		cbInputZonFile.setBounds(10, 123, 250, 23);
 		panel.add(cbInputZonFile);
 
-		for(String i:TestGUI.layerNames) {
-			cbInputZonFile.addItem(i);
+		for (int i = 0; i < TestGUI.layerList.size(); i++) {
+			String layerName = TestGUI.layerList.get(i).name;
+			cbInputZonFile.addItem(layerName);
 		}
 
 		inputFile2 = (String) cbInputZonFile.getItemAt(0); 	//default
@@ -215,7 +216,56 @@ public class ZonalWindow extends JFrame {
 		panel.add(btnRun);
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				Layer valueLayer = TestGUI.layerList.get(0);
+				Layer zoneLayer = TestGUI.layerList.get(0);
+				
+				// Match the layer name with the correct layer
+				for(int i = 0; i < TestGUI.layerList.size(); i++) {
+					if(TestGUI.layerList.get(i).name == inputFile) {
+						valueLayer = TestGUI.layerList.get(i);
+					}
+				}
+				
+				for(int i = 0; i < TestGUI.layerList.size(); i++) {
+					if(TestGUI.layerList.get(i).name == inputFile2) {
+						zoneLayer = TestGUI.layerList.get(i);
+					}
+				}
+				
+				int scale = 3;
+				Layer outputLayer = TestGUI.layerList.get(0);
+			
+				// Perform the selected operation
+				if(statisticType == "SUM") { 
+					outputLayer = valueLayer.zonalSum(zoneLayer, outLayerName);
+				} 
+				else if (statisticType == "VARIETY") {
+					outputLayer = valueLayer.zonalVariety(zoneLayer, outLayerName);
+				} 
+				else if (statisticType == "PRODUCT") {
+					outputLayer = valueLayer.zonalProduct(zoneLayer, outLayerName);
+				} 
+				else if (statisticType == "MEAN") {
+					outputLayer = valueLayer.zonalMean(zoneLayer, outLayerName);
+				} 
+				else if (statisticType == "MIN") {
+					outputLayer = valueLayer.zonalMinimum(zoneLayer, outLayerName);
+				} 
+				else if (statisticType == "MAX") {
+					outputLayer = valueLayer.zonalMaximum(zoneLayer, outLayerName);
+				}
+				
+				TestGUI.layerList.add(outputLayer);
+				TestGUI.imageList.add(outputLayer.toImage());
+				TestGUI.layerNameList.addElement(outLayerName);
+				
+				TestGUI.mPanel = new MapPanel(outputLayer.toImage(), scale);
+				TestGUI.aboveLayer = outputLayer;
+				TestGUI.mPanel.repaint();
+				
+				outputLayer.save(outputFileName);
+				
+				newWindow.dispose();
 				// HERE IS A LOT STILL MISSING
 			}
 		});

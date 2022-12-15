@@ -48,7 +48,6 @@ public class LocalWindow extends JFrame {
 	public String outLayerName;
 	private JTextField tfOutputFile;
 	public String statisticType;
-	public static Layer outLayer;
 	
 	/**
 	 * Launch the application.
@@ -98,10 +97,6 @@ public class LocalWindow extends JFrame {
 			String layerName = TestGUI.layerList.get(i).name;
 			cbInputFile.addItem(layerName);
 		}
-		
-//			for(String i:TestGUI.layerNames) {
-//				cbInputFile.addItem(i);
-//			}
 			
 			inputFile=(String) cbInputFile.getItemAt(0); 	//default
 
@@ -220,7 +215,6 @@ public class LocalWindow extends JFrame {
 				}				
 			}
 		});
-
 		
 		// Statistic operation
 				JLabel lblStatisticOperation = new JLabel("Statistic Operation:");
@@ -273,16 +267,11 @@ public class LocalWindow extends JFrame {
 				// Perform the selected operation
 				if(statisticType == "SUM") {
 					outputLayer = layer1.localSum(layer2, outLayerName);
-					
-				} else if (statisticType == "DIFF") {
+				} 
+				else if (statisticType == "DIFF") {
 					outputLayer = layer1.localDifference(layer2, outLayerName);
-					
-					TestGUI.layerList.add(outputLayer);
-					TestGUI.imageList.add(outputLayer.toImage());
-					
-					TestGUI.mPanel = new MapPanel(outputLayer.toImage(), scale);
-					TestGUI.aboveLayer = outputLayer;
 				}
+				
 				TestGUI.layerList.add(outputLayer);
 				TestGUI.imageList.add(outputLayer.toImage());
 				TestGUI.layerNameList.addElement(outLayerName);

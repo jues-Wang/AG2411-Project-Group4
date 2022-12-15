@@ -50,7 +50,6 @@ public class FocalWindow extends JFrame {
 	public String outLayerName;
 	private JTextField tfOutputFile;
 	public String statisticType;
-	public static Layer outLayer;
 	public JTextField txtRadius;
 	public int radius;
 	public boolean isSquare;
@@ -100,10 +99,6 @@ public class FocalWindow extends JFrame {
 			String layerName = TestGUI.layerList.get(i).name;
 			cbInputFile.addItem(layerName);
 		}
-		
-//		for(String i:TestGUI.layerNames) {
-//			cbInputFile.addItem(i);
-//		}
 
 		inputFile=(String) cbInputFile.getItemAt(0); 	//default
 
@@ -116,53 +111,11 @@ public class FocalWindow extends JFrame {
 			});	
 				
 		final DefaultListModel<String> fileListModel = new DefaultListModel<String>();
-		final JList<String> listFileList = new JList<String>(fileListModel);
-		listFileList.setBounds(23, 101, 247, 23);
-		GridBagConstraints gbc_listFileList = new GridBagConstraints();
-		panel.add(listFileList, gbc_listFileList);
-		
-		JButton btnAdd = new JButton ("Add");
-		btnAdd.setBounds(277, 67, 88, 23);
-		btnAdd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(fileListModel.getSize()<2) {
-					String selectItem=(String) cbInputFile.getSelectedItem();
-					fileListModel.addElement(selectItem);
-				}
-			}
-
-		});
-		panel.add(btnAdd);	
 		
 		JLabel lblOutput = new JLabel("Output file name and location:");
 		lblOutput.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
 		lblOutput.setBounds(23, 290, 239, 14);
 		panel.add(lblOutput);
-		
-		JButton btnDelete = new JButton ("Delete");
-		btnDelete.setBounds(277, 101, 88, 23);
-		btnDelete.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int index = listFileList.getSelectedIndex();
-				if(index>=0) {
-					fileListModel.remove(index);
-				}				
-			}
-
-		});
-		panel.add(btnDelete);
-		
-		btnDelete.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int index = listFileList.getSelectedIndex();
-				if(index>=0) {
-					fileListModel.remove(index);
-				}				
-			}
-
-		});
 
 		tfOutputFile = new JTextField();
 		tfOutputFile.setBounds(23, 315, 247, 23);
@@ -304,7 +257,7 @@ public class FocalWindow extends JFrame {
 			
 				// Match the layer name with the correct layer
 				for(int i = 0; i < TestGUI.layerList.size(); i++) {
-					if(TestGUI.layerList.get(i).name == fileListModel.get(0)) {
+					if(TestGUI.layerList.get(i).name == inputFile) {
 						inputLayer = TestGUI.layerList.get(i);
 					}
 				}
@@ -315,9 +268,11 @@ public class FocalWindow extends JFrame {
 				// Perform the selected operation
 				if(statisticType == "SUM") { 
 					outputLayer = inputLayer.focalSum(radius, isSquare, outLayerName);
-				} else if (statisticType == "VARIETY") {
+				} 
+				else if (statisticType == "VARIETY") {
 					outputLayer = inputLayer.focalVariety(radius, isSquare, outLayerName);
-				} else if (statisticType == "PRODUCT") {
+				} 
+				else if (statisticType == "PRODUCT") {
 					outputLayer = inputLayer.focalProduct(radius, isSquare, outLayerName);
 				}
 				
