@@ -34,6 +34,7 @@ public class landingPage extends JFrame {
 	}
 
 	public landingPage() {
+		setTitle("My Little FunGIS ");
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(400, 100, 350, 450);
@@ -44,29 +45,50 @@ public class landingPage extends JFrame {
 		setContentPane(contentPane);
 
 		JPanel panel = new JPanel();
-		panel.setBackground(Color.DARK_GRAY);
+		panel.setBackground(new Color (0, 41, 61));
 		panel.setBounds(0, 0, 350, 450);
 		contentPane.add(panel);
 		panel.setLayout(null);
-
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(".\\media\\landing-07.png"));
+		lblNewLabel.setBounds(54, 256, 83, 77);
+		panel.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon(".\\media\\landing-10.png"));
+		lblNewLabel_1.setBounds(253, 245, 83, 77);
+		panel.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("");
+		lblNewLabel_1_1.setIcon(new ImageIcon(".\\media\\landing-09.png"));
+		lblNewLabel_1_1.setBounds(0, 242, 83, 77);
+		panel.add(lblNewLabel_1_1);
+		
+		JLabel lblNewLabel_1_2_1 = new JLabel("");
+		lblNewLabel_1_2_1.setIcon(new ImageIcon(".\\media\\landing-11.png"));
+		lblNewLabel_1_2_1.setBounds(166, 231, 83, 77);
+		panel.add(lblNewLabel_1_2_1);
+		
 		// Adding slogan or title + description
-		JLabel slogan = new JLabel("<html>Follow <br>the grid ...<html>");
-		slogan.setHorizontalAlignment(SwingConstants.LEFT);
-		slogan.setFont(new Font("Showcard Gothic", Font.BOLD, 36));
-		slogan.setForeground(Color.BLACK);
-		slogan.setBounds(20, 183, 254, 118);
+		JLabel slogan = new JLabel("<html>My Little FunGIS<html>");
+		slogan.setHorizontalAlignment(SwingConstants.RIGHT);
+		slogan.setFont(new Font("Ravie", Font.BOLD, 36));
+		slogan.setForeground(new Color(255, 255, 255));
+		slogan.setBounds(20, 97, 288, 107);
 		panel.add(slogan);
 
 		JLabel description = new JLabel("<html>Must have for 2023! Perfect as a christmas present for your colleagues. What can I do with the Application? Slogan slogan slogan.<html>");
 		description.setVerticalAlignment(SwingConstants.TOP);
-		description.setHorizontalAlignment(SwingConstants.LEFT);
+		description.setHorizontalAlignment(SwingConstants.RIGHT);
 		description.setForeground(new Color(240, 248, 255));
-		description.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		description.setBounds(20, 319, 268, 77);
+		description.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+		description.setBounds(20, 334, 268, 59);
 		panel.add(description);
 
 		// Close "button"
 		JLabel close = new JLabel("EXIT");
+		close.setForeground(Color.WHITE);
 		close.setBounds(295, 0, 51, 27);
 		panel.add(close);
 		close.addMouseListener(new MouseAdapter() {
@@ -78,21 +100,33 @@ public class landingPage extends JFrame {
 		});
 		close.setHorizontalAlignment(SwingConstants.CENTER);
 		close.setForeground(Color.BLACK);
-		close.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		close.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 15));
 
 		// Adding the picture
 		JLabel label = new JLabel("");
 		label.setBounds(0, 0, 350, 300);
 		panel.add(label);
-		label.setIcon(new ImageIcon(".\\data\\network.jpg"));	// DON'T FORGET TO INSERT JPG IN data FOLDER !!!!
+		label.setIcon(new ImageIcon(".\\media\\color2.png"));	
 		label.setVerticalAlignment(SwingConstants.TOP);
 
 		Button button = new Button("Get started!");
 		button.setBounds(180, 404, 156, 27);
-		panel.add(button);
+		button.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 15));
 		button.setActionCommand("GetStarted");
-		button.setForeground(Color.WHITE);
-		button.setBackground(new Color(139, 153, 146));
+		button.setForeground(new Color (0, 41, 61));
+		button.setBackground(new Color (255, 208, 47));
+		panel.add(button);
+		
+		JLabel description_1 = new JLabel("<html>Carl Vilhelm Boström \nAgni Kontorini \nWeihua Wang  \nMing Yang \nJasmin Zdovc<html>");
+		description_1.setVerticalAlignment(SwingConstants.TOP);
+		description_1.setHorizontalAlignment(SwingConstants.RIGHT);
+		description_1.setForeground(new Color(240, 248, 255));
+		description_1.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 6));
+		description_1.setBounds(20, 398, 63, 64);
+		panel.add(description_1);
+
+		
+
 		
 		// Open the MAIN Application when clicking this button
 		button.addMouseListener(new MouseAdapter() {
