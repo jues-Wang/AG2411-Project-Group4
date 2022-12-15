@@ -29,6 +29,7 @@ import javax.swing.JTextArea;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -56,6 +57,8 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.JComboBox;
 import javax.swing.event.PopupMenuEvent;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 
 public class TestGUI extends JFrame {
 
@@ -122,6 +125,8 @@ public class TestGUI extends JFrame {
 	}
 	
 	public TestGUI() {
+		setTitle("My Little FunGIS");
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\AG2411\\AG2411-Project-Group4\\AG2411_raster\\media\\logo-04.png"));
 		
 		// Create the frame.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -145,6 +150,8 @@ public class TestGUI extends JFrame {
 		Color buttonColor = new Color(238, 238, 238);
 		Color highlightColor = projectYellow;
 		Color crazyColor = projectRed;
+		
+		String mainFont = new String ("Brandon Grotesque Regular");
 		
 		// Choosing a file.
 		final JFileChooser fileChooser = new JFileChooser();
@@ -234,9 +241,17 @@ public class TestGUI extends JFrame {
 		        }
 		    }
 		});
-		displayList.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+		panelTOC.setLayout(new BorderLayout(0, 0));
+		displayList.setFont(new Font(mainFont, Font.PLAIN, 12));
 		displayList.setBackground(mainColor2);
-		panelTOC.add(displayList);
+		panelTOC.add(displayList, BorderLayout.CENTER);
+
+		JLabel lblNewLabel = new JLabel("   Table of Content          ");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		panelTOC.add(lblNewLabel, BorderLayout.NORTH);
+
+		JLabel lblNewLabel_1 = new JLabel("   ");
+		panelTOC.add(lblNewLabel_1, BorderLayout.WEST);
 		
 		// Save event handler
 		mntmSaveRC.addMouseListener(new MouseAdapter() {
@@ -364,7 +379,7 @@ public class TestGUI extends JFrame {
 			JMenu mnFile = new JMenu("File");
 			mnFile.setHorizontalAlignment(SwingConstants.CENTER);
 			mnFile.setForeground(highlightColor);
-			mnFile.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
+			mnFile.setFont(new Font(mainFont, Font.PLAIN, 14));
 			mnFile.setBorder(new LineBorder(highlightColor, 1, true));
 			mnFile.setBorder(new RoundedBorder(radius));
 			menuBar.add(mnFile);
@@ -372,31 +387,16 @@ public class TestGUI extends JFrame {
 			Component gap2 = Box.createHorizontalStrut(20);
 			menuBar.add(gap2);
 			
-			// EDIT
-			JMenu mnEdit = new JMenu("Edit");
-			mnEdit.setForeground(highlightColor);
-			mnEdit.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
-			mnEdit.setBorder(new LineBorder(highlightColor, 1, true));
-			mnEdit.setBorder(new RoundedBorder(radius));
-			menuBar.add(mnEdit);
+			// RECOLOR
+			JMenu mnRecolor = new JMenu("Recolor");
+			mnRecolor.setForeground(highlightColor);
+			mnRecolor.setFont(new Font(mainFont, Font.PLAIN, 14));
+			mnRecolor.setBorder(new LineBorder(highlightColor, 1, true));
+			mnRecolor.setBorder(new RoundedBorder(radius));
+			menuBar.add(mnRecolor);
 			
-			JMenuItem mnUndo = new JMenuItem("Undo");
-			mnEdit.add(mnUndo);
-			
-			JMenuItem mnRedo = new JMenuItem("Redo");
-			mnEdit.add(mnRedo);
-			
-			JMenuItem mnCut = new JMenuItem("Cut");
-			mnEdit.add(mnCut);
-			
-			JMenuItem mnCopy = new JMenuItem("Copy");
-			mnEdit.add(mnCopy);
-			
-			JMenuItem mnPaste = new JMenuItem("Paste");
-			mnEdit.add(mnPaste);
-			
-			JMenuItem mnDelete = new JMenuItem("Delete");
-			mnEdit.add(mnDelete);
+			JMenuItem colorscheme1 = new JMenuItem("Colorscheme 1");
+			mnRecolor.add(colorscheme1);
 			
 			Component gap3 = Box.createHorizontalStrut(20);
 			menuBar.add(gap3);
@@ -404,13 +404,14 @@ public class TestGUI extends JFrame {
 			// TOOLBOX
 			JMenu mnToolbox = new JMenu("Toolbox");
 			mnToolbox.setForeground(highlightColor);
-			mnToolbox.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
+			mnToolbox.setFont(new Font(mainFont, Font.PLAIN, 14));
 			mnToolbox.setBorder(new LineBorder(highlightColor, 1, true));
 			mnToolbox.setBorder(new RoundedBorder(radius));
 			menuBar.add(mnToolbox);
 			
 			// Local operations
 			JMenuItem mnLocal = new JMenuItem("Local operations");
+			mnLocal.setFont(new Font(mainFont, Font.PLAIN, 12));
 			mnToolbox.add(mnLocal);
 			
 			mnLocal.addActionListener(new ActionListener() {
@@ -421,6 +422,7 @@ public class TestGUI extends JFrame {
 
 			// Focal operations
 			JMenuItem mnFocal = new JMenuItem("Focal operations");
+			mnFocal.setFont(new Font(mainFont, Font.PLAIN, 12));
 			mnToolbox.add(mnFocal);
 			mnFocal.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -430,6 +432,7 @@ public class TestGUI extends JFrame {
 			
 			// Zonal operations
 			JMenuItem mnZonal = new JMenuItem("Zonal operations");
+			mnZonal.setFont(new Font(mainFont, Font.PLAIN, 12));
 			mnToolbox.add(mnZonal);
 			mnZonal.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -438,9 +441,11 @@ public class TestGUI extends JFrame {
 			});
 			
 			JMenuItem mnDistance = new JMenuItem("Distance");
+			mnDistance.setFont(new Font(mainFont, Font.PLAIN, 12));
 			mnToolbox.add(mnDistance);
 			
 			JMenuItem mnShortestPath = new JMenuItem("Shortest Path");
+			mnShortestPath.setFont(new Font(mainFont, Font.PLAIN, 12));
 			mnToolbox.add(mnShortestPath);
 			
 			Component gap4 = Box.createHorizontalStrut(20);
@@ -448,18 +453,21 @@ public class TestGUI extends JFrame {
 			
 			// HELP = MANUAL
 			JMenu mnHelp = new JMenu("Help");
+			mnHelp.setIcon(new ImageIcon(".\\media\\icon-06.png"));
 			mnHelp.setForeground(highlightColor);
 			//mnHelp.setBackground(mainColor);
-			mnHelp.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
+			mnHelp.setFont(new Font(mainFont, Font.PLAIN, 14));
 			mnHelp.setBorder(new LineBorder(highlightColor, 1, true));
 			mnHelp.setBorder(new RoundedBorder(radius));
 			menuBar.add(mnHelp);
 			
-			JMenuItem mnManual = new JMenuItem("Open App Manual (heeeelp)");
+			JMenuItem mnManual = new JMenuItem("Open App Manual");
+			mnManual.setFont(new Font(mainFont, Font.PLAIN, 12));
 			mnHelp.add(mnManual);
 			
 			//Open file
 			JMenuItem mntmOpen = new JMenuItem("Open file");
+			mntmOpen.setFont(new Font(mainFont, Font.PLAIN, 12));
 			
 			mntmOpen.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -510,28 +518,26 @@ public class TestGUI extends JFrame {
 			
 			mnFile.add(mntmOpen);
 			
-			JMenuItem mntmSave = new JMenuItem("Save");
+			JMenuItem mntmSave = new JMenuItem("Save file");
+			mntmSave.setFont(new Font(mainFont, Font.PLAIN, 12));
 			mnFile.add(mntmSave);
 			
-			JMenuItem mntmExit = new JMenuItem("Exit");
-			mnFile.add(mntmExit);
-			
-			JButton btnZoomIn = new JButton("ZoomIn");
-			btnZoomIn.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-				zoom(1);}
-			});
-			menuBar.add(btnZoomIn);
+//			JButton btnZoomIn = new JButton("ZoomIn");
+//			btnZoomIn.addMouseListener(new MouseAdapter() {
+//				@Override
+//				public void mouseClicked(MouseEvent e) {
+//				zoom(1);}
+//			});
+//			menuBar.add(btnZoomIn);
 
-			JButton btnZoomOut = new JButton("ZoomOut");
-			btnZoomOut.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					zoom(-1);
-				}
-			});
-			menuBar.add(btnZoomOut);
+//			JButton btnZoomOut = new JButton("ZoomOut");
+//			btnZoomOut.addMouseListener(new MouseAdapter() {
+//				@Override
+//				public void mouseClicked(MouseEvent e) {
+//					zoom(-1);
+//				}
+//			});
+//			menuBar.add(btnZoomOut);
 			
 			Component verticalStrut = Box.createVerticalStrut(9);
 			headPanel.add(verticalStrut, BorderLayout.NORTH);
@@ -554,6 +560,9 @@ public class TestGUI extends JFrame {
 			
 			// Fill up bottom panel:
 			Button fullExtent = new Button("Full Extent");
+			fullExtent.setBackground(mainColor2);
+			fullExtent.setForeground(mainColor);
+			fullExtent.setFont(new Font(mainFont, Font.BOLD, 12));
 			fullExtent.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -562,20 +571,39 @@ public class TestGUI extends JFrame {
 					mPanel.repaint();
 				}
 			});
-			fullExtent.setBackground(mainColor2);
-			fullExtent.setForeground(mainColor);
-			fullExtent.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
 			bottomPanel.add(fullExtent);
+			
+			JButton btnZoomIn = new JButton("+");
+			btnZoomIn.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				zoom(1);}
+			});
+			btnZoomIn.setForeground(new Color(0, 41, 61));
+			btnZoomIn.setFont(new Font(mainFont, Font.BOLD, 12));
+			btnZoomIn.setBackground(new Color(187, 202, 192));
+			bottomPanel.add(btnZoomIn);
+			
+			JButton btnZoomOut = new JButton("-");
+			btnZoomOut.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					zoom(-1);
+				}
+			});
+			btnZoomOut.setForeground(new Color(0, 41, 61));
+			btnZoomOut.setFont(new Font(mainFont, Font.BOLD, 12));
+			btnZoomOut.setBackground(new Color(187, 202, 192));
+			bottomPanel.add(btnZoomOut);
 			
 			Component horizontalStrut = Box.createHorizontalStrut(40);
 			bottomPanel.add(horizontalStrut);
 			
-			JTextArea magnifier = new JTextArea();
+			JLabel magnifier = new JLabel();
 			magnifier.setText("Magnifier (%):");
-			magnifier.setTabSize(40);
 			magnifier.setOpaque(false);
 			magnifier.setForeground(mainColor2);
-			magnifier.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			magnifier.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(magnifier);
 			
 			JSpinner spinner = new JSpinner();
@@ -586,29 +614,39 @@ public class TestGUI extends JFrame {
 			Component horizontalStrut_1 = Box.createHorizontalStrut(20);
 			bottomPanel.add(horizontalStrut_1);
 			
-			JTextArea txtrScale = new JTextArea();
+			JLabel txtrScale = new JLabel();
 			txtrScale.setText("Scale 1:");
-			txtrScale.setTabSize(40);
 			txtrScale.setOpaque(false);
 			txtrScale.setForeground(new Color(187, 202, 192));
-			txtrScale.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			txtrScale.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(txtrScale);
 			
 			JSpinner spinner_1 = new JSpinner();
-			spinner_1.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			spinner_1.setFont(new Font(mainFont, Font.PLAIN, 12));
 			spinner_1.setModel(new SpinnerNumberModel(1000, 1, 100000, 500));
 			bottomPanel.add(spinner_1);
 			
 			Component horizontalStrut_2 = Box.createHorizontalStrut(40);
 			bottomPanel.add(horizontalStrut_2);
 			
-			JTextArea txtrSelectedCell = new JTextArea();
-			txtrSelectedCell.setText("Selected Cell:");
-			txtrSelectedCell.setTabSize(40);
-			txtrSelectedCell.setOpaque(false);
-			txtrSelectedCell.setForeground(new Color(187, 202, 192));
-			txtrSelectedCell.setFont(new Font("Brandon Grotesque Regular", Font.BOLD, 12));
-			bottomPanel.add(txtrSelectedCell);
+			JLabel txtrValue_1 = new JLabel();
+			txtrValue_1.setIcon(new ImageIcon("C:\\AG2411\\AG2411-Project-Group4\\AG2411_raster\\media\\cursor-06.png"));
+			txtrValue_1.setOpaque(false);
+			txtrValue_1.setForeground(new Color(187, 202, 192));
+			bottomPanel.add(txtrValue_1);
+
+			JLabel txtrId = new JLabel();
+			txtrId.setText("ID:");
+			txtrId.setOpaque(false);
+			txtrId.setForeground(new Color(187, 202, 192));
+			txtrId.setFont(new Font(mainFont, Font.ITALIC, 12));
+			bottomPanel.add(txtrId);
+
+			Label label = new Label("Nan");
+			label.setFont(new Font(mainFont, Font.PLAIN, 12));
+			label.setBackground(Color.WHITE);
+			label.setAlignment(Label.RIGHT);
+			bottomPanel.add(label);
 			
 			Label label_2 = new Label("01");
 			label_2.setAlignment(Label.RIGHT);
@@ -616,63 +654,45 @@ public class TestGUI extends JFrame {
 			label_2.setBackground(Color.WHITE);
 			bottomPanel.add(label_2);
 			
-			JTextArea txtrValue = new JTextArea();
+			JLabel txtrValue = new JLabel();
 			txtrValue.setText("value:");
-			txtrValue.setTabSize(40);
 			txtrValue.setOpaque(false);
 			txtrValue.setForeground(new Color(187, 202, 192));
-			txtrValue.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			txtrValue.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(txtrValue);
 			
 			Label label_3 = new Label(pixel[0]);//value
 			label_3.setText(pixel[0]);
-			label_3.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			label_3.setFont(new Font(mainFont, Font.PLAIN, 12));
 			label_3.setBackground(Color.WHITE);
 			label_3.setAlignment(Label.RIGHT);
 			bottomPanel.add(label_3);
 			
-			JTextArea txtrId = new JTextArea();
-			txtrId.setText("ID:");
-			txtrId.setTabSize(40);
-			txtrId.setOpaque(false);
-			txtrId.setForeground(new Color(187, 202, 192));
-			txtrId.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-			bottomPanel.add(txtrId);
-			
-			Label label = new Label(pixel[1]);//id
-			label.setText(pixel[1]);
-			label.setAlignment(Label.RIGHT);
-			label.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-			label.setBackground(Color.WHITE);
-			bottomPanel.add(label);
-			
-			JTextArea txtrX = new JTextArea();
+			JLabel txtrX = new JLabel();
 			txtrX.setText("x:");
-			txtrX.setTabSize(40);
 			txtrX.setOpaque(false);
 			txtrX.setForeground(new Color(187, 202, 192));
-			txtrX.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			txtrX.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(txtrX);
 			
 			Label label_1 = new Label(pixel[2]);
 			label_1.setText(pixel[2]);
 			label_1.setAlignment(Label.RIGHT);
-			label_1.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			label_1.setFont(new Font(mainFont, Font.PLAIN, 12));
 			label_1.setBackground(Color.WHITE);
 			bottomPanel.add(label_1);
 			
-			JTextArea txtrY = new JTextArea();
+			JLabel txtrY = new JLabel();
 			txtrY.setText("y:");
-			txtrY.setTabSize(40);
 			txtrY.setOpaque(false);
 			txtrY.setForeground(new Color(187, 202, 192));
-			txtrY.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			txtrY.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(txtrY);
 			
 			Label label_1_1 = new Label(pixel[3]);
 			label_1_1.setText(pixel[3]);
 			label_1_1.setAlignment(Label.RIGHT);
-			label_1_1.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			label_1_1.setFont(new Font(mainFont, Font.PLAIN, 12));
 			label_1_1.setBackground(Color.WHITE);
 			bottomPanel.add(label_1_1);
 			
