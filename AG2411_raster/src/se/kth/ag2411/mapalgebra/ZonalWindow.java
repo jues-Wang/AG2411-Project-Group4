@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -76,9 +77,11 @@ public class ZonalWindow extends JFrame {
 
 		newWindow = new JFrame();
 		newWindow.setTitle("MAP ALGEBRA: Zonal Operation");
-		newWindow.setBounds(400, 100, 400, 420);
+		newWindow.setIconImage(Toolkit.getDefaultToolkit().getImage(".\\media\\GIShead-05.png"));
+		newWindow.setBounds(400, 100, 310, 420);
 
 		JPanel panel = new JPanel();
+		panel.setBackground(TestGUI.mainColor2);
 		panel.setBounds(0, 49, 465, 373);
 		panel.setLayout(null);
 		newWindow.setContentPane(panel);
@@ -87,11 +90,11 @@ public class ZonalWindow extends JFrame {
 		// Value layer
 		JLabel lblInputValue = new JLabel("Choose value raster:");
 		lblInputValue.setFont(new Font(mainFont, Font.PLAIN, 14));
-		lblInputValue.setBounds(10, 42, 239, 14);
+		lblInputValue.setBounds(18, 47, 257, 14);
 		panel.add(lblInputValue);
 
 		JComboBox <String> cbInputValFile = new JComboBox<String>();
-		cbInputValFile.setBounds(10, 67, 250, 23);
+		cbInputValFile.setBounds(18, 66, 257, 23);
 		panel.add(cbInputValFile);
 		
 		for (int i = 0; i < TestGUI.layerList.size(); i++) {
@@ -112,11 +115,11 @@ public class ZonalWindow extends JFrame {
 		// Zone layer
 		JLabel lblInputZone = new JLabel("Choose zone raster:");
 		lblInputZone.setFont(new Font(mainFont, Font.PLAIN, 14));
-		lblInputZone.setBounds(10, 98, 239, 14);
+		lblInputZone.setBounds(18, 102, 257, 14);
 		panel.add(lblInputZone);
 
 		JComboBox<String> cbInputZonFile = new JComboBox<String>();
-		cbInputZonFile.setBounds(10, 123, 250, 23);
+		cbInputZonFile.setBounds(18, 122, 257, 23);
 		panel.add(cbInputZonFile);
 
 		for (int i = 0; i < TestGUI.layerList.size(); i++) {
@@ -137,15 +140,16 @@ public class ZonalWindow extends JFrame {
 		// Output file
 		JLabel lblOutput = new JLabel("Output file name and location:");
 		lblOutput.setFont(new Font(mainFont, Font.PLAIN, 14));
-		lblOutput.setBounds(10, 290, 239, 14);
+		lblOutput.setBounds(18, 256, 257, 14);
 		panel.add(lblOutput);
 
 		tfOutputFile = new JTextField();
-		tfOutputFile.setBounds(10, 315, 247, 23);
+		tfOutputFile.setBounds(18, 275, 148, 23);
 		panel.add(tfOutputFile);
 
-		JButton btnOutputFile = new JButton("Choose");
-		btnOutputFile.setBounds(277, 315, 88, 23);
+		JButton btnOutputFile = new JButton("Browse");
+		btnOutputFile.setBounds(190, 273, 88, 23);
+		btnOutputFile.setFont(new Font(mainFont, Font.PLAIN, 14));
 		panel.add(btnOutputFile);
 
 		final JFileChooser fileChooser = new JFileChooser();
@@ -186,11 +190,11 @@ public class ZonalWindow extends JFrame {
 		// Statistic operation
 		JLabel lblStatisticOperation = new JLabel("Statistic Operation:");
 		lblStatisticOperation.setFont(new Font(mainFont, Font.PLAIN, 14));
-		lblStatisticOperation.setBounds(10, 223, 239, 14);
+		lblStatisticOperation.setBounds(18, 177, 257, 14);
 		panel.add(lblStatisticOperation);
 
 		final JComboBox <String> cbStatisticType = new JComboBox<String>();
-		cbStatisticType.setBounds(10, 248, 247, 23);
+		cbStatisticType.setBounds(18, 196, 257, 23);
 		panel.add(cbStatisticType);
 
 		cbStatisticType.addItem("SUM");
@@ -212,7 +216,8 @@ public class ZonalWindow extends JFrame {
 
 		// Run or Cancel
 		JButton btnRun = new JButton("RUN");
-		btnRun.setBounds(277, 349, 88, 23);
+		btnRun.setBounds(190, 346, 88, 23);
+		btnRun.setFont(new Font(mainFont, Font.BOLD, 12));
 		panel.add(btnRun);
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -270,8 +275,9 @@ public class ZonalWindow extends JFrame {
 			}
 		});
 
-		JButton btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(167, 349, 88, 23);
+		JButton btnCancel = new JButton("CANCEL");
+		btnCancel.setBounds(80, 346, 88, 23);
+		btnCancel.setFont(new Font(mainFont, Font.BOLD, 12));
 		btnCancel.addMouseListener(new MouseListener() {
 
 			@Override

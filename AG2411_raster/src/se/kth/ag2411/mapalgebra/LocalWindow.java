@@ -33,6 +33,7 @@ import javax.swing.JComboBox;
 
 import java.awt.BorderLayout;
 import java.awt.Choice;
+import java.awt.Toolkit;
 
 public class LocalWindow extends JFrame {
 
@@ -72,16 +73,18 @@ public class LocalWindow extends JFrame {
 		setTitle("MAP ALGEBRA: Local Operations");
 
 		newWindow = new JFrame();
+		newWindow.setIconImage(Toolkit.getDefaultToolkit().getImage(".\\media\\GIShead-05.png"));
 		newWindow.setTitle("MAP ALGEBRA: Local Operation");
 		newWindow.setBounds(400, 100, 400, 420);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(TestGUI.mainColor2);
 		panel.setBounds(0, 49, 465, 373);
 		panel.setLayout(null);
 		newWindow.setContentPane(panel);
 		
 		// Input files
-		JLabel lblInput = new JLabel("Choose input raster:");
+		JLabel lblInput = new JLabel("Choose two input raster:");
 		lblInput.setFont(new Font(mainFont, Font.PLAIN, 14));
 		lblInput.setBounds(23, 42, 239, 14);
 		panel.add(lblInput);
@@ -111,12 +114,13 @@ public class LocalWindow extends JFrame {
 				
 		final DefaultListModel<String> fileListModel = new DefaultListModel<String>();
 		final JList<String> listFileList = new JList<String>(fileListModel);
-		listFileList.setBounds(23, 101, 247, 53);
+		listFileList.setBounds(20, 101, 250, 47);
 		GridBagConstraints gbc_listFileList = new GridBagConstraints();
 		panel.add(listFileList, gbc_listFileList);
 		
 		JButton btnAdd = new JButton ("Add");
 		btnAdd.setBounds(277, 67, 88, 23);
+		btnAdd.setFont(new Font(mainFont, Font.PLAIN, 12));
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -130,12 +134,13 @@ public class LocalWindow extends JFrame {
 		panel.add(btnAdd);	
 		
 		JLabel lblOutput = new JLabel("Output file name and location:");
-		lblOutput.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
+		lblOutput.setFont(new Font(mainFont, Font.PLAIN, 14));
 		lblOutput.setBounds(23, 168, 239, 14);
 		panel.add(lblOutput);
 		
 		JButton btnDelete = new JButton ("Delete");
 		btnDelete.setBounds(277, 101, 88, 23);
+		btnDelete.setFont(new Font(mainFont, Font.PLAIN, 12));
 		btnDelete.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -162,7 +167,7 @@ public class LocalWindow extends JFrame {
 		});
 
 		tfOutputFile = new JTextField();
-		tfOutputFile.setBounds(23, 193, 247, 23);
+		tfOutputFile.setBounds(20, 193, 250, 23);
 		
 		// Output file
 		GridBagConstraints gbc_tfOutputFile = new GridBagConstraints();
@@ -173,13 +178,10 @@ public class LocalWindow extends JFrame {
 		panel.add(tfOutputFile, gbc_tfOutputFile);
 		tfOutputFile.setColumns(10);
 
-		JButton btnOutputFile = new JButton("Choose");
+		JButton btnOutputFile = new JButton("Browse");
 		btnOutputFile.setBounds(277, 193, 88, 23);
-		GridBagConstraints gbc_btnOutputFile = new GridBagConstraints();
-		gbc_btnOutputFile.insets = new Insets(0, 0, 5, 5);
-		gbc_btnOutputFile.gridx = 1;
-		gbc_btnOutputFile.gridy = 6;
-		panel.add(btnOutputFile, gbc_btnOutputFile);
+		btnOutputFile.setFont(new Font(mainFont, Font.PLAIN, 12));
+		panel.add(btnOutputFile);
 		
 		final JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setAcceptAllFileFilterUsed(false);
@@ -217,13 +219,13 @@ public class LocalWindow extends JFrame {
 		});
 		
 		// Statistic operation
-				JLabel lblStatisticOperation = new JLabel("Statistic Operation:");
+		JLabel lblStatisticOperation = new JLabel("Statistic Operation:");
 		lblStatisticOperation.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
 		lblStatisticOperation.setBounds(23, 227, 239, 14);
 		panel.add(lblStatisticOperation);
 		
 		final JComboBox <String> cbStatisticType = new JComboBox<String>();
-		cbStatisticType.setBounds(23, 252, 247, 23);
+		cbStatisticType.setBounds(20, 252, 250, 23);
 		panel.add(cbStatisticType);
 		
 
@@ -244,6 +246,9 @@ public class LocalWindow extends JFrame {
 		
 		// Run or Cancel
 		JButton btnRun = new JButton("RUN");
+		btnRun.setFont(new Font(mainFont, Font.BOLD, 12));
+		
+		
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (TestGUI.layerList.size() == 0) {
@@ -288,7 +293,8 @@ public class LocalWindow extends JFrame {
 		btnRun.setBounds(277, 349, 88, 23);
 		panel.add(btnRun);
 		
-		JButton btnCancel = new JButton("Cancel");
+		JButton btnCancel = new JButton("CANCEL");
+		btnCancel.setFont(new Font(mainFont, Font.BOLD, 12));
 		btnCancel.setBounds(175, 349, 88, 23);
 		btnCancel.addMouseListener(new MouseListener() {
 
