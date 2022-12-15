@@ -109,8 +109,6 @@ public class FocalWindow extends JFrame {
 					inputFile = (String) cbInputFile.getSelectedItem();							
 				}			
 			});	
-				
-		final DefaultListModel<String> fileListModel = new DefaultListModel<String>();
 		
 		JLabel lblOutput = new JLabel("Output file name and location:");
 		lblOutput.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
@@ -268,21 +266,24 @@ public class FocalWindow extends JFrame {
 				// Perform the selected operation
 				if(statisticType == "SUM") { 
 					outputLayer = inputLayer.focalSum(radius, isSquare, outLayerName);
+					TestGUI.aboveLayer = inputLayer.focalSum(radius, isSquare, outLayerName);
 				} 
 				else if (statisticType == "VARIETY") {
 					outputLayer = inputLayer.focalVariety(radius, isSquare, outLayerName);
+					TestGUI.aboveLayer = inputLayer.focalSum(radius, isSquare, outLayerName);
 				} 
 				else if (statisticType == "PRODUCT") {
 					outputLayer = inputLayer.focalProduct(radius, isSquare, outLayerName);
+					TestGUI.aboveLayer = inputLayer.focalSum(radius, isSquare, outLayerName);
 				}
 				
 				TestGUI.layerList.add(outputLayer);
 				TestGUI.imageList.add(outputLayer.toImage());
 				TestGUI.layerNameList.addElement(outLayerName);
 				
-				TestGUI.mPanel = new MapPanel(outputLayer.toImage(), scale);
-				TestGUI.aboveLayer = outputLayer;
-				TestGUI.mPanel.repaint();
+//				TestGUI.mPanel = new MapPanel(outputLayer.toImage(), scale);
+//				TestGUI.aboveLayer = outputLayer;
+//				TestGUI.mPanel.repaint();
 				
 				outputLayer.save(outputFileName);
 				

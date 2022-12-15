@@ -474,12 +474,16 @@ public class TestGUI extends JFrame {
 						
 						File[] selectedFiles = fileChooser.getSelectedFiles();
 						for (int i = 0; i < selectedFiles.length; i++) {
+							if (mPanel != null) {
+								layeredPane.remove(mPanel);
+							}
 //							System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
 							String layerName = getFileName(selectedFiles[i].getAbsolutePath());
+							Layer imageLayer = new Layer(layerName, selectedFiles[i].getAbsolutePath());
 							aboveLayer = new Layer(layerName, selectedFiles[i].getAbsolutePath());//abovelayer = layer
 							
 							BufferedImage layerImage;
-							layerImage = aboveLayer.toImage();
+							layerImage = imageLayer.toImage();
 							
 							mPanel = new MapPanel(layerImage, scale);
 							layeredPane.add(mPanel, BorderLayout.CENTER);
@@ -497,7 +501,7 @@ public class TestGUI extends JFrame {
 							if (! inList) {
 								layerNameList.addElement(layerName);
 								layerList.add(new Layer (layerName, selectedFiles[i].getAbsolutePath()));
-								imageList.add(aboveLayer.toImage());
+								imageList.add(imageLayer.toImage());
 							}
 						}
 					}
