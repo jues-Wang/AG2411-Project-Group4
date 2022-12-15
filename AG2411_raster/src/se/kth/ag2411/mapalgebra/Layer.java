@@ -238,7 +238,17 @@ public class Layer {
 		return image;
 	}
 	
-	// Local methods
+////// Local methods ///////////////////////////////////////////////////////////////////////////////
+	
+	// LocolSum: 
+	// Create a new Layer in which the value of each pixel is 
+	// the sum of counterparts in this Layer and in an input Layers.
+	//        
+	// Input:	inLayer: 		an input Layer ready for addition           
+	// 			outLayerName: 	the name of output Layer
+	//         
+	// Output:	outLayer: 		an new Layer, value of each pixel: outLayer = (this)Layer + inLayer
+	//
 	public Layer localSum(Layer inLayer, String outLayerName){
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		for(int i = 0; i < nRows; i++){
@@ -249,6 +259,15 @@ public class Layer {
 		return outLayer;
 	}
 	
+	// LocolDifference: 
+	// Create a new Layer in which the value of each pixel is the result of 
+	// counterpart in this Layer subtracts from in an input Layers.
+	//          
+	// Input:	inLayer: 		an input Layer ready for subtract           
+	// 			outLayerName: 	the name of output Layer
+	//         
+	// Output:	outLayer: 		an new Layer, value of each pixel: outLayer = (this)Layer - inLayer
+	//
 	public Layer localDifference(Layer inLayer, String outLayerName){
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		for(int i = 0; i < nRows; i++){
@@ -259,13 +278,27 @@ public class Layer {
 		return outLayer;
 	}
 	
-	// Focal methods
+////// Focal methods ///////////////////////////////////////////////////////////////////////////////
+	
+	// FocalSum:
+	// Create a new Layer in which the value of each pixel is the sum of 
+	// its neighborhood in this Layer. The radius and shape of neighborhood
+	// should be given as parameters.
+	//          
+	// Input:	radius: 		the radius of neighborhood           
+	// 			IsSquare: 		the shape of neighborhood, true--square, false--circle
+	// 			outLayerName: 	the name of output Layer
+	//         
+	// Output:	outLayer: 		an new Layer, value of each pixel: 
+	// 							outLayer = neighborhood[0]+neighborhood[1]+...+neighborhood[n]
+	//
 	public Layer focalSum(int radius, boolean IsSquare, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		outLayer.values = new double[nRows][nCols];
 		for (int i = 0; i < nRows; i++) {
 			for (int j = 0; j < nCols; j++) {
-				int[][] neighborhood = getNeighborhood(i*nCols+j, radius, IsSquare);//the neighborhood’s shape is a square (if true) or a circle (if false)
+				//the neighborhood’s shape is a square (if true) or a circle (if false)
+				int[][] neighborhood = getNeighborhood(i*nCols+j, radius, IsSquare);
 				double sumNeigh = 0;
 				for (int k = 0; k < neighborhood.length; k++) {
 					int l = neighborhood[k][0];
@@ -278,6 +311,18 @@ public class Layer {
 		return outLayer;
 	}
 	
+	// FocalProduct:
+	// Create a new Layer in which the value of each pixel is the product of 
+	// its neighborhood in this Layer. The radius and shape of neighborhood
+	// should be given as parameters.
+	//          
+	// Input:	radius: 		the radius of neighborhood           
+	// 			IsSquare: 		the shape of neighborhood, true--square, false--circle
+	// 			outLayerName: 	the name of output Layer
+	//         
+	// Output:	outLayer: 		an new Layer, value of each pixel:
+	// 							outLayer = neighborhood[0]*neighborhood[1]*...*neighborhood[n]
+	//
 	public Layer focalProduct(int radius, boolean IsSquare, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		outLayer.values = new double[nRows][nCols];
@@ -296,6 +341,18 @@ public class Layer {
 		return outLayer;
 	}
 	
+	// FocalRanking:
+	// Create a new Layer in which the value of each pixel is its rank in
+	// its neighborhood in this Layer. The radius and shape of neighborhood
+	// should be given as parameters.
+	//          
+	// Input:	radius: 		the radius of neighborhood           
+	// 			IsSquare: 		the shape of neighborhood, true--square, false--circle
+	// 			outLayerName: 	the name of output Layer
+	//         
+	// Output:	outLayer: 		an new Layer, value of each pixel:
+	// 							outLayer = its rank in neighborhood(Descending order)
+	//
 	public Layer focalRanking(int radius, boolean IsSquare, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		outLayer.values = new double[nRows][nCols];
@@ -310,6 +367,7 @@ public class Layer {
 					neighMap.put(l*nCols+j, values[l][m]);
 				}
 				List<Map.Entry<Integer, Double>> list = new ArrayList<>(neighMap.entrySet());
+				//sort in ascending order
 				Collections.sort(list, new Comparator<Map.Entry<Integer, Double>>(){
 					public int compare(Map.Entry<Integer, Double> o1,Map.Entry<Integer, Double> o2) {
 						return o1.getKey().compareTo(o2.getKey());
@@ -318,7 +376,7 @@ public class Layer {
 //				Arrays.sort(neighValues, Collections.reverseOrder());
 				for(int ii=0;ii<list.size();ii++) {
 					if(list.get(ii).getKey()==i*nCols+j){
-						rank = list.size()-ii;
+						rank = list.size()-ii;//descending order
 					}
 				}
 				outLayer.values[i][j] = rank;
@@ -327,6 +385,19 @@ public class Layer {
 		return outLayer;
 	}
 	
+	// FocalVariety:
+	// Create a new Layer in which the value of each pixel is the number of 
+	// unique values in its neighborhood. The radius and shape of neighborhood
+	// should be given as parameters.
+	//          
+	// Input:	radius: 		the radius of neighborhood           
+	// 			IsSquare: 		the shape of neighborhood, true--square, false--circle
+	// 			outLayerName: 	the name of output Layer
+	//         
+	// Output:	outLayer: 		an new Layer, value of each pixel:
+	// 							outLayer = the number of unique values in neighborhood
+	//					   e.g. the number of unique values in [1, 0, 2 , 1, 0, 0, 2] = 3
+	//
 	public Layer focalVariety(int r, boolean isSquare, String outLayerName) {
 		 Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 	        for(int i = 0; i < nRows; i++) {
@@ -354,7 +425,18 @@ public class Layer {
 	
 	
 	
-	// Zonal methods
+////// Zonal methods ///////////////////////////////////////////////////////////////////////////////
+	
+	// ZonalSum
+	// Create a new Layer in which the value of each pixel is the sum of 
+	// its zone in this Layer. 
+	//          
+	// Input:	zoneLayer: 		a Layer that divide this layer into several zones by unique numbers.
+	// 			outLayerName: 	the name of output Layer
+	//         
+	// Output:	outLayer: 		an new Layer, value of each pixel:
+	// 							outLayer = the sum of zone
+    //
 	public Layer zonalSum(Layer zoneLayer, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		outLayer.values = new double[nRows][nCols];
@@ -389,6 +471,16 @@ public class Layer {
 		return outLayer;
 	}
 	
+	// ZonalMean
+	// Create a new Layer in which the value of each pixel is the mean of 
+	// its zone in this Layer. 
+	//          
+	// Input:	zoneLayer: 		a Layer that divide this layer into several zones by unique numbers.
+	// 			outLayerName: 	the name of output Layer
+	//         
+	// Output:	outLayer: 		an new Layer, value of each pixel:
+	// 							outLayer = the mean of zone
+    //
 	public Layer zonalMean(Layer zoneLayer, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		outLayer.values = new double[nRows][nCols];
@@ -423,6 +515,16 @@ public class Layer {
 		return outLayer;
 	}
 	
+	// ZonalMaximum
+	// Create a new Layer in which the value of each pixel is the maximum of 
+	// its zone in this Layer. 
+	//          
+	// Input:	zoneLayer: 		a Layer that divide this layer into several zones by unique numbers.
+	// 			outLayerName: 	the name of output Layer
+	//         
+	// Output:	outLayer: 		an new Layer, value of each pixel:
+	// 							outLayer = the maximum of zone
+    //
 	public Layer zonalMaximum(Layer zoneLayer, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		outLayer.values = new double[nRows][nCols];
@@ -454,6 +556,16 @@ public class Layer {
 		return outLayer;
 	}
 	
+	// ZonalMinimum
+	// Create a new Layer in which the value of each pixel is the minimum of 
+	// its zone in this Layer. 
+	//          
+	// Input:	zoneLayer: 		a Layer that divide this layer into several zones by unique numbers.
+	// 			outLayerName: 	the name of output Layer
+	//         
+	// Output:	outLayer: 		an new Layer, value of each pixel:
+	// 							outLayer = the minimum of zone
+    //
 	public Layer zonalMinimum(Layer zoneLayer, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		
@@ -478,6 +590,16 @@ public class Layer {
 		return outLayer;
 	}
 	
+	// ZonalProduct
+	// Create a new Layer in which the value of each pixel is the product of 
+	// its zone in this Layer. 
+	//          
+	// Input:	zoneLayer: 		a Layer that divide this layer into several zones by unique numbers.
+	// 			outLayerName: 	the name of output Layer
+	//         
+	// Output:	outLayer: 		an new Layer, value of each pixel:
+	// 							outLayer = the product of zone
+    //
 	public Layer zonalProduct(Layer zoneLayer, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		outLayer.values = new double[nRows][nCols];
@@ -511,6 +633,17 @@ public class Layer {
 		return outLayer;
 	}
 	
+	// ZonalVariety
+	// Create a new Layer in which the value of each pixel is the number of 
+	// the unique values in its zone in this Layer. 
+	//          
+	// Input:	zoneLayer: 		a Layer that divide this layer into several zones by unique numbers.
+	// 			outLayerName: 	the name of output Layer
+	//         
+	// Output:	outLayer: 		an new Layer, value of each pixel:
+	// 							outLayer = the number of unique values in its zone
+	//					   e.g. the number of unique values in [1, 0, 2 , 1, 0, 0, 2] = 3
+	//
 	public Layer zonalVariety(Layer zoneLayer, String outLayerName) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		outLayer.values = new double[nRows][nCols];
