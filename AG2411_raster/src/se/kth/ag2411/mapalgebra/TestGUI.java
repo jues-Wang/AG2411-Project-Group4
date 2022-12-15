@@ -69,6 +69,9 @@ public class TestGUI extends JFrame {
     public static TestGUI app;
     public static Layer aboveLayer; // the layer that is shown currently 
 	public String[] pixel = {"Nan","Nan","Nan","Nan",};
+	public static Color mainColor2;
+	public static Color mainColor;
+	public static Color highlightColor;
 	
 	// For operations in other windows
 	public static DefaultListModel<String> layerNameList = new DefaultListModel<String>();
@@ -144,11 +147,11 @@ public class TestGUI extends JFrame {
 		Color projectYellow = new Color (255, 208, 47);
 		
 		// Choose main colors for GUI:
-		Color mainColor = projectDarkBlue4;		// for background color in head & bottom panel
-		Color mainColor2 = projectLightGreen;	// for text, borders, ...
+		mainColor = projectDarkBlue4;		// for background color in head & bottom panel
+		mainColor2 = projectLightGreen;	// for text, borders, ...
 		
 		Color buttonColor = new Color(238, 238, 238);
-		Color highlightColor = projectYellow;
+		highlightColor = projectYellow;
 		Color crazyColor = projectRed;
 		
 		String mainFont = new String ("Brandon Grotesque Regular");
@@ -387,20 +390,6 @@ public class TestGUI extends JFrame {
 			Component gap2 = Box.createHorizontalStrut(20);
 			menuBar.add(gap2);
 			
-			// RECOLOR
-			JMenu mnRecolor = new JMenu("Recolor");
-			mnRecolor.setForeground(highlightColor);
-			mnRecolor.setFont(new Font(mainFont, Font.PLAIN, 14));
-			mnRecolor.setBorder(new LineBorder(highlightColor, 1, true));
-			mnRecolor.setBorder(new RoundedBorder(radius));
-			menuBar.add(mnRecolor);
-			
-			JMenuItem colorscheme1 = new JMenuItem("Colorscheme 1");
-			mnRecolor.add(colorscheme1);
-			
-			Component gap3 = Box.createHorizontalStrut(20);
-			menuBar.add(gap3);
-			
 			// TOOLBOX
 			JMenu mnToolbox = new JMenu("Toolbox");
 			mnToolbox.setForeground(highlightColor);
@@ -419,7 +408,7 @@ public class TestGUI extends JFrame {
 					LocalWindow.main();
 				}
 			});
-
+			
 			// Focal operations
 			JMenuItem mnFocal = new JMenuItem("Focal operations");
 			mnFocal.setFont(new Font(mainFont, Font.PLAIN, 12));
@@ -429,7 +418,7 @@ public class TestGUI extends JFrame {
 					FocalWindow.main();
 				}
 			});
-			
+
 			// Zonal operations
 			JMenuItem mnZonal = new JMenuItem("Zonal operations");
 			mnZonal.setFont(new Font(mainFont, Font.PLAIN, 12));
@@ -439,14 +428,50 @@ public class TestGUI extends JFrame {
 					ZonalWindow.main();
 				}
 			});
-			
+
 			JMenuItem mnDistance = new JMenuItem("Distance");
 			mnDistance.setFont(new Font(mainFont, Font.PLAIN, 12));
 			mnToolbox.add(mnDistance);
+			mnDistance.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(
+					app,
+					"Unfortunately, this window is still a work in progress. \nTry the local, focal or zonal operations instead!",
+					"SORRY",
+					JOptionPane.OK_OPTION
+					);
+				}
+			});
 			
+
 			JMenuItem mnShortestPath = new JMenuItem("Shortest Path");
 			mnShortestPath.setFont(new Font(mainFont, Font.PLAIN, 12));
 			mnToolbox.add(mnShortestPath);
+			mnShortestPath.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(
+					app,
+					"Unfortunately, this window is still a work in progress. \nTry the local, focal or zonal operations instead!",
+					"SORRY",
+					JOptionPane.OK_OPTION
+					);
+				}
+			});
+
+			Component gap3 = Box.createHorizontalStrut(20);
+			menuBar.add(gap3);
+			
+			// RECOLOR
+			JMenu mnRecolor = new JMenu("Recolor");
+			mnRecolor.setForeground(highlightColor);
+			mnRecolor.setFont(new Font(mainFont, Font.PLAIN, 14));
+			mnRecolor.setBorder(new LineBorder(highlightColor, 1, true));
+			mnRecolor.setBorder(new RoundedBorder(radius));
+			menuBar.add(mnRecolor);
+			
+			JMenuItem colorscheme1 = new JMenuItem("Colorscheme 1");
+			colorscheme1.setFont(new Font(mainFont, Font.PLAIN, 12));
+			mnRecolor.add(colorscheme1);
 			
 			Component gap4 = Box.createHorizontalStrut(20);
 			menuBar.add(gap4);

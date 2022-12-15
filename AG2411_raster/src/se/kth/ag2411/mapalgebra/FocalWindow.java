@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -77,9 +78,11 @@ public class FocalWindow extends JFrame {
 
 		newWindow = new JFrame();
 		newWindow.setTitle("MAP ALGEBRA: Focal Operation");
-		newWindow.setBounds(400, 100, 400, 420);
+		newWindow.setIconImage(Toolkit.getDefaultToolkit().getImage(".\\media\\GIShead-05.png"));
+		newWindow.setBounds(400, 100, 310, 420);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(TestGUI.mainColor2);
 		panel.setBounds(0, 49, 465, 373);
 		panel.setLayout(null);
 		newWindow.setContentPane(panel);
@@ -87,11 +90,11 @@ public class FocalWindow extends JFrame {
 		// Input files
 		JLabel lblInput = new JLabel("Choose input raster:");
 		lblInput.setFont(new Font(mainFont, Font.PLAIN, 14));
-		lblInput.setBounds(23, 42, 239, 14);
+		lblInput.setBounds(23, 32, 239, 14);
 		panel.add(lblInput);
 		
 		final JComboBox <String> cbInputFile = new JComboBox<String>();
-		cbInputFile.setBounds(20, 67, 250, 23);
+		cbInputFile.setBounds(20, 57, 250, 23);
 		GridBagConstraints gbc_cbInputFile = new GridBagConstraints();
 		panel.add(cbInputFile, gbc_cbInputFile);
 		
@@ -111,29 +114,21 @@ public class FocalWindow extends JFrame {
 			});	
 		
 		JLabel lblOutput = new JLabel("Output file name and location:");
-		lblOutput.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
-		lblOutput.setBounds(23, 290, 239, 14);
+		lblOutput.setFont(new Font(mainFont, Font.PLAIN, 14));
+		lblOutput.setBounds(23, 267, 239, 14);
 		panel.add(lblOutput);
 
-		tfOutputFile = new JTextField();
-		tfOutputFile.setBounds(23, 315, 247, 23);
+
 		
 		// Output file
-		GridBagConstraints gbc_tfOutputFile = new GridBagConstraints();
-		gbc_tfOutputFile.insets = new Insets(0, 0, 5, 5);
-		gbc_tfOutputFile.fill = GridBagConstraints.HORIZONTAL;
-		gbc_tfOutputFile.gridx = 0;
-		gbc_tfOutputFile.gridy = 6;
-		panel.add(tfOutputFile, gbc_tfOutputFile);
+		tfOutputFile = new JTextField();
+		tfOutputFile.setBounds(23, 292, 146, 23);
+		panel.add(tfOutputFile);
 		tfOutputFile.setColumns(10);
 
-		JButton btnOutputFile = new JButton("Choose");
-		btnOutputFile.setBounds(277, 315, 88, 23);
-		GridBagConstraints gbc_btnOutputFile = new GridBagConstraints();
-		gbc_btnOutputFile.insets = new Insets(0, 0, 5, 5);
-		gbc_btnOutputFile.gridx = 1;
-		gbc_btnOutputFile.gridy = 6;
-		panel.add(btnOutputFile, gbc_btnOutputFile);
+		JButton btnOutputFile = new JButton("Browse");
+		btnOutputFile.setBounds(183, 292, 88, 23);
+		panel.add(btnOutputFile);
 		
 		final JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setAcceptAllFileFilterUsed(false);
@@ -173,11 +168,11 @@ public class FocalWindow extends JFrame {
 		// Parameters
 		JLabel lblNeighborhoodType = new JLabel("Neighborhood type:");
 		lblNeighborhoodType.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
-		lblNeighborhoodType.setBounds(23, 143, 120, 14);
+		lblNeighborhoodType.setBounds(23, 108, 120, 14);
 		panel.add(lblNeighborhoodType);
 		
 		JComboBox<String> cbNeighborhood = new JComboBox<String>();
-		cbNeighborhood.setBounds(149, 140, 120, 23);
+		cbNeighborhood.setBounds(149, 105, 120, 23);
 		panel.add(cbNeighborhood);
 		
 		cbNeighborhood.addItem("SQUARE");
@@ -196,13 +191,13 @@ public class FocalWindow extends JFrame {
 		});
 		
 		JLabel lblRadius = new JLabel("Radius:");
-		lblRadius.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
-		lblRadius.setBounds(23, 175, 120, 14);
+		lblRadius.setFont(new Font(mainFont, Font.PLAIN, 14));
+		lblRadius.setBounds(23, 140, 120, 14);
 		panel.add(lblRadius);
 		
 		txtRadius = new JTextField();
 		txtRadius.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtRadius.setBounds(149, 174, 121, 23);
+		txtRadius.setBounds(149, 139, 121, 23);
 		panel.add(txtRadius);
 		
 		txtRadius.addActionListener(new ActionListener() {
@@ -217,12 +212,12 @@ public class FocalWindow extends JFrame {
 		
 		// Statistic operation
 		JLabel lblStatisticOperation = new JLabel("Statistic Operation:");
-		lblStatisticOperation.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
-		lblStatisticOperation.setBounds(23, 223, 239, 14);
+		lblStatisticOperation.setFont(new Font(mainFont, Font.PLAIN, 14));
+		lblStatisticOperation.setBounds(24, 198, 239, 14);
 		panel.add(lblStatisticOperation);
 		
 		final JComboBox <String> cbStatisticType = new JComboBox<String>();
-		cbStatisticType.setBounds(23, 248, 247, 23);
+		cbStatisticType.setBounds(24, 223, 247, 23);
 		panel.add(cbStatisticType);
 		
 		cbStatisticType.addItem("SUM");
@@ -241,7 +236,8 @@ public class FocalWindow extends JFrame {
 		
 		// Run or Cancel
 		JButton btnRun = new JButton("RUN");
-		btnRun.setBounds(277, 349, 88, 23);
+		btnRun.setFont(new Font(mainFont, Font.BOLD, 14));
+		btnRun.setBounds(183, 349, 88, 23);
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -292,8 +288,9 @@ public class FocalWindow extends JFrame {
 			});
 		panel.add(btnRun);
 		
-		JButton btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(175, 349, 88, 23);
+		JButton btnCancel = new JButton("CANCEL");
+		btnCancel.setBounds(81, 349, 88, 23);
+		btnCancel.setFont(new Font(mainFont, Font.BOLD, 12));
 		btnCancel.addMouseListener(new MouseListener() {
 
 			@Override
