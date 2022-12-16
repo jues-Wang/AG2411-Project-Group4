@@ -68,7 +68,8 @@ public class TestGUI extends JFrame {
 	public static int zoomLvl = 3;
     public static TestGUI app;
     public static Layer aboveLayer; // the layer that is shown currently 
-	public String[] pixel = {"Nan","Nan","Nan","Nan",};
+	public String[] pixel = {" "," "," "," ",};
+	public String[] pixel_select = {" "," "," "," ",};
 	public static Color mainColor2;
 	public static Color mainColor;
 	public static Color highlightColor;
@@ -134,6 +135,9 @@ public class TestGUI extends JFrame {
 		// Create the frame.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 500);
+		// spinners in bottom panel
+		JSpinner spinner = new JSpinner(); // for %
+		JSpinner spinner_1 = new JSpinner(); //for scale
 		
 		// NICE COLORS:
 		Color projectDarkBlue = new Color (39, 55, 115);
@@ -198,6 +202,7 @@ public class TestGUI extends JFrame {
 		panelMAP.setLayout(new CardLayout(0, 0));
 
 		final JLayeredPane layeredPane = new JLayeredPane();	// to LAYER the maps ??
+		
 		layeredPane.addMouseWheelListener(new MouseWheelListener() {
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				zoom(e.getWheelRotation());
@@ -222,7 +227,7 @@ public class TestGUI extends JFrame {
 				if (e.getClickCount() == 2) {
 		        	layeredPane.remove(mPanel);
 		            int index = displayList.locationToIndex(e.getPoint());
-		            int scale = 3;
+		            int scale = zoomLvl;
 		            layeredPane.remove(mPanel);
 		            
 		            aboveLayer = layerList.get(index);
@@ -232,7 +237,8 @@ public class TestGUI extends JFrame {
 					layeredPane.add(mPanel, BorderLayout.CENTER);
 					mPanel.setBounds(0, 0, 2000, 2000);	
 					mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
-					
+					spinner.setValue(100*zoomLvl);
+					spinner_1.setValue((int)zoomLvl*aboveLayer.resolution);
 		        }
 		        
 		        // Open pop-up menu
@@ -490,6 +496,8 @@ public class TestGUI extends JFrame {
 			mnManual.setFont(new Font(mainFont, Font.PLAIN, 12));
 			mnHelp.add(mnManual);
 			
+
+			
 			//Open file
 			JMenuItem mntmOpen = new JMenuItem("Open file");
 			mntmOpen.setFont(new Font(mainFont, Font.PLAIN, 12));
@@ -498,7 +506,7 @@ public class TestGUI extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					
 					int result = fileChooser.showOpenDialog(TestGUI.this);
-					int scale = 3;
+					int scale = zoomLvl;
 					
 					if (result == JFileChooser.APPROVE_OPTION) {
 						if (mPanel != null) {
@@ -513,7 +521,7 @@ public class TestGUI extends JFrame {
 //							System.out.println("Selected file: " + selectedFiles[i].getAbsolutePath());
 							String layerName = getFileName(selectedFiles[i].getAbsolutePath());
 							Layer imageLayer = new Layer(layerName, selectedFiles[i].getAbsolutePath());
-							aboveLayer = new Layer(layerName, selectedFiles[i].getAbsolutePath());//abovelayer = layer
+							
 							
 							BufferedImage layerImage;
 							layerImage = imageLayer.toImage();
@@ -537,6 +545,9 @@ public class TestGUI extends JFrame {
 								imageList.add(imageLayer.toImage());
 							}
 						}
+						aboveLayer = layerList.getLast();//aboveLayer = last layer
+						spinner.setValue(100*scale);
+						spinner_1.setValue((int)aboveLayer.resolution*scale);
 					}
 				}
 			});
@@ -589,12 +600,14 @@ public class TestGUI extends JFrame {
 //			headPanel.add(modeOnOff, BorderLayout.EAST);
 			contentPanel.setBounds(10,10,10,10);	
 		
-		// Create bottom Panel.
-		JPanel bottomPanel = new JPanel();
-		bottomPanel.setBackground(mainColor);
-		contentPanel.add(bottomPanel, BorderLayout.SOUTH);
+			// Create bottom Panel.
+			JPanel bottomPanel = new JPanel();
+			bottomPanel.setBackground(mainColor);
+			contentPanel.add(bottomPanel, BorderLayout.SOUTH);
 			
 			// Fill up bottom panel:
+
+			
 			Button fullExtent = new Button("Full Extent");
 			fullExtent.setBackground(mainColor2);
 			fullExtent.setForeground(mainColor);
@@ -602,7 +615,8 @@ public class TestGUI extends JFrame {
 			fullExtent.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					mPanel.scale = 3;
+					zoomLvl = 3;
+					mPanel.scale = zoomLvl;
 					mPanel.revalidate();
 					mPanel.repaint();
 				}
@@ -613,7 +627,10 @@ public class TestGUI extends JFrame {
 			btnZoomIn.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-				zoom(1);}
+					zoom(1);
+					spinner.setValue(zoomLvl*100);
+					spinner_1.setValue((int)zoomLvl*aboveLayer.resolution);
+				}
 			});
 			btnZoomIn.setForeground(new Color(0, 41, 61));
 			btnZoomIn.setFont(new Font(mainFont, Font.BOLD, 12));
@@ -625,12 +642,15 @@ public class TestGUI extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					zoom(-1);
+					spinner.setValue(zoomLvl*100);
+					spinner_1.setValue((int)zoomLvl*aboveLayer.resolution);
 				}
 			});
 			btnZoomOut.setForeground(new Color(0, 41, 61));
 			btnZoomOut.setFont(new Font(mainFont, Font.BOLD, 12));
 			btnZoomOut.setBackground(new Color(187, 202, 192));
 			bottomPanel.add(btnZoomOut);
+
 			
 			Component horizontalStrut = Box.createHorizontalStrut(40);
 			bottomPanel.add(horizontalStrut);
@@ -642,24 +662,22 @@ public class TestGUI extends JFrame {
 			magnifier.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(magnifier);
 			
-			JSpinner spinner = new JSpinner();
 			spinner.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-			spinner.setModel(new SpinnerNumberModel(100, 0, 500, 25));	// insert % ??
+			spinner.setModel(new SpinnerNumberModel(0, 0, 1000, 100));	// insert % ??
 			bottomPanel.add(spinner);
 			
 			Component horizontalStrut_1 = Box.createHorizontalStrut(20);
 			bottomPanel.add(horizontalStrut_1);
 			
 			JLabel txtrScale = new JLabel();
-			txtrScale.setText("Scale 1:");
+			txtrScale.setText("Scale:");
 			txtrScale.setOpaque(false);
 			txtrScale.setForeground(new Color(187, 202, 192));
 			txtrScale.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(txtrScale);
 			
-			JSpinner spinner_1 = new JSpinner();
 			spinner_1.setFont(new Font(mainFont, Font.PLAIN, 12));
-			spinner_1.setModel(new SpinnerNumberModel(1000, 1, 100000, 500));
+			spinner_1.setModel(new SpinnerNumberModel(0, 0, 100000, 500));
 			bottomPanel.add(spinner_1);
 			
 			Component horizontalStrut_2 = Box.createHorizontalStrut(40);
@@ -678,13 +696,13 @@ public class TestGUI extends JFrame {
 			txtrId.setFont(new Font(mainFont, Font.ITALIC, 12));
 			bottomPanel.add(txtrId);
 
-			Label label = new Label("Nan");
+			Label label = new Label(pixel[1]);
 			label.setFont(new Font(mainFont, Font.PLAIN, 12));
 			label.setBackground(Color.WHITE);
 			label.setAlignment(Label.RIGHT);
 			bottomPanel.add(label);
 			
-			Label label_2 = new Label("01");
+			Label label_2 = new Label(pixel_select[0]);
 			label_2.setAlignment(Label.RIGHT);
 			label_2.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
 			label_2.setBackground(Color.WHITE);
@@ -730,12 +748,13 @@ public class TestGUI extends JFrame {
 			label_1_1.setAlignment(Label.RIGHT);
 			label_1_1.setFont(new Font(mainFont, Font.PLAIN, 12));
 			label_1_1.setBackground(Color.WHITE);
+			label_1_1.setBounds(130, 130, 130, 130);
 			bottomPanel.add(label_1_1);
 			
 			layeredPane.addMouseMotionListener(new MouseMotionAdapter() {
 				@Override
 				public void mouseMoved(MouseEvent e) {
-					if(mPanel!=null) {
+					if(mPanel!=null & aboveLayer!=null) {
 						int x_screen = e.getX();//x&y are started from the left-up corner of layeredPanel
 						int y_screen = e.getY();
 						Point mPanelLocation = mPanel.getLocation();//[x=0,y=0]
@@ -761,6 +780,37 @@ public class TestGUI extends JFrame {
 							label.setText(pixel[1]);//id
 							label_1.setText(pixel[2]);//x
 							label_1_1.setText(pixel[3]);//y
+						}
+					}
+				}
+			});
+			
+			layeredPane.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if(mPanel!=null & aboveLayer!=null) {
+						int x_screen = e.getX();//x&y are started from the left-up corner of layeredPanel
+						int y_screen = e.getY();
+						Point mPanelLocation = mPanel.getLocation();//[x=0,y=0]
+
+						int x_start = mPanelLocation.x; // from left to right
+						int x_end = mPanelLocation.x + aboveLayer.nCols*zoomLvl;
+						int y_start = mPanelLocation.y; //from up to bottom
+						int y_end = mPanelLocation.y + aboveLayer.nRows*zoomLvl;
+						
+						if(x_screen > x_start & x_screen < x_end & y_screen > y_start & y_screen < y_end) {
+							// index 
+							int x = (x_screen - x_start)/zoomLvl;
+							int y = (y_screen - y_start)/zoomLvl;
+
+							//message of this pixel
+							pixel_select[0] = Double.toString(aboveLayer.values[x][y]);//value
+							pixel_select[1] = Integer.toString(x*aboveLayer.nCols+y);//id
+							pixel_select[2] = Integer.toString(x);
+							pixel_select[3] = Integer.toString(y);
+
+							//visualization
+							label_2.setText(pixel_select[1]);//id
 						}
 					}
 				}
