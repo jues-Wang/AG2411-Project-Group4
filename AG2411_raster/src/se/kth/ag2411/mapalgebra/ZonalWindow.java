@@ -222,7 +222,7 @@ public class ZonalWindow extends JFrame {
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(outputFileName == null) {
-					JOptionPane.showMessageDialog(new JFrame(),"Error when trying to perform the operation.");
+					JOptionPane.showMessageDialog(new JFrame(),"Error when trying to perform the operation, no window loaded.");
 					return;
 				}
 				

@@ -68,7 +68,7 @@ public class TestGUI extends JFrame {
 	public static int zoomLvl = 3;
     public static TestGUI app;
     public static Layer aboveLayer; // the layer that is shown currently 
-	public String[] pixel = {"Nan","Nan","Nan","Nan",};
+	public String[] pixel = {"   ","   ","   ","   ",};
 	public static Color mainColor2;
 	public static Color mainColor;
 	public static Color highlightColor;
@@ -133,7 +133,7 @@ public class TestGUI extends JFrame {
 		
 		// Create the frame.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 500);
+//		setBounds(100, 100, 900, 500);
 		
 		// NICE COLORS:
 		Color projectDarkBlue = new Color (39, 55, 115);
@@ -678,7 +678,7 @@ public class TestGUI extends JFrame {
 			txtrId.setFont(new Font(mainFont, Font.ITALIC, 12));
 			bottomPanel.add(txtrId);
 
-			Label label = new Label("Nan");
+			Label label = new Label("   ");
 			label.setFont(new Font(mainFont, Font.PLAIN, 12));
 			label.setBackground(Color.WHITE);
 			label.setAlignment(Label.RIGHT);
