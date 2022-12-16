@@ -251,8 +251,12 @@ public class LocalWindow extends JFrame {
 		
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (TestGUI.layerList.size() == 0) {
-					newWindow.dispose();
+//				if (TestGUI.layerList.size() == 0) {
+//					newWindow.dispose();
+//				}
+				if(outputFileName == null) {
+					JOptionPane.showMessageDialog(new JFrame(),"Epic fail.");
+					return;
 				}
 				Layer layer1 = TestGUI.layerList.get(0);
 				Layer layer2 = TestGUI.layerList.get(0);

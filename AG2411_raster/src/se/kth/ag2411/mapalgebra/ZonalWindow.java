@@ -221,6 +221,11 @@ public class ZonalWindow extends JFrame {
 		panel.add(btnRun);
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(outputFileName == null) {
+					JOptionPane.showMessageDialog(new JFrame(),"Error when trying to perform the operation.");
+					return;
+				}
+				
 				Layer valueLayer = TestGUI.layerList.get(0);
 				Layer zoneLayer = TestGUI.layerList.get(0);
 				

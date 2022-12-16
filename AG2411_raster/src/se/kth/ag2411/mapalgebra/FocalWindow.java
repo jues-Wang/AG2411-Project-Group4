@@ -240,7 +240,7 @@ public class FocalWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				if(radius < 0 || outputFileName == null) {
-					JOptionPane.showMessageDialog(new JFrame(),"fail");
+					JOptionPane.showMessageDialog(new JFrame(),"Error when trying to perform the operation.");
 					return;
 				}
 			
