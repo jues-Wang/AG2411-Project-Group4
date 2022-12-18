@@ -12,16 +12,16 @@ public class ProjectTest {
 		// Local animation
 //		Layer layer = new Layer("", "raster3x4.txt");
 //		Layer inLayer = new Layer("", args[1]);
-//		layer.localSumLearning(inLayer, "", 3, -10000, "raster3x4.txt");
+//		layer.localSumLearning(inLayer, "", 100, -10000, "raster3x4.txt");
 		
 		// Focal animation
-//		Layer layer = new Layer("", "elevation.txt");
-//		layer.focalVarietyLearning(10, false, "", 3, -10000, "elevation.txt");
+		Layer layer = new Layer("", "elevation.txt");
+		layer.focalVarietyLearning(10, false, "", 3, -10000, "elevation.txt");
 //		
 		// Zonal animation
 //		Layer layer = new Layer("", "raster3x4.txt");
 //		Layer zoneLayer = new Layer("", "raster3x4.txt");
-//		layer.zonalMinimumLearning(zoneLayer, "", 50, -10000, -20000, "raster3x4.txt");
+//		layer.zonalMinimumLearning(zoneLayer, "", 100, -10000, -20000, "raster3x4.txt");
 		
 		// Dijkstra
 //		Layer layer = new Layer("", args[0]);

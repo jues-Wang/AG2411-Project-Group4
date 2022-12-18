@@ -240,10 +240,10 @@ public class FocalWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				if(radius < 0) {
-					JOptionPane.showMessageDialog(new JFrame(),"Error when trying to perform the operation, incorrect radius.");
+					JOptionPane.showMessageDialog(new JFrame(),"Error when trying to perform the operation: Incorrect radius.");
 					return;
 				} else if (outputFileName == null) {
-					JOptionPane.showMessageDialog(new JFrame(),"Error when trying to perform the operation, no layer loaded.");
+					JOptionPane.showMessageDialog(new JFrame(),"Error when trying to perform the operation: No layer loaded.");
 					return;
 				}
 				

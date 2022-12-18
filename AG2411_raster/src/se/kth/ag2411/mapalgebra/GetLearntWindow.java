@@ -173,9 +173,29 @@ public class GetLearntWindow extends JFrame{
 		
 		// Choosing operation
 		JButton btnLocal = new JButton("Local Operations");
+		btnLocal.setBounds(10, 10, 225, 68);
+		btnLocal.setBackground(crazyColor);
+		panel.add(btnLocal);
+		
+		JButton btnFocal = new JButton("Focal Operations");
+		btnFocal.setBounds(280, 10, 225, 68);
+		btnFocal.setBackground(crazyColor);
+		panel.add(btnFocal);
+		
+		JButton btnZonal = new JButton("Zonal Operations");
+		btnZonal.setBounds(551, 10, 225, 68);
+		btnZonal.setBackground(crazyColor);
+		panel.add(btnZonal);
+		
+		// Event handlers
 		btnLocal.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				// Button colors
+				btnLocal.setBackground(highlightColor);
+				btnFocal.setBackground(crazyColor);
+				btnZonal.setBackground(crazyColor);
+				
 				// Input options
 				lblInput.setVisible(true);
 				lblInput.setText("Choose input layer:");
@@ -207,14 +227,15 @@ public class GetLearntWindow extends JFrame{
 				mPanel.setBounds(xStart, yStart, xEnd, yEnd);
 			}
 		});
-		btnLocal.setBounds(10, 10, 225, 68);
-		btnLocal.setBackground(crazyColor);
-		panel.add(btnLocal);
 		
-		JButton btnFocal = new JButton("Focal Operations");
 		btnFocal.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				// Button colors
+				btnLocal.setBackground(crazyColor);
+				btnFocal.setBackground(highlightColor);
+				btnZonal.setBackground(crazyColor);
+				
 				// Input layer options
 				lblInput.setVisible(true);
 				lblInput.setText("Choose input layer:");
@@ -244,14 +265,15 @@ public class GetLearntWindow extends JFrame{
 				mPanel.setBounds(xStart, yStart, xEnd, yEnd);
 			}
 		});
-		btnFocal.setBounds(280, 10, 225, 68);
-		btnFocal.setBackground(crazyColor);
-		panel.add(btnFocal);
-		
-		JButton btnZonal = new JButton("Zonal Operations");
+
 		btnZonal.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				// Button colors
+				btnLocal.setBackground(crazyColor);
+				btnFocal.setBackground(crazyColor);
+				btnZonal.setBackground(highlightColor);
+				
 				// Input layer options
 				lblInput.setVisible(true);
 				lblInput.setText("Choose value layer:");
@@ -282,9 +304,6 @@ public class GetLearntWindow extends JFrame{
 				mPanel.setBounds(xStart, yStart, xEnd, yEnd);
 			}
 		});
-		btnZonal.setBounds(551, 10, 225, 68);
-		btnZonal.setBackground(crazyColor);
-		panel.add(btnZonal);
 		
 		// Handling layer inputs
 		for (int i = 0; i < TestGUI.layerList.size(); i++) {

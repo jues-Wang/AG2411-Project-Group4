@@ -107,7 +107,6 @@ public class TestGUI extends JFrame {
 			mPanel.scale = zoomLvl;
 			mPanel.revalidate();
 			mPanel.repaint();
-
 		} else {
 			JOptionPane.showMessageDialog(
 					app,
@@ -125,6 +124,15 @@ public class TestGUI extends JFrame {
 		String[] nameTokens = fileName.split("[.]", 0);
 		String name = nameTokens[0];
 		return name;
+	}
+	
+	private String getFileType(String path) {
+		String[] tokens = path.split("\\\\");
+		int i = tokens.length - 1;
+		String fileName = tokens[i];
+		String[] nameTokens = fileName.split("[.]", 0);
+		String fileType = nameTokens[1];
+		return fileType;
 	}
 	
 	public TestGUI() {
@@ -207,11 +215,11 @@ public class TestGUI extends JFrame {
 		
 		// Defining the pop-up menu on right click
 		final JPopupMenu popupMenuRC = new JPopupMenu();
-		JMenuItem mntmSaveRC = new JMenuItem("Save");
+		JMenuItem mntmSaveRC = new JMenuItem("Save file");
 		popupMenuRC.add(mntmSaveRC);
 		JMenuItem mntmDeleteRC = new JMenuItem("Delete");
 		popupMenuRC.add(mntmDeleteRC);
-		JMenuItem mntmExportRC = new JMenuItem("Export");
+		JMenuItem mntmExportRC = new JMenuItem("Export to JPG");
 		popupMenuRC.add(mntmExportRC);
 		
 		// Display TOC
@@ -506,7 +514,18 @@ public class TestGUI extends JFrame {
 						}
 						
 						File[] selectedFiles = fileChooser.getSelectedFiles();
+						
 						for (int i = 0; i < selectedFiles.length; i++) {
+							String fileType = getFileType(selectedFiles[i].getAbsolutePath());
+							if (! fileType.equals("txt")) {
+								JOptionPane.showMessageDialog(new JFrame(),"Error when loading file: Incorrect file type, please provide a .txt file.");
+								return;
+							}
+						}
+						
+						for (int i = 0; i < selectedFiles.length; i++) {
+							
+							
 							if (mPanel != null) {
 								layeredPane.remove(mPanel);
 							}
@@ -547,23 +566,6 @@ public class TestGUI extends JFrame {
 			mntmSave.setFont(new Font(mainFont, Font.PLAIN, 12));
 			mnFile.add(mntmSave);
 			
-//			JButton btnZoomIn = new JButton("ZoomIn");
-//			btnZoomIn.addMouseListener(new MouseAdapter() {
-//				@Override
-//				public void mouseClicked(MouseEvent e) {
-//				zoom(1);}
-//			});
-//			menuBar.add(btnZoomIn);
-
-//			JButton btnZoomOut = new JButton("ZoomOut");
-//			btnZoomOut.addMouseListener(new MouseAdapter() {
-//				@Override
-//				public void mouseClicked(MouseEvent e) {
-//					zoom(-1);
-//				}
-//			});
-//			menuBar.add(btnZoomOut);
-			
 			JButton btnGetLearnt = new JButton("GET LEARNT");
 			btnGetLearnt.addMouseListener(new MouseAdapter() {
 				@Override
@@ -580,13 +582,6 @@ public class TestGUI extends JFrame {
 			
 			Component verticalStrut_1 = Box.createVerticalStrut(9);
 			headPanel.add(verticalStrut_1, BorderLayout.SOUTH);
-//			
-//			JToggleButton modeOnOff = new JToggleButton("OBSERVATION MODE (on/off)");
-//			modeOnOff.setSelected(true);
-//			modeOnOff.setBackground(crazyColor);
-//			modeOnOff.setFont(new Font("Sitka Heading", Font.BOLD, 14));
-//			modeOnOff.setForeground(mainColor);
-//			headPanel.add(modeOnOff, BorderLayout.EAST);
 			contentPanel.setBounds(10,10,10,10);	
 		
 		// Create bottom Panel.
