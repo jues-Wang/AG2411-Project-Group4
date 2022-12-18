@@ -82,7 +82,7 @@ public class Layer {
 						ex.printStackTrace();
 					}
 				}
-				count = count + 1;
+				count++;
 				text = bReader.readLine();
 			}
 			bReader.close();
@@ -153,20 +153,30 @@ public class Layer {
 	// Image methods
 	public BufferedImage toImage() {
 		// create a BufferedImage of the layer in grayscale
-		BufferedImage image = new BufferedImage(nRows, nCols, BufferedImage.TYPE_INT_RGB);
+		BufferedImage image = new BufferedImage(nCols, nRows, BufferedImage.TYPE_INT_RGB);
 		WritableRaster raster = image.getRaster();
 		double maxNum = this.getMax();
 		double minNum = this.getMin();
 		double range = maxNum - minNum;
 		
+		int[] noValueColor = new int[3];
+		noValueColor[0] = 255;
+		noValueColor[1] = 208;
+		noValueColor[2] = 47;
+		
+		
 		for (int i = 0; i < nRows; i++) {
 			for (int j = 0; j < nCols; j++) {
+				if (values[i][j] == nullValue) {
+					raster.setPixel(j, i, noValueColor);
+				}
+				
 				int[] color = new int[3];
 				int temp_color = (int)Math.round((maxNum - values[i][j]) * 255 / range);
 				color[0] = temp_color;
 				color[1] = temp_color;
 				color[2] = temp_color;
-				raster.setPixel(i, j, color);
+				raster.setPixel(j, i, color);
 			}
 		}
 		return image;
@@ -174,10 +184,15 @@ public class Layer {
 	
 	public BufferedImage toImage(double[] v) {
 		// visualize a BufferedImage of the layer in color
-		BufferedImage image = new BufferedImage(nRows, nCols, BufferedImage.TYPE_INT_RGB);
+		BufferedImage image = new BufferedImage(nCols, nRows, BufferedImage.TYPE_INT_RGB);
 		WritableRaster raster = image.getRaster();
 		int length = v.length;
 		int[][] colors = new int[length][3];
+		
+		int[] noValueColor = new int[3];
+		noValueColor[0] = 255;
+		noValueColor[1] = 208;
+		noValueColor[2] = 47;
 		
 		// Create color palette
 		for (int k = 0; k < length; k++) {
@@ -194,6 +209,10 @@ public class Layer {
 				
 				// Check if values of interest and apply the correct color
 				for (int k = 0; k < length; k++) {
+					if (values[i][j] == nullValue) {
+						raster.setPixel(j, i, noValueColor);
+					}
+					
 					if (v[k] == values[i][j]) {
 						color[0] = colors[k][0];
 						color[1] = colors[k][1];
@@ -201,7 +220,7 @@ public class Layer {
 						break;
 					}
 				}
-				raster.setPixel(i, j, color);
+				raster.setPixel(j, i, color);
 			}
 		}
 		return image;
@@ -209,7 +228,7 @@ public class Layer {
 	
 	public BufferedImage toImageLearning(double maxNum, double minNum, double visitValue, double highlightValue) {
 		// create a BufferedImage of the layer in grayscale
-		BufferedImage image = new BufferedImage(nRows, nCols, BufferedImage.TYPE_INT_RGB);
+		BufferedImage image = new BufferedImage(nCols, nRows, BufferedImage.TYPE_INT_RGB);
 		WritableRaster raster = image.getRaster();
 		double range = maxNum - minNum;
 		
@@ -220,18 +239,18 @@ public class Layer {
 					color[0] = 255;
 					color[1] = 0;
 					color[2] = 0;
-					raster.setPixel(i, j, color);
+					raster.setPixel(j, i, color);
 				} else if (values[i][j] == highlightValue) {
 					color[0] = 0;
 					color[1] = 0;
 					color[2] = 255;
-					raster.setPixel(i, j, color);
+					raster.setPixel(j, i, color);
 				} else {
 					int temp_color = (int)Math.round((maxNum - values[i][j]) * 255 / range);
 					color[0] = temp_color;
 					color[1] = temp_color;
 					color[2] = temp_color;
-					raster.setPixel(i, j, color);
+					raster.setPixel(j, i, color);
 				}
 			}
 		}
@@ -831,7 +850,7 @@ public class Layer {
 		double maxNum = Double.NEGATIVE_INFINITY;
 		for (int i = 0; i < nRows; i++) {
 			for (int j = 0; j < nCols; j++) {
-				if (values[i][j] > maxNum) {
+				if (values[i][j] > maxNum && values[i][j] != nullValue) {
 					maxNum = values[i][j];
 				}
 			}
@@ -843,7 +862,7 @@ public class Layer {
 		double minNum = Double.POSITIVE_INFINITY;
 		for (int i = 0; i < nRows; i++) {
 			for (int j = 0; j < nCols; j++) {
-				if (values[i][j] < minNum) {
+				if (values[i][j] < minNum && values[i][j] != nullValue) {
 					minNum = values[i][j];
 				}
 			}

@@ -38,10 +38,13 @@ public class GetLearntWindow extends JFrame{
 	public static JLayeredPane layeredPane;
 	
 	// For visualizations
+	public static int previewScale = 60;
+	public static Layer previewLayer1 = new Layer("", "raster3x4.txt");
+	public static Layer previewLayer2 = new Layer("", "zoneRaster3x4.txt");
 	private int xStart = 300;
 	private int yStart = 109;
-	private int xEnd = 180;
-	private int yEnd = 240;
+	private int xWidth = previewLayer1.nCols * previewScale;
+	private int yWidth = previewLayer1.nRows * previewScale;
 	
 	// Launch the application
 	public static void main() {
@@ -166,11 +169,6 @@ public class GetLearntWindow extends JFrame{
 		btnCancel.setVisible(false);
 		panel.add(btnCancel);
 		
-		int previewScale = 60;
-		
-		Layer previewLayer1 = new Layer("", "raster3x4.txt");
-		Layer previewLayer2 = new Layer("", "raster3x4.txt");
-		
 		// Choosing operation
 		JButton btnLocal = new JButton("Local Operations");
 		btnLocal.setBounds(10, 10, 225, 68);
@@ -224,7 +222,9 @@ public class GetLearntWindow extends JFrame{
 				}
 				mPanel = new MapPanel(previewLayer1.toImage(), previewScale);
 				layeredPane.add(mPanel);
-				mPanel.setBounds(xStart, yStart, xEnd, yEnd);
+				mPanel.setBounds(xStart, yStart, xWidth, yWidth);
+				layeredPane.revalidate();
+	            layeredPane.repaint();
 			}
 		});
 		
@@ -262,7 +262,9 @@ public class GetLearntWindow extends JFrame{
 				}
 				mPanel = new MapPanel(previewLayer1.toImage(), previewScale);
 				layeredPane.add(mPanel);
-				mPanel.setBounds(xStart, yStart, xEnd, yEnd);
+				mPanel.setBounds(xStart, yStart, xWidth, yWidth);
+				layeredPane.revalidate();
+	            layeredPane.repaint();
 			}
 		});
 
@@ -301,7 +303,9 @@ public class GetLearntWindow extends JFrame{
 				}
 				mPanel = new MapPanel(previewLayer1.toImage(), previewScale);
 				layeredPane.add(mPanel);
-				mPanel.setBounds(xStart, yStart, xEnd, yEnd);
+				mPanel.setBounds(xStart, yStart, xWidth, yWidth);
+				layeredPane.revalidate();
+	            layeredPane.repaint();
 			}
 		});
 		
