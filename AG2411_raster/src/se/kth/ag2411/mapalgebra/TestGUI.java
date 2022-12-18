@@ -18,12 +18,17 @@ import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+
 import javax.swing.border.LineBorder;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.swing.AbstractButton;
 import javax.swing.Box;
 import javax.swing.SwingConstants;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 
 import javax.swing.JToggleButton;
@@ -39,11 +44,14 @@ import java.awt.event.MouseWheelListener;
 import java.awt.event.MouseWheelEvent;
 import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
+import java.awt.event.MouseMotionAdapter;
 
 
 public class TestGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	protected static final AbstractButton lblNewLabel = null;
+	protected static final MapPanel[] MapPanel = null;
 	private JPanel contentPanel;
 	
 	
@@ -88,6 +96,8 @@ public class TestGUI extends JFrame {
 			
 			public String getDescription() {
 				return "ASCII (*.txt)";
+				
+				
 			}
 			
 			public boolean accept(File f) {
@@ -108,6 +118,8 @@ public class TestGUI extends JFrame {
 		contentPanel.setBackground(Color.WHITE);
 		setContentPane(contentPanel);
 		contentPanel.setLayout(new BorderLayout(0, 0));
+		
+		
 		
 		// SPLIT PANEL = TOC (left) + Map Panel (right)
 		JSplitPane splitPane = new JSplitPane();
@@ -134,14 +146,59 @@ public class TestGUI extends JFrame {
 		panelMAP.setBackground(new Color(255, 255, 255));
 		splitPane.setRightComponent(panelMAP);
 		panelMAP.setLayout(new CardLayout(0, 0));
+		
+		
 
 		final JLayeredPane layeredPanel = new JLayeredPane();	// to LAYER the maps ??
-		layeredPanel.addMouseWheelListener(new MouseWheelListener() {
-			public void mouseWheelMoved(MouseWheelEvent e) {
-			}
-		});
+		layeredPanel.addMouseWheelListener(new MouseWheelListener() { 
+				private int mousePrevX;
+				private int mousePrevY;
+				private int mapPanelX;
+				private int mapPanelY;
+				public void mouseDragged(MouseEvent e) {
+						int x = e.getX();
+						int y = e.getY();
+						
+						
+						int dx = x - mousePrevX;
+						
+						int dy = y - mousePrevY;
+						
+						mousePrevX = x;
+						mousePrevY = y;
+						mapPanelX = x;
+						mapPanelY = y;
+						
+						if(MapPanel!=null) {
+							for(MapPanel mp: MapPanel) {
+								mp.setBounds(mapPanelX, mapPanelY, mp.WIDTH, mp.HEIGHT);
+							};
+						}
+				}	
+				 public void mouseMoved (MouseEvent e) {
+					 int x = e.getX();
+					 int y = e.getY();
+					 
+					  mousePrevX = x;
+					  mousePrevY = y;
+					 
+					 //String displayText = (mousePrevX +""+ mousePrevY);
+					 lblNewLabel.setText("X=" + e.getX()+ "; Y =" + e.getY());
+				 }
+				@Override
+				public void mouseWheelMoved(MouseWheelEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				});
+	
+	
 		panelMAP.add(layeredPanel, "name_927277592538900");
 //		layeredPanel.setLayout(new CardLayout(0, 0));			// Layout is important
+		
+		
+		
 		
 		// Initializing
 		int[] backgroundColor = new int[3];
@@ -159,6 +216,10 @@ public class TestGUI extends JFrame {
 		}
 		int scale = 3;
 		MapPanel mapPanel = new MapPanel(image, scale);
+		mapPanel.addMouseMotionListener(new MouseMotionAdapter() {
+			
+			
+			});
 		layeredPanel.add(mapPanel, BorderLayout.CENTER);
 		mapPanel.setBounds(0, 0, 600, 600);	
 		mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -320,6 +381,7 @@ public class TestGUI extends JFrame {
 						mapPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
 					
 						
+						
 					}
 					
 //					if (result == JFileChooser.APPROVE_OPTION) {
@@ -343,6 +405,7 @@ public class TestGUI extends JFrame {
 				}
 			});
 			
+			
 			mnFile.add(mntmOpen);
 			
 			JMenuItem mntmSave = new JMenuItem("Save");
@@ -364,6 +427,7 @@ public class TestGUI extends JFrame {
 			modeOnOff.setForeground(mainColor);
 			headPanel.add(modeOnOff, BorderLayout.EAST);
 			contentPanel.setBounds(10,10,10,10);	
+		
 		
 		// Create bottom Panel.
 		JPanel bottomPanel = new JPanel();
@@ -391,6 +455,8 @@ public class TestGUI extends JFrame {
 					}
 				
 			});
+			
+			
 			fullExtent.setBackground(mainColor2);
 			fullExtent.setForeground(mainColor);
 			fullExtent.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 14));
@@ -500,10 +566,13 @@ public class TestGUI extends JFrame {
 			label_1_1.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
 			label_1_1.setBackground(Color.WHITE);
 			bottomPanel.add(label_1_1);
+			
+			
 	}
 
 	protected Object zoom(int i) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 }
