@@ -91,6 +91,7 @@ public class ColorWindow extends JFrame {
 			comboBoxColor.addItem("Blue");
 			comboBoxColor.addItem("Green");
 			comboBoxColor.addItem("Yellow");
+			comboBoxColor.addItem("Purple");
 			comboBoxColor.addItem("Grayscale");
 			panel.add(comboBoxColor);
 			
@@ -115,6 +116,7 @@ public class ColorWindow extends JFrame {
 			hmColor.put("Blue", new Color(0, 0, 255));
 			hmColor.put("Green", new Color(0, 255, 0));
 			hmColor.put("Yellow", new Color(255, 255, 0));
+			hmColor.put("Purple", new Color(226,45,211));
 			hmColor.put("Grayscale", new Color(0, 0, 0));
 			
 			JButton btnRecolor = new JButton("RECOLOR");
