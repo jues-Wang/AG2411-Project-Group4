@@ -239,9 +239,9 @@ public class Layer {
 		minColor[1] = 255;
 		minColor[2] = 255;
 		
-		double redRange = Math.abs(maxColor[0] - minColor[0]);
-		double greenRange = Math.abs(maxColor[1] - minColor[1]);
-		double blueRange = Math.abs(maxColor[2] - minColor[2]);
+		double redRange = Math.max(Math.abs(maxColor[0] - minColor[0]), 1);
+		double greenRange = Math.max(Math.abs(maxColor[1] - minColor[1]), 1);
+		double blueRange = Math.max(Math.abs(maxColor[2] - minColor[2]), 1);
 		
 		BufferedImage image = new BufferedImage(nCols, nRows, BufferedImage.TYPE_INT_RGB);
 		WritableRaster raster = image.getRaster();
@@ -252,19 +252,9 @@ public class Layer {
 		for (int i = 0; i < nRows; i++) {
 			for (int j = 0; j < nCols; j++) { // oldMin + (oldMax - oldMin) * (value - newMin) / (newMax - newMin)
 				int[] pixelColor = new int[3]; // (maxNum - values[i][j]) * 255 / range
-				pixelColor[0] = (int) ((maxNum - values[i][j]) * redRange / range) ;
-				pixelColor[1] = (int) ((maxNum - values[i][j]) * greenRange / range);
-				pixelColor[2] = (int) ((maxNum - values[i][j]) * blueRange / range);
-				
-				if (redRange == 0) {
-					pixelColor[0] = maxColor[0];
-				}
-				if (greenRange == 0) {
-					pixelColor[1] = maxColor[1];
-				}
-				if (blueRange == 0) {
-					pixelColor[2] = maxColor[2];
-				}
+				pixelColor[0] = (int)Math.round(255 - (values[i][j] - minNum) * redRange / range) ;
+				pixelColor[1] = (int)Math.round(255 - (values[i][j] - minNum) * greenRange / range);
+				pixelColor[2] = (int)Math.round(255 - (values[i][j] - minNum) * blueRange / range);
 				raster.setPixel(j, i, pixelColor);
 			}
 		}
