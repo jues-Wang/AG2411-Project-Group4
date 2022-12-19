@@ -267,6 +267,11 @@ public class LocalWindow extends JFrame {
 					}
 				}
 				
+				if (layer1.nCols != layer2.nCols || layer1.nRows != layer2.nRows) {
+					JOptionPane.showMessageDialog(new JFrame(),"Size error: Input layers are of different sizes, please input two layers of the same size.");
+					return;
+				}
+				
 				Layer outputLayer = TestGUI.layerList.get(0);
 				
 				// Perform the selected operation
