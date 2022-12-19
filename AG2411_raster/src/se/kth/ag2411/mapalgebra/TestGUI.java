@@ -73,6 +73,8 @@ public class TestGUI extends JFrame {
     public static Layer aboveLayer; // the layer that is shown currently 
 	public String[] pixel = {"   ","   ","   ","   ",};
 	public String[] pixel_select = {"   ","   ","   ","   ",};
+	
+	// For coloring other windows
 	public static Color mainColor2;
 	public static Color mainColor;
 	public static Color highlightColor;
@@ -82,7 +84,11 @@ public class TestGUI extends JFrame {
 	public static LinkedList<Layer> layerList = new LinkedList<Layer>();
 	public static LinkedList<BufferedImage> imageList = new LinkedList<BufferedImage>();
 	
+	// For saving and exporting in external windows
 	public static int chosenIndex = 0;
+	
+	// For dragging map
+	public int dx, dy;
 	
 	// Launch the application.
 	public static void main(String[] args) {
@@ -213,12 +219,29 @@ public class TestGUI extends JFrame {
 		splitPane.setRightComponent(panelMAP);
 		panelMAP.setLayout(new CardLayout(0, 0));
 
-		final JLayeredPane layeredPane = new JLayeredPane();	// to LAYER the maps ??
+		final JLayeredPane layeredPane = new JLayeredPane();
+		// Zooming with mouse wheel
 		layeredPane.addMouseWheelListener(new MouseWheelListener() {
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				zoom(- e.getWheelRotation());
 			}
 		});
+		// Panning the map around
+					layeredPane.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mousePressed(MouseEvent e) {
+							dx = e.getX() - mPanel.getLocation().x;
+							dy = e.getY() - mPanel.getLocation().y;
+						}
+					});
+					layeredPane.addMouseMotionListener(new MouseMotionAdapter() {
+						@Override
+						public void mouseDragged(MouseEvent e) {
+							int mouseX = e.getX();
+							int mouseY = e.getY();
+							mPanel.setLocation(mouseX - dx, mouseY - dy);
+						}
+					});
 		panelMAP.add(layeredPane, "name_927277592538900");
 		
 		// Defining the pop-up menu on right click
