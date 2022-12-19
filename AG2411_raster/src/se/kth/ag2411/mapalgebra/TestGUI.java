@@ -551,7 +551,12 @@ public class TestGUI extends JFrame {
 			mnRecolor.setBorder(new RoundedBorder(radius));
 			menuBar.add(mnRecolor);
 			
-			JMenuItem colorscheme1 = new JMenuItem("Colorscheme 1");
+			JMenuItem colorscheme1 = new JMenuItem("Color scheme");
+			colorscheme1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ColorWindow.main();
+				}
+			});
 			colorscheme1.setFont(new Font(mainFont, Font.PLAIN, 12));
 			mnRecolor.add(colorscheme1);
 			

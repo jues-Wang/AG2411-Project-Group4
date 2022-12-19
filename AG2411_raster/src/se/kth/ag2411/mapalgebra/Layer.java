@@ -1,6 +1,7 @@
 package se.kth.ag2411.mapalgebra;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.image.*;
 import java.io.*;
@@ -10,6 +11,7 @@ import java.util.Comparator;
 import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -223,6 +225,50 @@ public class Layer {
 				raster.setPixel(j, i, color);
 			}
 		}
+		return image;
+	}
+	
+	public BufferedImage toImageColor(Color color) { 
+		int[] maxColor = new int[3];
+		maxColor[0] = color.getRed();
+		maxColor[1] = color.getGreen();
+		maxColor[2] = color.getBlue();
+		
+		int[] minColor = new int[3];
+		minColor[0] = 255;
+		minColor[1] = 255;
+		minColor[2] = 255;
+		
+		double redRange = Math.abs(maxColor[0] - minColor[0]);
+		double greenRange = Math.abs(maxColor[1] - minColor[1]);
+		double blueRange = Math.abs(maxColor[2] - minColor[2]);
+		
+		BufferedImage image = new BufferedImage(nCols, nRows, BufferedImage.TYPE_INT_RGB);
+		WritableRaster raster = image.getRaster();
+		double maxNum = getMax();
+		double minNum = getMin();
+		double range = maxNum - minNum;
+		
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) { // oldMin + (oldMax - oldMin) * (value - newMin) / (newMax - newMin)
+				int[] pixelColor = new int[3]; // (maxNum - values[i][j]) * 255 / range
+				pixelColor[0] = (int) ((maxNum - values[i][j]) * redRange / range) ;
+				pixelColor[1] = (int) ((maxNum - values[i][j]) * greenRange / range);
+				pixelColor[2] = (int) ((maxNum - values[i][j]) * blueRange / range);
+				
+				if (redRange == 0) {
+					pixelColor[0] = maxColor[0];
+				}
+				if (greenRange == 0) {
+					pixelColor[1] = maxColor[1];
+				}
+				if (blueRange == 0) {
+					pixelColor[2] = maxColor[2];
+				}
+				raster.setPixel(j, i, pixelColor);
+			}
+		}
+		
 		return image;
 	}
 	
@@ -873,6 +919,11 @@ public class Layer {
 	// Used for visualizing multiple images of different scales in the same MapPanel
 	private double rescale(double value, double oldMin, double oldMax, double newMin, double newMax) {
 		double outValue = oldMin + (oldMax - oldMin) * (value - newMin) / (newMax - newMin); // Formula: b = b0 + (b1 - b0) * (a - a0) / (a1 - a0)
+		if (newMax - newMin == 0) {
+			outValue = newMax;
+		} else if (oldMax - oldMin == 0) {
+			outValue = newMin;
+		}
 		return outValue;
 	}
 

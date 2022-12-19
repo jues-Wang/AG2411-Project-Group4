@@ -46,7 +46,7 @@ public class ExportWindow extends JFrame {
 		
 		public ExportWindow() {
 			newWindow = new JFrame();
-			newWindow.setTitle("Save File");
+			newWindow.setTitle("Export File");
 			newWindow.setBounds(400, 100, 427, 217);
 
 			JPanel panel = new JPanel();

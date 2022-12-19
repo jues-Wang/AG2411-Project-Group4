@@ -261,19 +261,15 @@ public class FocalWindow extends JFrame {
 				// Perform the selected operation
 				if(statisticType == "SUM") { 
 					outputLayer = inputLayer.focalSum(radius, isSquare, outLayerName);
-					TestGUI.aboveLayer = inputLayer.focalSum(radius, isSquare, outLayerName);
 				} 
 				else if (statisticType == "VARIETY") {
 					outputLayer = inputLayer.focalVariety(radius, isSquare, outLayerName);
-					TestGUI.aboveLayer = inputLayer.focalSum(radius, isSquare, outLayerName);
 				} 
 				else if (statisticType == "PRODUCT") {
 					outputLayer = inputLayer.focalProduct(radius, isSquare, outLayerName);
-					TestGUI.aboveLayer = inputLayer.focalSum(radius, isSquare, outLayerName);
 				}
 				else if (statisticType == "RANKING") {
 					outputLayer = inputLayer.focalRanking(radius, isSquare, outLayerName);
-					TestGUI.aboveLayer = inputLayer.focalRanking(radius, isSquare, outLayerName);
 				}
 				
 				TestGUI.layerList.add(outputLayer);
@@ -281,6 +277,10 @@ public class FocalWindow extends JFrame {
 				TestGUI.layerNameList.addElement(outLayerName);
 				
 				TestGUI.aboveLayer = outputLayer;
+				
+				// Reset map pan changes
+				TestGUI.mapMovedX = 0;
+				TestGUI.mapMovedY = 0;
 				
 				TestGUI.layeredPane.remove(TestGUI.mPanel);
 				
