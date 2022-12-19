@@ -70,7 +70,6 @@ public class SaveWindow extends JFrame {
 				comboBox.setSelectedIndex(TestGUI.chosenIndex);
 			}
 			
-			
 			comboBox.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {

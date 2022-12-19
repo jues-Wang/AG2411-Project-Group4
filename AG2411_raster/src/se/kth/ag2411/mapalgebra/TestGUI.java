@@ -526,7 +526,16 @@ public class TestGUI extends JFrame {
 						for (int i = 0; i < selectedFiles.length; i++) {
 							String fileType = getFileType(selectedFiles[i].getAbsolutePath());
 							if (! fileType.equals("txt")) {
+								// JFileChooser.APPROVE_OPTION does not work properly for some reason, so this is needed instead.
 								JOptionPane.showMessageDialog(new JFrame(),"Error when loading file: Incorrect file type, please provide a .txt file.");
+								return;
+							}
+							// Catching incorrectly formatted .txt files. How to make the error messages go away?
+							try {
+								new Layer("", selectedFiles[i].getAbsolutePath()).toImage();
+							} catch (Exception ex) {
+								ex.printStackTrace();
+								JOptionPane.showMessageDialog(new JFrame(),"Error when loading file: Incorrectly formatted .txt file.");
 								return;
 							}
 						}
