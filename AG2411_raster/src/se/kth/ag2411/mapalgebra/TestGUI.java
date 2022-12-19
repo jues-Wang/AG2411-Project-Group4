@@ -82,6 +82,8 @@ public class TestGUI extends JFrame {
 	public static LinkedList<Layer> layerList = new LinkedList<Layer>();
 	public static LinkedList<BufferedImage> imageList = new LinkedList<BufferedImage>();
 	
+	public static int chosenIndex = 0;
+	
 	// Launch the application.
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -281,10 +283,10 @@ public class TestGUI extends JFrame {
 		mntmSaveRC.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int index = Integer.parseInt(popupMenuRC.getLabel());
+				chosenIndex = Integer.parseInt(popupMenuRC.getLabel());
 				popupMenuRC.setVisible(false);
 				mntmSaveRC.setBackground(buttonColor);
-				layerList.get(index).save(layerNameList.get(index) + ".txt");
+				SaveWindow.main();
 			}
 
 			@Override
@@ -350,18 +352,10 @@ public class TestGUI extends JFrame {
 		mntmExportRC.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int index = Integer.parseInt(popupMenuRC.getLabel());
+				chosenIndex = Integer.parseInt(popupMenuRC.getLabel());
 				popupMenuRC.setVisible(false);
 				mntmExportRC.setBackground(buttonColor);
-				
-				BufferedImage outputImage = imageList.get(index);
-				File outputfile = new File(layerNameList.get(index) + ".jpg");
-				try {
-					ImageIO.write(outputImage, "jpg", outputfile);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				ExportWindow.main();
 			}
 
 			@Override
@@ -574,8 +568,22 @@ public class TestGUI extends JFrame {
 			mnFile.add(mntmOpen);
 			
 			JMenuItem mntmSave = new JMenuItem("Save file");
+			mntmSave.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					SaveWindow.main();
+				}
+			});
 			mntmSave.setFont(new Font(mainFont, Font.PLAIN, 12));
 			mnFile.add(mntmSave);
+			
+			JMenuItem mntmExport = new JMenuItem("Export to JPG");
+			mntmExport.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ExportWindow.main();
+				}
+			});
+			mntmExport.setFont(new Font(mainFont, Font.PLAIN, 12));
+			mnFile.add(mntmExport);
 			
 			JButton btnGetLearnt = new JButton("GET LEARNT");
 			btnGetLearnt.addMouseListener(new MouseAdapter() {
