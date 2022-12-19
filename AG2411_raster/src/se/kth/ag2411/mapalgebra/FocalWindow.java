@@ -247,9 +247,7 @@ public class FocalWindow extends JFrame {
 					return;
 				}
 				
-			
 				Layer inputLayer = TestGUI.layerList.get(0);
-			
 			
 				// Match the layer name with the correct layer
 				for(int i = 0; i < TestGUI.layerList.size(); i++) {
@@ -282,6 +280,21 @@ public class FocalWindow extends JFrame {
 				TestGUI.layerList.add(outputLayer);
 				TestGUI.imageList.add(outputLayer.toImage());
 				TestGUI.layerNameList.addElement(outLayerName);
+				
+				TestGUI.aboveLayer = outputLayer;
+				
+				TestGUI.layeredPane.remove(TestGUI.mPanel);
+				
+				TestGUI.mPanel = new MapPanel(outputLayer.toImage(), scale);
+				
+				TestGUI.getMapStartX();
+				TestGUI.getMapStartY();
+				TestGUI.mPanel.setBounds(TestGUI.mapStartX, TestGUI.mapStartY, 2000, 2000);	
+				TestGUI.mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+				
+				TestGUI.layeredPane.add(TestGUI.mPanel);
+				TestGUI.layeredPane.revalidate();
+				TestGUI.layeredPane.repaint();
 				
 				outputLayer.save(outputFileName);
 				

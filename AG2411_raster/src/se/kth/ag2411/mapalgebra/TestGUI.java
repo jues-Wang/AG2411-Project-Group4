@@ -67,12 +67,15 @@ public class TestGUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPanel;
 	public static MapPanel mPanel;
-	public static int zoomLvl = 3;
 	public static int scale = 3;
+	public static int zoomLvl = scale;
+	
     public static TestGUI app;
     public static Layer aboveLayer; // the layer that is shown currently 
 	public String[] pixel = {"   ","   ","   ","   ",};
 	public String[] pixel_select = {"   ","   ","   ","   ",};
+	
+	public static JLayeredPane layeredPane = new JLayeredPane();
 	
 	// For coloring other windows
 	public static Color mainColor2;
@@ -89,6 +92,31 @@ public class TestGUI extends JFrame {
 	
 	// For dragging map
 	public int dx, dy;
+	public static int mapMovedX, mapMovedY;
+	
+	// Map start position
+	public static int mapStartX = 0;
+	public static int mapStartY = 0;
+	
+	public static void getMapStartX() {
+		mapStartX = layeredPane.getWidth() / 2 - aboveLayer.nCols * scale / 2;
+	}
+	
+	public static void getMapStartY() {
+		mapStartY = layeredPane.getHeight() / 2 - aboveLayer.nRows * scale / 2;
+	}
+	
+	public static void getScale(Layer layer) {
+		double ratio = 0.8;
+		int rowScale = (int) layeredPane.getHeight() / layer.nRows;
+		rowScale *= ratio;
+		
+		int colScale = (int) layeredPane.getWidth() / layer.nCols;
+		colScale *= ratio;
+		int tempScale = Math.min(rowScale, colScale);
+		scale = Math.max(tempScale, 1);
+		zoomLvl = scale;
+	}
 	
 	// Launch the application.
 	public static void main(String[] args) {
@@ -117,6 +145,17 @@ public class TestGUI extends JFrame {
 		if (mPanel != null){
 			zoomLvl = Math.max(zoomLvl + change, 1);
 			mPanel.scale = zoomLvl;
+			scale = zoomLvl;
+			
+			// Zooming centered around the map's current midpoint
+			getMapStartX();
+			getMapStartY();
+			int mapX = mapStartX - mapMovedX;
+			int mapY = mapStartY - mapMovedY;
+			
+			mPanel.setBounds(mapX, mapY, 2000, 2000);
+			mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			
 			mPanel.revalidate();
 			mPanel.repaint();
 		} else {
@@ -218,14 +257,6 @@ public class TestGUI extends JFrame {
 		final JPanel panelMAP = new JPanel();
 		splitPane.setRightComponent(panelMAP);
 		panelMAP.setLayout(new CardLayout(0, 0));
-
-		final JLayeredPane layeredPane = new JLayeredPane();
-		// Zooming with mouse wheel
-		layeredPane.addMouseWheelListener(new MouseWheelListener() {
-			public void mouseWheelMoved(MouseWheelEvent e) {
-				zoom(- e.getWheelRotation());
-			}
-		});
 		// Panning the map around
 					layeredPane.addMouseListener(new MouseAdapter() {
 						@Override
@@ -240,6 +271,10 @@ public class TestGUI extends JFrame {
 							int mouseX = e.getX();
 							int mouseY = e.getY();
 							mPanel.setLocation(mouseX - dx, mouseY - dy);
+							
+							// Keep track of map displacement for zooming purposes
+							mapMovedX = mapStartX - mPanel.getLocation().x;
+							mapMovedY = mapStartY - mPanel.getLocation().y;
 						}
 					});
 		panelMAP.add(layeredPane, "name_927277592538900");
@@ -263,18 +298,22 @@ public class TestGUI extends JFrame {
 		        // Visualize a layer by double clicking it
 				if (e.getClickCount() == 2) {
 		        	layeredPane.remove(mPanel);
+					layeredPane.revalidate();
+		            layeredPane.repaint();
 		            int index = displayList.locationToIndex(e.getPoint());
-		            layeredPane.remove(mPanel);
 		            
 		            aboveLayer = layerList.get(index);
+		            getScale(aboveLayer);
 		            
 					BufferedImage layerImage = imageList.get(index);
 					mPanel = new MapPanel(layerImage, scale);
+					
 					layeredPane.add(mPanel, BorderLayout.CENTER);
-					mPanel.setBounds(0, 0, 2000, 2000);	
+					
+					getMapStartX();
+					getMapStartY();
+					mPanel.setBounds(mapStartX, mapStartY, 2000, 2000);	
 					mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
-					layeredPane.revalidate();
-		            layeredPane.repaint();
 					
 					spinner.setValue(100*zoomLvl);
 					spinner_1.setValue((int)zoomLvl*aboveLayer.resolution);
@@ -332,7 +371,6 @@ public class TestGUI extends JFrame {
 				mntmDeleteRC.setBackground(buttonColor);
 				
 				// Remove image if shown
-				int scale = 3;
 				boolean shownLayer = false;
 				if(layerNameList.get(index).equals(aboveLayer.name)) {
 					shownLayer = true;
@@ -349,14 +387,16 @@ public class TestGUI extends JFrame {
 				// Display new image if needed (layer top of TOC)
 				if (! layerList.isEmpty() && shownLayer) {
 					aboveLayer = layerList.getLast();
+					getScale(aboveLayer);
 					BufferedImage layerImage = imageList.getLast();
-					
 					mPanel = new MapPanel(layerImage, scale);
+					
 					layeredPane.add(mPanel, BorderLayout.CENTER);
-					mPanel.setBounds(0, 0, 2000, 2000);	
+					
+					getMapStartX();
+					getMapStartY();
+					mPanel.setBounds(mapStartX, mapStartY, 2000, 2000);	
 					mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
-					layeredPane.revalidate();
-		            layeredPane.repaint();
 				}
 			}
 			
@@ -582,15 +622,20 @@ public class TestGUI extends JFrame {
 							}
 						}
 						BufferedImage layerImage = imageList.getLast();
+						aboveLayer = layerList.getLast();//aboveLayer = last layer
+						getScale(aboveLayer);
+						
 						mPanel = new MapPanel(layerImage, scale);
 						layeredPane.add(mPanel, BorderLayout.CENTER);
-						mPanel.setBounds(0, 0, 2000, 2000);	
+						
+						getMapStartX();
+						getMapStartY();
+						mPanel.setBounds(mapStartX, mapStartY, 2000, 2000);	
 						mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
 						
 						layeredPane.revalidate();
 			            layeredPane.repaint();
 						
-						aboveLayer = layerList.getLast();//aboveLayer = last layer
 						spinner.setValue(100*scale);
 						spinner_1.setValue((int)aboveLayer.resolution*scale);
 					}
@@ -648,8 +693,19 @@ public class TestGUI extends JFrame {
 			fullExtent.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					zoomLvl = 3;
-					mPanel.scale = zoomLvl;
+					getScale(aboveLayer);
+					mPanel.scale = scale;
+					
+					// Reset map pan changes
+					mapMovedX = 0;
+					mapMovedY = 0;
+					
+					// Move it back
+					getMapStartX();
+					getMapStartY();
+					mPanel.setBounds(mapStartX, mapStartY, 2000, 2000);
+					mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+					
 					mPanel.revalidate();
 					mPanel.repaint();
 				}
@@ -684,6 +740,16 @@ public class TestGUI extends JFrame {
 			btnZoomOut.setBackground(new Color(187, 202, 192));
 			bottomPanel.add(btnZoomOut);
 			
+
+			// Zooming with mouse wheel
+			layeredPane.addMouseWheelListener(new MouseWheelListener() {
+				public void mouseWheelMoved(MouseWheelEvent e) {
+					zoom(- e.getWheelRotation());
+					spinner.setValue(zoomLvl*100);
+					spinner_1.setValue((int)zoomLvl*aboveLayer.resolution);
+				}
+			});
+			
 			Component horizontalStrut = Box.createHorizontalStrut(40);
 			bottomPanel.add(horizontalStrut);
 			
@@ -694,7 +760,6 @@ public class TestGUI extends JFrame {
 			magnifier.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(magnifier);
 			
-//			JSpinner spinner = new JSpinner();
 			spinner.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
 			spinner.setModel(new SpinnerNumberModel(0, 0, 1000, 100));	// insert % ??
 			bottomPanel.add(spinner);
@@ -709,7 +774,6 @@ public class TestGUI extends JFrame {
 			txtrScale.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(txtrScale);
 			
-//			JSpinner spinner_1 = new JSpinner();
 			spinner_1.setFont(new Font(mainFont, Font.PLAIN, 12));
 			spinner_1.setModel(new SpinnerNumberModel(0, 0, 100000, 500));
 			bottomPanel.add(spinner_1);
