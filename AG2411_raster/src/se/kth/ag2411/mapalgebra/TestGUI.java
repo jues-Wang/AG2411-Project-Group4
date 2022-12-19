@@ -888,8 +888,8 @@ public class TestGUI extends JFrame {
 							//visualization
 							label_3.setText(pixel[0]);//value
 							label.setText(pixel[1]);//id
-							label_1.setText(pixel[2]);//x
-							label_1_1.setText(pixel[3]);//y
+							label_1.setText(pixel[3]);//x
+							label_1_1.setText(pixel[2]);//y
 						}
 					}
 				}
