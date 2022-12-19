@@ -288,6 +288,10 @@ public class LocalWindow extends JFrame {
 				
 				TestGUI.aboveLayer = outputLayer;
 				
+				// Reset map pan changes
+				TestGUI.mapMovedX = 0;
+				TestGUI.mapMovedY = 0;
+				
 				TestGUI.layeredPane.remove(TestGUI.mPanel);
 				
 				TestGUI.getScale(outputLayer);
