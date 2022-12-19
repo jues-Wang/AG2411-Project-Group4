@@ -84,7 +84,7 @@ public class LocalWindow extends JFrame {
 		newWindow.setContentPane(panel);
 		
 		// Input files
-		JLabel lblInput = new JLabel("Choose two input raster:");
+		JLabel lblInput = new JLabel("Choose two input layers:");
 		lblInput.setFont(new Font(mainFont, Font.PLAIN, 14));
 		lblInput.setBounds(23, 42, 239, 14);
 		panel.add(lblInput);
@@ -251,9 +251,6 @@ public class LocalWindow extends JFrame {
 		
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				if (TestGUI.layerList.size() == 0) {
-//					newWindow.dispose();
-//				}
 				if(outputFileName == null) {
 					JOptionPane.showMessageDialog(new JFrame(),"Epic fail.");
 					return;
