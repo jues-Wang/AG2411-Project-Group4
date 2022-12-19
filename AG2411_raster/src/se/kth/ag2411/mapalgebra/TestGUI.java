@@ -766,14 +766,14 @@ public class TestGUI extends JFrame {
 				@Override
 				public void mouseMoved(MouseEvent e) {
 					if(mPanel != null && aboveLayer != null) {
-						int x_screen = e.getX();//x&y are started from the left-up corner of layeredPanel
-						int y_screen = e.getY();
+						int x_screen = e.getY();//x&y are started from the left-up corner of layeredPanel
+						int y_screen = e.getX();
 						Point mPanelLocation = mPanel.getLocation();//[x=0,y=0]
 
-						int x_start = mPanelLocation.x; // from left to right
-						int x_end = mPanelLocation.x + aboveLayer.nCols*zoomLvl;
-						int y_start = mPanelLocation.y; //from up to bottom
-						int y_end = mPanelLocation.y + aboveLayer.nRows*zoomLvl;
+						int y_start = mPanelLocation.x; // from left to right
+						int y_end = mPanelLocation.x + aboveLayer.nCols*zoomLvl;
+						int x_start = mPanelLocation.y; //from up to bottom
+						int x_end = mPanelLocation.y + aboveLayer.nRows*zoomLvl;
 						
 						if(x_screen > x_start & x_screen < x_end & y_screen > y_start & y_screen < y_end) {
 							// index 
@@ -800,14 +800,14 @@ public class TestGUI extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					if(mPanel!=null & aboveLayer!=null) {
-						int x_screen = e.getX();//x&y are started from the left-up corner of layeredPanel
-						int y_screen = e.getY();
+						int x_screen = e.getY();//x&y are started from the left-up corner of layeredPanel
+						int y_screen = e.getX();
 						Point mPanelLocation = mPanel.getLocation();//[x=0,y=0]
 
-						int x_start = mPanelLocation.x; // from left to right
-						int x_end = mPanelLocation.x + aboveLayer.nCols*zoomLvl;
-						int y_start = mPanelLocation.y; //from up to bottom
-						int y_end = mPanelLocation.y + aboveLayer.nRows*zoomLvl;
+						int y_start = mPanelLocation.x; // from left to right
+						int y_end = mPanelLocation.x + aboveLayer.nCols*zoomLvl;
+						int x_start = mPanelLocation.y; //from up to bottom
+						int x_end = mPanelLocation.y + aboveLayer.nRows*zoomLvl;
 
 						if(x_screen > x_start & x_screen < x_end & y_screen > y_start & y_screen < y_end) {
 							// index 
