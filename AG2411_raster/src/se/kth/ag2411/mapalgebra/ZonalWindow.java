@@ -269,14 +269,24 @@ public class ZonalWindow extends JFrame {
 				TestGUI.imageList.add(outputLayer.toImage());
 				TestGUI.layerNameList.addElement(outLayerName);
 				
-				TestGUI.mPanel = new MapPanel(outputLayer.toImage(), scale);
 				TestGUI.aboveLayer = outputLayer;
-				TestGUI.mPanel.repaint();
+				
+				TestGUI.layeredPane.remove(TestGUI.mPanel);
+				
+				TestGUI.mPanel = new MapPanel(outputLayer.toImage(), scale);
+				
+				TestGUI.getMapStartX();
+				TestGUI.getMapStartY();
+				TestGUI.mPanel.setBounds(TestGUI.mapStartX, TestGUI.mapStartY, 2000, 2000);	
+				TestGUI.mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+				
+				TestGUI.layeredPane.add(TestGUI.mPanel);
+				TestGUI.layeredPane.revalidate();
+				TestGUI.layeredPane.repaint();
 				
 				outputLayer.save(outputFileName);
 				
 				newWindow.dispose();
-				// HERE IS A LOT STILL MISSING
 			}
 		});
 
