@@ -242,7 +242,6 @@ public class ZonalWindow extends JFrame {
 					}
 				}
 				
-				int scale = 3;
 				Layer outputLayer = TestGUI.layerList.get(0);
 			
 				// Perform the selected operation
@@ -273,7 +272,8 @@ public class ZonalWindow extends JFrame {
 				
 				TestGUI.layeredPane.remove(TestGUI.mPanel);
 				
-				TestGUI.mPanel = new MapPanel(outputLayer.toImage(), scale);
+				TestGUI.getScale(outputLayer);
+				TestGUI.mPanel = new MapPanel(outputLayer.toImage(), TestGUI.scale);
 				
 				TestGUI.getMapStartX();
 				TestGUI.getMapStartY();
