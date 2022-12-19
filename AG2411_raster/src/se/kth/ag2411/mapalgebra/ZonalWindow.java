@@ -242,6 +242,11 @@ public class ZonalWindow extends JFrame {
 					}
 				}
 				
+				if (valueLayer.nCols != zoneLayer.nCols || valueLayer.nRows != zoneLayer.nRows) {
+					JOptionPane.showMessageDialog(new JFrame(),"Size error: Input layers are of different sizes, please input two layers of the same size.");
+					return;
+				}
+				
 				Layer outputLayer = TestGUI.layerList.get(0);
 			
 				// Perform the selected operation

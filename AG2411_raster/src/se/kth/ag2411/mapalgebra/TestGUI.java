@@ -35,6 +35,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
 
 import javax.swing.JToggleButton;
@@ -567,6 +568,17 @@ public class TestGUI extends JFrame {
 			menuBar.add(mnHelp);
 			
 			JMenuItem mnManual = new JMenuItem("Open App Manual");
+			mnManual.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					File pdfFile = new File("manual.pdf");
+					try {
+						Desktop.getDesktop().open(pdfFile);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
 			mnManual.setFont(new Font(mainFont, Font.PLAIN, 12));
 			mnHelp.add(mnManual);
 			
