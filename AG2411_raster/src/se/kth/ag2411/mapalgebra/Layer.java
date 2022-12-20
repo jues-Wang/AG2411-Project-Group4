@@ -358,22 +358,22 @@ public class Layer {
 				outLayer.values[i][j] = values[i][j] + inLayer.values[i][j];
 			}
 		}
-		TestGUI.getMapStartX();
-		TestGUI.getMapStartY();
+//		TestGUI.getMapStartX();
+//		TestGUI.getMapStartY();
 		
 		if (TestGUI.mPanel != null) {
-			TestGUI.layeredPane.remove(TestGUI.mPanel);
-			TestGUI.layeredPane.revalidate();
-			TestGUI.layeredPane.repaint();
+			layeredPane.remove(TestGUI.mPanel);
+			layeredPane.revalidate();
+			layeredPane.repaint();
 		}
 		BufferedImage image = outLayer.toImage();
 		MapPanel map = new MapPanel(image, TestGUI.scale);
-		TestGUI.layeredPane.add(map);
+		layeredPane.add(map);
 		map.setBounds(TestGUI.mapStartX, TestGUI.mapStartY, 2000, 2000);	
-		map.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//		map.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-		TestGUI.layeredPane.revalidate();
-		TestGUI.layeredPane.repaint();
+//		TestGUI.layeredPane.revalidate();
+//		TestGUI.layeredPane.repaint();
 		
 	}
 	
@@ -1110,6 +1110,7 @@ public class Layer {
 				layeredPane.remove(map);
 				layeredPane.revalidate();
 				layeredPane.repaint();
+				map = null;
 				
 				BufferedImage image2 = outLayer.toImageLearning(maxNum, minNum, visitValue, visitValue - 10000);
 				MapPanel map2 = new MapPanel(image2, scale);

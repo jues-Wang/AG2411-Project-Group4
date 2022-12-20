@@ -368,24 +368,24 @@ public class GetLearntWindow extends JFrame{
 				int layer1Index = comboBoxInput1.getSelectedIndex();
 				Layer layer1 = TestGUI.layerList.get(layer1Index);
 
-				int layer2Index = comboBoxInput1.getSelectedIndex();
+				int layer2Index = comboBoxInput2.getSelectedIndex();
 				Layer layer2 = TestGUI.layerList.get(layer2Index);
 				
 				TestGUI.getScale(layer2);
 				
 				newWindow.setVisible(false);
 				
-//				try {
-//					layer1.localSumLearningTest(
-//							layer2, "",
-//							TestGUI.scale, -10000,
-//							"", TestGUI.layeredPane);
-//				} catch (InterruptedException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
+				try {
+					layer1.localSumLearningTest(
+							layer2, "",
+							TestGUI.scale, -10000,
+							"", TestGUI.layeredPane);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
-				layer1.localSumTest(layer2, "", TestGUI.layeredPane);
+//				layer1.localSumTest(layer2, "", TestGUI.layeredPane);
 				
 				newWindow.dispose();
 			}
