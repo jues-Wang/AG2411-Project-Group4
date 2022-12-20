@@ -228,7 +228,7 @@ public class Layer {
 		return image;
 	}
 	
-	public BufferedImage toImageColor(Color color) { 
+	public BufferedImage toImage(Color color) { 
 		int[] maxColor = new int[3];
 		maxColor[0] = color.getRed();
 		maxColor[1] = color.getGreen();

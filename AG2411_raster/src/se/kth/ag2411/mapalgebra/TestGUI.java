@@ -725,6 +725,9 @@ public class TestGUI extends JFrame {
 					
 					mPanel.revalidate();
 					mPanel.repaint();
+					
+					spinner.setValue(zoomLvl*100);
+					spinner_1.setValue((int)zoomLvl*aboveLayer.resolution);
 				}
 			});
 			bottomPanel.add(fullExtent);
