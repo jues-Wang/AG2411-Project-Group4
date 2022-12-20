@@ -92,6 +92,7 @@ public class ColorWindow extends JFrame {
 			comboBoxColor.addItem("Green");
 			comboBoxColor.addItem("Yellow");
 			comboBoxColor.addItem("Purple");
+			comboBoxColor.addItem("Orange");
 			comboBoxColor.addItem("Grayscale");
 			panel.add(comboBoxColor);
 			
@@ -117,6 +118,7 @@ public class ColorWindow extends JFrame {
 			hmColor.put("Green", new Color(0, 255, 0));
 			hmColor.put("Yellow", new Color(255, 255, 0));
 			hmColor.put("Purple", new Color(226,45,211));
+			hmColor.put("Orange", new Color(235, 157, 33));
 			hmColor.put("Grayscale", new Color(0, 0, 0));
 			
 			JButton btnRecolor = new JButton("RECOLOR");
@@ -131,7 +133,7 @@ public class ColorWindow extends JFrame {
 					int recolorIndex = comboBoxLayer.getSelectedIndex();
 					TestGUI.imageList.remove(recolorIndex);
 					Layer recolorLayer = TestGUI.layerList.get(recolorIndex);
-					BufferedImage outputImage = recolorLayer.toImageColor(hmColor.get(inputColor));
+					BufferedImage outputImage = recolorLayer.toImage(hmColor.get(inputColor));
 					TestGUI.imageList.add(recolorIndex, outputImage);
 					
 					TestGUI.chosenIndex = 0;
