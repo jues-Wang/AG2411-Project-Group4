@@ -50,7 +50,7 @@ public class ShortestPathWindow extends JFrame {
 	public static int destination;
 	private JTextField textFieldOutput;
 	
-	public static boolean isVisible;
+	public static int chosenIndex;
 	public static boolean choosingOrigin;
 	public static boolean choosingDestination;
 	
@@ -204,13 +204,37 @@ public class ShortestPathWindow extends JFrame {
 			lblAlgorithm.setBounds(60, 215, 250, 23);
 			panel.add(lblAlgorithm);
 			
-			JButton btnOriginPick = new JButton("PICK FROM MAP");
+			JButton btnOriginPick = new JButton("Pick from map");
 			btnOriginPick.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (TestGUI.mPanel == null) {
 						JOptionPane.showMessageDialog(new JFrame(),"Error: No layer to choose origin from.");
 						return;
 					}
+					// Painting chosen layer
+					chosenIndex = comboBoxLayer.getSelectedIndex();
+					
+					BufferedImage image = TestGUI.imageList.get(chosenIndex);
+					TestGUI.aboveLayer = TestGUI.layerList.get(chosenIndex);
+					
+					// Reset map pan changes
+					TestGUI.mapMovedX = 0;
+					TestGUI.mapMovedY = 0;
+					
+					TestGUI.layeredPane.remove(TestGUI.mPanel);
+					
+					TestGUI.getScale(TestGUI.aboveLayer);
+					TestGUI.mPanel = new MapPanel(image, TestGUI.scale);
+					
+					TestGUI.getMapStartX();
+					TestGUI.getMapStartY();
+					TestGUI.mPanel.setBounds(TestGUI.mapStartX, TestGUI.mapStartY, 2000, 2000);	
+					TestGUI.mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+					
+					TestGUI.layeredPane.add(TestGUI.mPanel);
+					TestGUI.layeredPane.revalidate();
+					TestGUI.layeredPane.repaint();
+					
 					TestGUI.lblLocationChoice.setText("Choose origin:");
 					TestGUI.lblLocationChoice.setVisible(true);
 					choosingOrigin = true;
@@ -222,24 +246,25 @@ public class ShortestPathWindow extends JFrame {
 				public void mouseClicked(MouseEvent e) {
 				}
 			});
-			btnOriginPick.setFont(new Font("Dialog", Font.BOLD, 12));
+			btnOriginPick.setFont(new Font("Dialog", Font.PLAIN, 12));
 			btnOriginPick.setBounds(197, 117, 129, 23);
 			panel.add(btnOriginPick);
 			
-			JButton btnDestinationPick = new JButton("PICK FROM MAP");
+			JButton btnDestinationPick = new JButton("Pick from map");
 			btnDestinationPick.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (TestGUI.mPanel == null) {
 						JOptionPane.showMessageDialog(new JFrame(),"Error: No layer to choose origin from.");
 						return;
 					}
+					chosenIndex = comboBoxLayer.getSelectedIndex();
 					TestGUI.lblLocationChoice.setText("Choose destination:");
 					TestGUI.lblLocationChoice.setVisible(true);
 					choosingDestination = true;
 					newWindow.setVisible(false);
 				}
 			});
-			btnDestinationPick.setFont(new Font("Dialog", Font.BOLD, 12));
+			btnDestinationPick.setFont(new Font("Dialog", Font.PLAIN, 12));
 			btnDestinationPick.setBounds(197, 183, 129, 23);
 			panel.add(btnDestinationPick);
 			
@@ -279,6 +304,37 @@ public class ShortestPathWindow extends JFrame {
 						
 						fileName=fileChooser.getSelectedFile().getName();
 						outLayerName = fileName;
+						
+						// If the same name as an already chosen layer is loaded
+						// Initial condition
+						boolean inList = false;
+						for (int i = 0; i < TestGUI.layerNameList.size(); i++) {
+							if (fileName.equals(TestGUI.layerNameList.getElementAt(i))) {
+								inList = true;
+							}
+						}
+						while (inList) {
+							String tempName = fileName;
+							String tempDir = outputFileName;
+							int counter = 1;
+							
+							for(int i = 0; i < TestGUI.layerNameList.size(); i++) {
+								if(fileName.equals(TestGUI.layerNameList.getElementAt(i))) {
+									fileName = tempName + "_" + counter;
+									outputFileName = tempDir + "_" + counter;
+									outLayerName = fileName;
+									counter++;
+									inList = false;
+								}
+							}
+							
+							for(int i = 0; i < TestGUI.layerNameList.size(); i++) {
+								if(fileName.equals(TestGUI.layerNameList.getElementAt(i))) {
+									inList = true;
+								}
+							}
+						}
+						
 						if(fileName.indexOf(".txt")==-1) {
 							outputFileName=outputFileName+".txt";
 							fileName=fileName+".txt";
@@ -300,13 +356,36 @@ public class ShortestPathWindow extends JFrame {
 						return;
 					}
 					
+					if (TestGUI.layerNameList.contains(outputFileName)) {
+						JOptionPane.showMessageDialog(new JFrame(),"Error: Layer of specified name is already loaded in the program.");
+						return;
+					}
+					
 					int layerIndex = comboBoxLayer.getSelectedIndex();
 					Layer selectedLayer = TestGUI.layerList.get(layerIndex);
+					
+					if (originX < 0 || originX > selectedLayer.nCols) {
+						JOptionPane.showMessageDialog(new JFrame(),"Value error: Incorrect or missing origin x-coordinate. Remember to press Enter after entering a value manually.");
+						return;
+					}
+					else if (originY < 0 || originY > selectedLayer.nRows) {
+						JOptionPane.showMessageDialog(new JFrame(),"Value error: Incorrect or missing origin y-coordinate. Remember to press Enter after entering a value manually.");
+						return;
+					}
+					else if (destinationX < 0 || destinationX > selectedLayer.nCols) {
+						JOptionPane.showMessageDialog(new JFrame(),"Value error: Incorrect or missing destination x-coordinate. Remember to press Enter after entering a value manually.");
+						return;
+					}
+					else if (destinationY < 0 || destinationY > selectedLayer.nRows) {
+						JOptionPane.showMessageDialog(new JFrame(),"Value error: Incorrect or missing destination y-coordinate. Remember to press Enter after entering a value manually.");
+						return;
+					}
 					
 					origin = originX + originY * selectedLayer.nCols;
 					destination = destinationX + destinationY * selectedLayer.nCols;
 					
 					Layer outputLayer = selectedLayer.dijkstra(outLayerName, origin, destination);
+					TestGUI.aboveLayer = outputLayer;
 					
 					BufferedImage outputImage = outputLayer.toImage();
 					

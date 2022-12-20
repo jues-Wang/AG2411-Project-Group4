@@ -37,6 +37,9 @@ public class GetLearntWindow extends JFrame{
 	public static MapPanel mPanel;
 	public static JLayeredPane layeredPane;
 	
+	public int radius;
+	public boolean isSquare;
+	
 	// For visualizations
 	public static int previewScale = 60;
 	public static Layer previewLayer1 = new Layer("", "raster3x4.txt");
@@ -60,18 +63,11 @@ public class GetLearntWindow extends JFrame{
 		});
 	}
 	
-	
-	
 	// Create the application
 	public GetLearntWindow() {
-		
-		Color mainColor = new Color (0, 41, 61);
-		Color crazyColor = new Color (223, 81, 79);
-		Color highlightColor = new Color (255, 208, 47);
-		
-		boolean isLocal = true;
-		boolean isFocal = false;
-		boolean isZonal = false;
+		Color mainColor = TestGUI.mainColor;
+		Color crazyColor = TestGUI.crazyColor;
+		Color highlightColor = TestGUI.highlightColor;
 		
 		newWindow = new JFrame();
 		newWindow.setTitle("GET LEARNT");
@@ -126,6 +122,15 @@ public class GetLearntWindow extends JFrame{
 		panel.add(textFieldRadius);
 		textFieldRadius.setColumns(10);
 		
+		textFieldRadius.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String text = textFieldRadius.getText();
+				if(!text.equals("")) {
+					radius = Integer.parseInt(text);
+				}
+			}
+		});
+		
 		// Neighborhood type inputs
 		JLabel lblNeighborhoodType = new JLabel("Neighborhood type");
 		lblNeighborhoodType.setForeground(Color.WHITE);
@@ -138,6 +143,21 @@ public class GetLearntWindow extends JFrame{
 		comboBoxNeighborhood.setBounds(10, 219, 162, 21);
 		comboBoxNeighborhood.setVisible(false);
 		panel.add(comboBoxNeighborhood);
+		
+		comboBoxNeighborhood.addItem("SQUARE");
+		comboBoxNeighborhood.addItem("CIRCLE");
+		
+		isSquare = false;
+		comboBoxNeighborhood.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				String selectedItem = (String) comboBoxNeighborhood.getSelectedItem();
+				if (selectedItem.equals("Square")) {
+					isSquare = true;
+				} else {
+					isSquare = false;
+				}
+			}
+		});
 		
 		// Run buttons
 		JButton btnLocalRun = new JButton("Run");
@@ -321,8 +341,7 @@ public class GetLearntWindow extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				inputFile1 = (String) comboBoxInput1.getSelectedItem();
-				//System.out.println("选择的选项是: " + selectedItem);								
+				inputFile1 = (String) comboBoxInput1.getSelectedItem();							
 			}			
 		});
 		
@@ -337,8 +356,7 @@ public class GetLearntWindow extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				inputFile2 = (String) comboBoxInput2.getSelectedItem();
-				//System.out.println("选择的选项是: " + selectedItem);								
+				inputFile2 = (String) comboBoxInput2.getSelectedItem();							
 			}			
 		});
 		
@@ -347,6 +365,29 @@ public class GetLearntWindow extends JFrame{
 		btnLocalRun.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				int layer1Index = comboBoxInput1.getSelectedIndex();
+				Layer layer1 = TestGUI.layerList.get(layer1Index);
+
+				int layer2Index = comboBoxInput2.getSelectedIndex();
+				Layer layer2 = TestGUI.layerList.get(layer2Index);
+				
+				TestGUI.getScale(layer2);
+				
+				newWindow.setVisible(false);
+				
+//				try {
+//					layer1.localSumLearningTest(
+//							layer2, "",
+//							TestGUI.scale, -10000,
+//							"", TestGUI.layeredPane);
+//				} catch (InterruptedException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+				
+//				layer1.localSumTest(layer2, "", TestGUI.layeredPane);
+				
+				newWindow.dispose();
 			}
 		});
 		

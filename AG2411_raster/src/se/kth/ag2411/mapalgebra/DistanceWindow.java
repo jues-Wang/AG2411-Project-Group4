@@ -41,12 +41,12 @@ public class DistanceWindow extends JFrame {
 	public String fileName;
 	public String outLayerName;
 	
-	public static int originX;
-	public static int originY;
+	public static int originX = -1;
+	public static int originY = -1;
 	public static int origin;
 	
-	public static int destinationX;
-	public static int destinationY;
+	public static int destinationX = -1;
+	public static int destinationY = -1;
 	public static int destination;
 	private JTextField textFieldManhattan;
 	
@@ -189,7 +189,7 @@ public class DistanceWindow extends JFrame {
 			lblEuclidean.setBounds(60, 215, 250, 23);
 			panel.add(lblEuclidean);
 			
-			JButton btnOriginPick = new JButton("PICK FROM MAP");
+			JButton btnOriginPick = new JButton("Pick from map");
 			btnOriginPick.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (TestGUI.mPanel == null) {
@@ -207,11 +207,11 @@ public class DistanceWindow extends JFrame {
 				public void mouseClicked(MouseEvent e) {
 				}
 			});
-			btnOriginPick.setFont(new Font("Dialog", Font.BOLD, 12));
+			btnOriginPick.setFont(new Font("Dialog", Font.PLAIN, 12));
 			btnOriginPick.setBounds(197, 117, 129, 23);
 			panel.add(btnOriginPick);
 			
-			JButton btnDestinationPick = new JButton("PICK FROM MAP");
+			JButton btnDestinationPick = new JButton("Pick from map");
 			btnDestinationPick.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (TestGUI.mPanel == null) {
@@ -224,7 +224,7 @@ public class DistanceWindow extends JFrame {
 					newWindow.setVisible(false);
 				}
 			});
-			btnDestinationPick.setFont(new Font("Dialog", Font.BOLD, 12));
+			btnDestinationPick.setFont(new Font("Dialog", Font.PLAIN, 12));
 			btnDestinationPick.setBounds(197, 183, 129, 23);
 			panel.add(btnDestinationPick);
 			
@@ -249,6 +249,23 @@ public class DistanceWindow extends JFrame {
 					
 					int layerIndex = comboBoxLayer.getSelectedIndex();
 					Layer selectedLayer = TestGUI.layerList.get(layerIndex);
+					
+					if (originX < 0 || originX > selectedLayer.nCols) {
+						JOptionPane.showMessageDialog(new JFrame(),"Value error: Incorrect or missing origin x-coordinate. Remember to press Enter after entering a value manually.");
+						return;
+					}
+					else if (originY < 0 || originY > selectedLayer.nRows) {
+						JOptionPane.showMessageDialog(new JFrame(),"Value error: Incorrect or missing origin y-coordinate. Remember to press Enter after entering a value manually.");
+						return;
+					}
+					else if (destinationX < 0 || destinationX > selectedLayer.nCols) {
+						JOptionPane.showMessageDialog(new JFrame(),"Value error: Incorrect or missing destination x-coordinate. Remember to press Enter after entering a value manually.");
+						return;
+					}
+					else if (destinationY < 0 || destinationY > selectedLayer.nRows) {
+						JOptionPane.showMessageDialog(new JFrame(),"Value error: Incorrect or missing destination y-coordinate. Remember to press Enter after entering a value manually.");
+						return;
+					}
 					
 					origin = originX + originY * selectedLayer.nCols;
 					destination = destinationX + destinationY * selectedLayer.nCols;

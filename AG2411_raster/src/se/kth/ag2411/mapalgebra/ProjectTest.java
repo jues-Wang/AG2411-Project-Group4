@@ -10,9 +10,9 @@ import javax.swing.JFrame;
 public class ProjectTest {
 	public static void main(String[] args) throws InterruptedException {
 		// Local animation
-//		Layer layer = new Layer("", "raster3x4.txt");
-//		Layer inLayer = new Layer("", "zoneRaster3x4.txt");
-//		layer.localSumLearning(inLayer, "", 100, -10000, "raster3x4.txt");
+		Layer layer = new Layer("", "elevation.txt");
+		Layer inLayer = new Layer("", "elevation.txt");
+		layer.localSumLearning(inLayer, "", 3, -10000, "rr3x4.txt");
 		
 		// Focal animation
 //		Layer layer = new Layer("", "elevation.txt");
@@ -24,9 +24,9 @@ public class ProjectTest {
 //		layer.zonalMinimumLearning(zoneLayer, "", 100, -10000, -20000, "raster3x4.txt");
 		
 		// Dijkstra
-		Layer layer = new Layer("", "elevation.txt");
-		Layer outLayer = layer.dijkstra("", 0);
-		outLayer.print();
+//		Layer layer = new Layer("", "elevation.txt");
+//		Layer outLayer = layer.dijkstra("", 0);
+//		outLayer.print();
 //		outLayer.save("test.txt");
 		
 		// File IO

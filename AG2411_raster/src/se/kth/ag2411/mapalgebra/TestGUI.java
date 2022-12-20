@@ -66,7 +66,7 @@ import java.awt.Toolkit;
 public class TestGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPanel;
+	private JPanel contentPane;
 	public static MapPanel mPanel;
 	public static int scale = 3;
 	public static int zoomLvl = scale;
@@ -242,15 +242,15 @@ public class TestGUI extends JFrame {
 		fileChooser.setMultiSelectionEnabled(true);
 		
 		// Create the content panel.
-		contentPanel = new JPanel();
-		contentPanel.setForeground(Color.WHITE);
-		setContentPane(contentPanel);
-		contentPanel.setLayout(new BorderLayout(0, 0));
+		contentPane = new JPanel();
+		contentPane.setForeground(Color.WHITE);
+		setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		// SPLIT PANEL = TOC (left) + Map Panel (right)
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setBackground(new Color(255, 255, 255));
-		contentPanel.add(splitPane);
+		contentPane.add(splitPane);
 		
 		final JPanel panelTOC = new JPanel();
 		panelTOC.setBackground(mainColor2);
@@ -455,7 +455,7 @@ public class TestGUI extends JFrame {
 		// Create head Panel.
 		JPanel headPanel = new JPanel();
 		headPanel.setBackground(mainColor);
-		contentPanel.add(headPanel, BorderLayout.NORTH);
+		contentPane.add(headPanel, BorderLayout.NORTH);
 		headPanel.setLayout(new BorderLayout(0, 0));
 		
 			// Fill head panel:
@@ -624,19 +624,36 @@ public class TestGUI extends JFrame {
 							String layerName = getFileName(selectedFiles[i].getAbsolutePath());
 							Layer imageLayer = new Layer(layerName, selectedFiles[i].getAbsolutePath());
 							
-							// Add to TOC if does not exist already
+							// If trying to add a file with the name of an already added file
+							// Initial condition
 							boolean inList = false;
 							for (int j = 0; j < layerNameList.size(); j++) {
 								if (layerNameList.get(j).equals(layerName)) {
 									inList = true;
-									break;
 								}
 							}
-							if (! inList) {
-								layerNameList.addElement(layerName);
-								layerList.add(new Layer (layerName, selectedFiles[i].getAbsolutePath()));
-								imageList.add(imageLayer.toImage());
+							// Find a new name
+							while (inList) {
+								String tempName = layerName;
+								int counter = 1;
+								for (int j = 0; j < layerNameList.size(); j++) {
+									if (layerNameList.get(j).equals(layerName)) {
+										layerName = tempName + "_" + counter;
+										inList = false;
+										counter++;
+									}
+								}
+								for (int j = 0; j < layerNameList.size(); j++) {
+									if (layerNameList.get(j).equals(layerName)) {
+										inList = true;
+									}
+								}
 							}
+							
+							// Add to TOC etc.
+							layerNameList.addElement(layerName);
+							layerList.add(new Layer (layerName, selectedFiles[i].getAbsolutePath()));
+							imageList.add(imageLayer.toImage());
 						}
 						BufferedImage layerImage = imageList.getLast();
 						aboveLayer = layerList.getLast();//aboveLayer = last layer
@@ -697,12 +714,12 @@ public class TestGUI extends JFrame {
 			
 			Component verticalStrut_1 = Box.createVerticalStrut(9);
 			headPanel.add(verticalStrut_1, BorderLayout.SOUTH);
-			contentPanel.setBounds(10,10,10,10);	
+			contentPane.setBounds(10,10,10,10);	
 		
 			// Create bottom Panel.
 			JPanel bottomPanel = new JPanel();
 			bottomPanel.setBackground(mainColor);
-			contentPanel.add(bottomPanel, BorderLayout.SOUTH);
+			contentPane.add(bottomPanel, BorderLayout.SOUTH);
 			
 			// Fill up bottom panel:
 			Button fullExtent = new Button("Full Extent");
