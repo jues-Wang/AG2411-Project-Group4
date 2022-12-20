@@ -19,15 +19,15 @@ public class ProjectTest {
 //		layer.focalVarietyLearning(10, false, "", 3, -10000, "elevation.txt");
 //		
 		// Zonal animation
-		Layer layer = new Layer("", "raster3x4.txt");
-		Layer zoneLayer = new Layer("", "zoneRaster3x4.txt");
-		layer.zonalMinimumLearning(zoneLayer, "", 100, -10000, -20000, "raster3x4.txt");
+//		Layer layer = new Layer("", "raster3x4.txt");
+//		Layer zoneLayer = new Layer("", "zoneRaster3x4.txt");
+//		layer.zonalMinimumLearning(zoneLayer, "", 100, -10000, -20000, "raster3x4.txt");
 		
 		// Dijkstra
-//		Layer layer = new Layer("", args[0]);
-//		Layer outLayer = layer.dijkstra("", false, 0);
-//		outLayer.print();
-//		outLayer.save(args[1]);
+		Layer layer = new Layer("", "elevation.txt");
+		Layer outLayer = layer.dijkstra("", 0);
+		outLayer.print();
+//		outLayer.save("test.txt");
 		
 		// File IO
 //		Layer layer = new Layer("", "raster3x4.txt");

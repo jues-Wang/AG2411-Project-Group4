@@ -30,6 +30,7 @@ public class Layer {
 	public double resolution; // cell size
 	public double[][] values; // data. Alternatively, public double[][] values;
 	public double nullValue; // value designated as "No data"
+	public double pathValue; // For shortest path visualization
 	public int[][] prev; // Where the previous node is stored for shortest path algorithms
 
 	//Constructor (This is not complete)
@@ -90,6 +91,8 @@ public class Layer {
 			bReader.close();
 			
 			prev = new int[nRows][nCols];
+			pathValue = nullValue;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -162,23 +165,30 @@ public class Layer {
 		double range = maxNum - minNum;
 		
 		int[] noValueColor = new int[3];
-		noValueColor[0] = 255;
-		noValueColor[1] = 208;
-		noValueColor[2] = 47;
+		noValueColor[0] = TestGUI.highlightColor.getRed();
+		noValueColor[1] = TestGUI.highlightColor.getGreen();
+		noValueColor[2] = TestGUI.highlightColor.getBlue();
+		
+		int[] pathColor = new int[3];
+		pathColor[0] = TestGUI.crazyColor.getRed();
+		pathColor[1] = TestGUI.crazyColor.getGreen();
+		pathColor[2] = TestGUI.crazyColor.getBlue();
 		
 		
 		for (int i = 0; i < nRows; i++) {
 			for (int j = 0; j < nCols; j++) {
 				if (values[i][j] == nullValue) {
 					raster.setPixel(j, i, noValueColor);
+				} else if (values[i][j] == pathValue) {
+					raster.setPixel(j, i, pathColor);
+				} else {
+					int[] color = new int[3];
+					int temp_color = (int)Math.round((maxNum - values[i][j]) * 255 / range);
+					color[0] = temp_color;
+					color[1] = temp_color;
+					color[2] = temp_color;
+					raster.setPixel(j, i, color);
 				}
-				
-				int[] color = new int[3];
-				int temp_color = (int)Math.round((maxNum - values[i][j]) * 255 / range);
-				color[0] = temp_color;
-				color[1] = temp_color;
-				color[2] = temp_color;
-				raster.setPixel(j, i, color);
 			}
 		}
 		return image;
@@ -239,6 +249,16 @@ public class Layer {
 		minColor[1] = 255;
 		minColor[2] = 255;
 		
+		int[] noValueColor = new int[3];
+		noValueColor[0] = 0;
+		noValueColor[1] = 0;
+		noValueColor[1] = 0;
+		
+		int[] pathColor = new int[3];
+		pathColor[0] = 255 - maxColor[0];
+		pathColor[1] = 255 - maxColor[1];
+		pathColor[2] = 255 - maxColor[2];
+		
 		double redRange = Math.max(Math.abs(maxColor[0] - minColor[0]), 1);
 		double greenRange = Math.max(Math.abs(maxColor[1] - minColor[1]), 1);
 		double blueRange = Math.max(Math.abs(maxColor[2] - minColor[2]), 1);
@@ -251,11 +271,19 @@ public class Layer {
 		
 		for (int i = 0; i < nRows; i++) {
 			for (int j = 0; j < nCols; j++) { // oldMin + (oldMax - oldMin) * (value - newMin) / (newMax - newMin)
-				int[] pixelColor = new int[3]; // (maxNum - values[i][j]) * 255 / range
-				pixelColor[0] = (int)Math.round(255 - (values[i][j] - minNum) * redRange / range) ;
-				pixelColor[1] = (int)Math.round(255 - (values[i][j] - minNum) * greenRange / range);
-				pixelColor[2] = (int)Math.round(255 - (values[i][j] - minNum) * blueRange / range);
-				raster.setPixel(j, i, pixelColor);
+				if (values[i][j] == nullValue) {
+					raster.setPixel(j, i, noValueColor);
+				} else if (values[i][j] == pathValue) {
+					raster.setPixel(j, i, pathColor);
+				} else {
+					int[] pixelColor = new int[3]; // (maxNum - values[i][j]) * 255 / range
+					pixelColor[0] = (int)Math.round(255 - (values[i][j] - minNum) * redRange / range) ;
+					pixelColor[1] = (int)Math.round(255 - (values[i][j] - minNum) * greenRange / range);
+					pixelColor[2] = (int)Math.round(255 - (values[i][j] - minNum) * blueRange / range);
+					raster.setPixel(j, i, pixelColor);
+				}
+				
+				
 			}
 		}
 		
@@ -749,14 +777,14 @@ public class Layer {
 		double manhattan = Math.abs(startRow - endRow) + Math.abs(startCol - endCol);
 		double euclidean = Math.sqrt( Math.pow(startRow - endRow, 2) + Math.pow(startCol - endCol, 2) );
 		
-		outDistances[0] = euclidean;
-		outDistances[1] = manhattan;
+		outDistances[0] = euclidean * resolution;
+		outDistances[1] = manhattan * resolution;
 		
 		return outDistances;
 	}
 	
 	// Not finished
-	public Layer dijkstra(String outLayerName, boolean useValues, int startIndex) {
+	public Layer dijkstra(String outLayerName, int startIndex) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		int startRow = startIndex / nCols;
 		int startCol = startIndex % nCols;
@@ -794,43 +822,23 @@ public class Layer {
 				}
 			}
 			
-			// Four potential neighbors, need to not be out of bounds
 			int visitRow = visitIndex / nCols;
 			int visitCol = visitIndex % nCols;
-			int[][] indices = new int[4][2];
-			int counter = 0;
-			
-			for (int i = visitRow - 1; i <= visitRow + 1; i++) {
-				for (int j = visitCol - 1; j <= visitCol + 1; j++) {
-					
-					double d = Math.sqrt( Math.pow(i - visitRow, 2) + Math.pow(j - visitCol, 2) );
-					if (d == 1) {
-						indices[counter][0] = i;
-						indices[counter][1] = j;
-						counter++;
-					}
-				}
-			}
+			int[][] neighborhood = getNeighborhood(visitIndex, 1, true);
 			
 			double newWeight;
-			for (int[] index: indices) {
-				int i = index[0];
-				int j = index[1];
-				if (i >= 0 && i < nRows && j >= 0 && j < nCols) {
-					
-					if (useValues) {
-						newWeight = outLayer.values[visitRow][visitCol] + 1 + Math.max(values[i][j] - values[visitRow][visitCol], 0);
-					} else {
-						newWeight = outLayer.values[visitRow][visitCol] + 1;
-					}
-					
-					if (newWeight < outLayer.values[i][j]) {
-						outLayer.values[i][j] = newWeight;
-						outLayer.prev[i][j] = visitIndex;
-					}
+			for (int[] neighbor: neighborhood) {
+				int i = neighbor[0];
+				int j = neighbor[1];
+				
+				double d = Math.sqrt( Math.pow(i - visitRow, 2) + Math.pow(j - visitCol, 2) );
+				newWeight = outLayer.values[visitRow][visitCol] + d * values[i][j];
+				
+				if (newWeight < outLayer.values[i][j]) {
+					outLayer.values[i][j] = newWeight;
+					outLayer.prev[i][j] = visitIndex;
 				}
 			}
-			System.out.println(tempNodes.size());
 			tempNodes.remove(visitIndexString);
 		}
 		
@@ -841,6 +849,36 @@ public class Layer {
 				outLayer.trace(i * nCols + j);
 			}
 		}
+		return outLayer;
+	}
+	
+	public Layer dijkstra(String outLayerName, int startIndex, int endIndex) {
+		Layer pathLayer = dijkstra(outLayerName, startIndex);
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		for (int i = 0; i < nRows; i++) {
+			for (int j = 0; j < nCols; j++) {
+				outLayer.values[i][j] = values[i][j];
+			}
+		}
+		
+		outLayer.pathValue = outLayer.getMin() - 1;
+		if (outLayer.pathValue == outLayer.nullValue) {
+			outLayer.pathValue -= 1;
+		}
+		
+		int row = endIndex / nCols;
+		int col = endIndex % nCols;
+		int prevIndex = pathLayer.prev[row][col];
+		
+		while (prevIndex != -1) {
+			outLayer.values[row][col] = outLayer.pathValue;
+			startIndex = prevIndex;
+			row = startIndex / nCols;
+			col = startIndex % nCols;
+			prevIndex = pathLayer.prev[row][col];
+		}
+		outLayer.values[row][col] = outLayer.pathValue;
+		
 		return outLayer;
 	}
 	
@@ -886,7 +924,7 @@ public class Layer {
 		double maxNum = Double.NEGATIVE_INFINITY;
 		for (int i = 0; i < nRows; i++) {
 			for (int j = 0; j < nCols; j++) {
-				if (values[i][j] > maxNum && values[i][j] != nullValue) {
+				if (values[i][j] > maxNum && values[i][j] != nullValue && values[i][j] != pathValue) {
 					maxNum = values[i][j];
 				}
 			}
@@ -898,7 +936,7 @@ public class Layer {
 		double minNum = Double.POSITIVE_INFINITY;
 		for (int i = 0; i < nRows; i++) {
 			for (int j = 0; j < nCols; j++) {
-				if (values[i][j] < minNum && values[i][j] != nullValue) {
+				if (values[i][j] < minNum && values[i][j] != nullValue && values[i][j] != pathValue) {
 					minNum = values[i][j];
 				}
 			}

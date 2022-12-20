@@ -82,6 +82,7 @@ public class TestGUI extends JFrame {
 	public static Color mainColor2;
 	public static Color mainColor;
 	public static Color highlightColor;
+	public static Color crazyColor;
 	
 	// For operations in other windows
 	public static DefaultListModel<String> layerNameList = new DefaultListModel<String>();
@@ -195,8 +196,8 @@ public class TestGUI extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 500);
 		// spinners in bottom panel
-		JSpinner spinner = new JSpinner(); // for %
-		JSpinner spinner_1 = new JSpinner(); //for scale
+		JSpinner zoomSpinner = new JSpinner(); // for %
+		JSpinner scaleSpinner = new JSpinner(); //for scale
 		
 		// NICE COLORS:
 		Color projectDarkBlue = new Color (39, 55, 115);
@@ -215,7 +216,7 @@ public class TestGUI extends JFrame {
 		
 		Color buttonColor = new Color(238, 238, 238);
 		highlightColor = projectYellow;
-		Color crazyColor = projectRed;
+		crazyColor = projectRed;
 		
 		String mainFont = new String ("Brandon Grotesque Regular");
 		
@@ -292,7 +293,7 @@ public class TestGUI extends JFrame {
 		// Display TOC
 		JList<String> displayList = new JList<String>(layerNameList);
 		displayList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		displayList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		displayList.setLayoutOrientation(JList.VERTICAL_WRAP);
 		displayList.setVisibleRowCount(-1);
 		displayList.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -316,8 +317,8 @@ public class TestGUI extends JFrame {
 					mPanel.setBounds(mapStartX, mapStartY, 2000, 2000);	
 					mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
 					
-					spinner.setValue(100*zoomLvl);
-					spinner_1.setValue((int)zoomLvl*aboveLayer.resolution);
+					zoomSpinner.setValue(100*zoomLvl);
+					scaleSpinner.setValue((int)zoomLvl*aboveLayer.resolution);
 		        }
 		        
 		        // Open pop-up menu
@@ -531,12 +532,13 @@ public class TestGUI extends JFrame {
 			mnToolbox.add(mnShortestPath);
 			mnShortestPath.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(
-					app,
-					"Unfortunately, this window is still a work in progress. \nTry the local, focal or zonal operations instead!",
-					"SORRY",
-					JOptionPane.OK_OPTION
-					);
+//					JOptionPane.showMessageDialog(
+//					app,
+//					"Unfortunately, this window is still a work in progress. \nTry the local, focal or zonal operations instead!",
+//					"SORRY",
+//					JOptionPane.OK_OPTION
+//					);
+					DijkstraWindow.main();
 				}
 			});
 
@@ -653,8 +655,8 @@ public class TestGUI extends JFrame {
 						layeredPane.revalidate();
 			            layeredPane.repaint();
 						
-						spinner.setValue(100*scale);
-						spinner_1.setValue((int)aboveLayer.resolution*scale);
+						zoomSpinner.setValue(100*scale);
+						scaleSpinner.setValue((int)aboveLayer.resolution*scale);
 					}
 				}
 			});
@@ -726,8 +728,8 @@ public class TestGUI extends JFrame {
 					mPanel.revalidate();
 					mPanel.repaint();
 					
-					spinner.setValue(zoomLvl*100);
-					spinner_1.setValue((int)zoomLvl*aboveLayer.resolution);
+					zoomSpinner.setValue(zoomLvl*100);
+					scaleSpinner.setValue((int)zoomLvl*aboveLayer.resolution);
 				}
 			});
 			bottomPanel.add(fullExtent);
@@ -737,8 +739,8 @@ public class TestGUI extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					zoom(1);
-					spinner.setValue(zoomLvl*100);
-					spinner_1.setValue((int)zoomLvl*aboveLayer.resolution);
+					zoomSpinner.setValue(zoomLvl*100);
+					scaleSpinner.setValue((int)zoomLvl*aboveLayer.resolution);
 				}
 			});
 			btnZoomIn.setForeground(new Color(0, 41, 61));
@@ -751,8 +753,8 @@ public class TestGUI extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					zoom(-1);
-					spinner.setValue(zoomLvl*100);
-					spinner_1.setValue((int)zoomLvl*aboveLayer.resolution);
+					zoomSpinner.setValue(zoomLvl*100);
+					scaleSpinner.setValue((int)zoomLvl*aboveLayer.resolution);
 				}
 			});
 			btnZoomOut.setForeground(new Color(0, 41, 61));
@@ -765,13 +767,13 @@ public class TestGUI extends JFrame {
 			layeredPane.addMouseWheelListener(new MouseWheelListener() {
 				public void mouseWheelMoved(MouseWheelEvent e) {
 					zoom(- e.getWheelRotation());
-					spinner.setValue(zoomLvl*100);
-					spinner_1.setValue((int)zoomLvl*aboveLayer.resolution);
+					zoomSpinner.setValue(zoomLvl*100);
+					scaleSpinner.setValue((int)zoomLvl*aboveLayer.resolution);
 				}
 			});
 			
-			Component horizontalStrut = Box.createHorizontalStrut(40);
-			bottomPanel.add(horizontalStrut);
+			Component bottomGap1 = Box.createHorizontalStrut(40);
+			bottomPanel.add(bottomGap1);
 			
 			JLabel magnifier = new JLabel();
 			magnifier.setText("Magnifier (%):");
@@ -780,12 +782,12 @@ public class TestGUI extends JFrame {
 			magnifier.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(magnifier);
 			
-			spinner.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-			spinner.setModel(new SpinnerNumberModel(0, 0, 1000, 100));	// insert % ??
-			bottomPanel.add(spinner);
+			zoomSpinner.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			zoomSpinner.setModel(new SpinnerNumberModel(0, 0, 1000, 100));	// insert % ??
+			bottomPanel.add(zoomSpinner);
 			
-			Component horizontalStrut_1 = Box.createHorizontalStrut(20);
-			bottomPanel.add(horizontalStrut_1);
+			Component bottomGap2 = Box.createHorizontalStrut(20);
+			bottomPanel.add(bottomGap2);
 			
 			JLabel txtrScale = new JLabel();
 			txtrScale.setText("Scale:");
@@ -794,12 +796,12 @@ public class TestGUI extends JFrame {
 			txtrScale.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(txtrScale);
 			
-			spinner_1.setFont(new Font(mainFont, Font.PLAIN, 12));
-			spinner_1.setModel(new SpinnerNumberModel(0, 0, 100000, 500));
-			bottomPanel.add(spinner_1);
+			scaleSpinner.setFont(new Font(mainFont, Font.PLAIN, 12));
+			scaleSpinner.setModel(new SpinnerNumberModel(0, 0, 100000, 500));
+			bottomPanel.add(scaleSpinner);
 			
-			Component horizontalStrut_2 = Box.createHorizontalStrut(40);
-			bottomPanel.add(horizontalStrut_2);
+			Component bottomGap3 = Box.createHorizontalStrut(40);
+			bottomPanel.add(bottomGap3);
 			
 			JLabel txtrValue_1 = new JLabel();
 			txtrValue_1.setIcon(new ImageIcon("C:\\AG2411\\AG2411-Project-Group4\\AG2411_raster\\media\\cursor-06.png"));
@@ -814,17 +816,17 @@ public class TestGUI extends JFrame {
 			txtrId.setFont(new Font(mainFont, Font.ITALIC, 12));
 			bottomPanel.add(txtrId);
 
-			Label label = new Label("       ");
-			label.setFont(new Font(mainFont, Font.PLAIN, 12));
-			label.setBackground(Color.WHITE);
-			label.setAlignment(Label.RIGHT);
-			bottomPanel.add(label);
+			Label hoverIDLabel = new Label("       ");
+			hoverIDLabel.setFont(new Font(mainFont, Font.PLAIN, 12));
+			hoverIDLabel.setBackground(Color.WHITE);
+			hoverIDLabel.setAlignment(Label.RIGHT);
+			bottomPanel.add(hoverIDLabel);
 			
-			Label label_2 = new Label("       ");
-			label_2.setAlignment(Label.RIGHT);
-			label_2.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
-			label_2.setBackground(Color.WHITE);
-			bottomPanel.add(label_2);
+			Label selectedIDLabel = new Label("       ");
+			selectedIDLabel.setAlignment(Label.RIGHT);
+			selectedIDLabel.setFont(new Font("Brandon Grotesque Regular", Font.PLAIN, 12));
+			selectedIDLabel.setBackground(Color.WHITE);
+			bottomPanel.add(selectedIDLabel);
 			
 			JLabel txtrValue = new JLabel();
 			txtrValue.setText("value:");
@@ -833,12 +835,12 @@ public class TestGUI extends JFrame {
 			txtrValue.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(txtrValue);
 			
-			Label label_3 = new Label(pixel[0]);//value
-			label_3.setText(pixel[0]);
-			label_3.setFont(new Font(mainFont, Font.PLAIN, 12));
-			label_3.setBackground(Color.WHITE);
-			label_3.setAlignment(Label.RIGHT);
-			bottomPanel.add(label_3);
+			Label valueLabel = new Label(pixel[0]);//value
+			valueLabel.setText(pixel[0]);
+			valueLabel.setFont(new Font(mainFont, Font.PLAIN, 12));
+			valueLabel.setBackground(Color.WHITE);
+			valueLabel.setAlignment(Label.RIGHT);
+			bottomPanel.add(valueLabel);
 			
 			JLabel txtrX = new JLabel();
 			txtrX.setText("x:");
@@ -847,12 +849,12 @@ public class TestGUI extends JFrame {
 			txtrX.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(txtrX);
 			
-			Label label_1 = new Label(pixel[2]);
-			label_1.setText(pixel[2]);
-			label_1.setAlignment(Label.RIGHT);
-			label_1.setFont(new Font(mainFont, Font.PLAIN, 12));
-			label_1.setBackground(Color.WHITE);
-			bottomPanel.add(label_1);
+			Label xLabel = new Label(pixel[2]);
+			xLabel.setText(pixel[2]);
+			xLabel.setAlignment(Label.RIGHT);
+			xLabel.setFont(new Font(mainFont, Font.PLAIN, 12));
+			xLabel.setBackground(Color.WHITE);
+			bottomPanel.add(xLabel);
 			
 			JLabel txtrY = new JLabel();
 			txtrY.setText("y:");
@@ -861,13 +863,13 @@ public class TestGUI extends JFrame {
 			txtrY.setFont(new Font(mainFont, Font.PLAIN, 12));
 			bottomPanel.add(txtrY);
 			
-			Label label_1_1 = new Label(pixel[3]);
-			label_1_1.setText(pixel[3]);
-			label_1_1.setAlignment(Label.RIGHT);
-			label_1_1.setFont(new Font(mainFont, Font.PLAIN, 12));
-			label_1_1.setBackground(Color.WHITE);
-			label_1_1.setBounds(130, 130, 130, 130);
-			bottomPanel.add(label_1_1);
+			Label yLabel = new Label(pixel[3]);
+			yLabel.setText(pixel[3]);
+			yLabel.setAlignment(Label.RIGHT);
+			yLabel.setFont(new Font(mainFont, Font.PLAIN, 12));
+			yLabel.setBackground(Color.WHITE);
+			yLabel.setBounds(130, 130, 130, 130);
+			bottomPanel.add(yLabel);
 			
 			layeredPane.addMouseMotionListener(new MouseMotionAdapter() {
 				@Override
@@ -894,10 +896,10 @@ public class TestGUI extends JFrame {
 							pixel[3] = Integer.toString(y);
 
 							//visualization
-							label_3.setText(pixel[0]);//value
-							label.setText(pixel[1]);//id
-							label_1.setText(pixel[3]);//x
-							label_1_1.setText(pixel[2]);//y
+							valueLabel.setText(pixel[0]);//value
+							hoverIDLabel.setText(pixel[1]);//id
+							xLabel.setText(pixel[3]);//x
+							yLabel.setText(pixel[2]);//y
 						}
 					}
 				}
@@ -928,7 +930,7 @@ public class TestGUI extends JFrame {
 							pixel_select[3] = Integer.toString(y);
 
 							//visualization
-							label_2.setText(pixel_select[1]);//id
+							selectedIDLabel.setText(pixel_select[1]);//id
 						}
 					}
 				}
