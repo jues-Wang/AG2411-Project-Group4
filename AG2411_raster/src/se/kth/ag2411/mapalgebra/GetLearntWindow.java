@@ -375,15 +375,15 @@ public class GetLearntWindow extends JFrame{
 				
 				newWindow.setVisible(false);
 				
-				try {
-					layer1.localSumLearningTest(
-							layer2, "",
-							TestGUI.scale, -10000,
-							"", TestGUI.layeredPane);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+//				try {
+//					layer1.localSumLearningTest(
+//							layer2, "",
+//							TestGUI.scale, -10000,
+//							"", TestGUI.layeredPane);
+//				} catch (InterruptedException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
 				
 //				layer1.localSumTest(layer2, "", TestGUI.layeredPane);
 				

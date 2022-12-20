@@ -50,7 +50,7 @@ public class ShortestPathWindow extends JFrame {
 	public static int destination;
 	private JTextField textFieldOutput;
 	
-	public static boolean isVisible;
+	public static int chosenIndex;
 	public static boolean choosingOrigin;
 	public static boolean choosingDestination;
 	
@@ -211,6 +211,30 @@ public class ShortestPathWindow extends JFrame {
 						JOptionPane.showMessageDialog(new JFrame(),"Error: No layer to choose origin from.");
 						return;
 					}
+					// Painting chosen layer
+					chosenIndex = comboBoxLayer.getSelectedIndex();
+					
+					BufferedImage image = TestGUI.imageList.get(chosenIndex);
+					TestGUI.aboveLayer = TestGUI.layerList.get(chosenIndex);
+					
+					// Reset map pan changes
+					TestGUI.mapMovedX = 0;
+					TestGUI.mapMovedY = 0;
+					
+					TestGUI.layeredPane.remove(TestGUI.mPanel);
+					
+					TestGUI.getScale(TestGUI.aboveLayer);
+					TestGUI.mPanel = new MapPanel(image, TestGUI.scale);
+					
+					TestGUI.getMapStartX();
+					TestGUI.getMapStartY();
+					TestGUI.mPanel.setBounds(TestGUI.mapStartX, TestGUI.mapStartY, 2000, 2000);	
+					TestGUI.mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
+					
+					TestGUI.layeredPane.add(TestGUI.mPanel);
+					TestGUI.layeredPane.revalidate();
+					TestGUI.layeredPane.repaint();
+					
 					TestGUI.lblLocationChoice.setText("Choose origin:");
 					TestGUI.lblLocationChoice.setVisible(true);
 					choosingOrigin = true;
@@ -233,6 +257,7 @@ public class ShortestPathWindow extends JFrame {
 						JOptionPane.showMessageDialog(new JFrame(),"Error: No layer to choose origin from.");
 						return;
 					}
+					chosenIndex = comboBoxLayer.getSelectedIndex();
 					TestGUI.lblLocationChoice.setText("Choose destination:");
 					TestGUI.lblLocationChoice.setVisible(true);
 					choosingDestination = true;
@@ -279,6 +304,37 @@ public class ShortestPathWindow extends JFrame {
 						
 						fileName=fileChooser.getSelectedFile().getName();
 						outLayerName = fileName;
+						
+						// If the same name as an already chosen layer is loaded
+						// Initial condition
+						boolean inList = false;
+						for (int i = 0; i < TestGUI.layerNameList.size(); i++) {
+							if (fileName.equals(TestGUI.layerNameList.getElementAt(i))) {
+								inList = true;
+							}
+						}
+						while (inList) {
+							String tempName = fileName;
+							String tempDir = outputFileName;
+							int counter = 1;
+							
+							for(int i = 0; i < TestGUI.layerNameList.size(); i++) {
+								if(fileName.equals(TestGUI.layerNameList.getElementAt(i))) {
+									fileName = tempName + "_" + counter;
+									outputFileName = tempDir + "_" + counter;
+									outLayerName = fileName;
+									counter++;
+									inList = false;
+								}
+							}
+							
+							for(int i = 0; i < TestGUI.layerNameList.size(); i++) {
+								if(fileName.equals(TestGUI.layerNameList.getElementAt(i))) {
+									inList = true;
+								}
+							}
+						}
+						
 						if(fileName.indexOf(".txt")==-1) {
 							outputFileName=outputFileName+".txt";
 							fileName=fileName+".txt";
@@ -297,6 +353,11 @@ public class ShortestPathWindow extends JFrame {
 				public void mouseClicked(MouseEvent e) {
 					if(inputFile == null) {
 						JOptionPane.showMessageDialog(new JFrame(),"Error when trying to export: No layer loaded.");
+						return;
+					}
+					
+					if (TestGUI.layerNameList.contains(outputFileName)) {
+						JOptionPane.showMessageDialog(new JFrame(),"Error: Layer of specified name is already loaded in the program.");
 						return;
 					}
 					
@@ -324,6 +385,7 @@ public class ShortestPathWindow extends JFrame {
 					destination = destinationX + destinationY * selectedLayer.nCols;
 					
 					Layer outputLayer = selectedLayer.dijkstra(outLayerName, origin, destination);
+					TestGUI.aboveLayer = outputLayer;
 					
 					BufferedImage outputImage = outputLayer.toImage();
 					

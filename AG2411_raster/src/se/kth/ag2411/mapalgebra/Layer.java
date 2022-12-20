@@ -19,6 +19,7 @@ import java.util.Set;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 
 
 
@@ -358,19 +359,23 @@ public class Layer {
 				outLayer.values[i][j] = values[i][j] + inLayer.values[i][j];
 			}
 		}
-//		TestGUI.getMapStartX();
-//		TestGUI.getMapStartY();
+		TestGUI.getMapStartX();
+		TestGUI.getMapStartY();
 		
 		if (TestGUI.mPanel != null) {
 			layeredPane.remove(TestGUI.mPanel);
 			layeredPane.revalidate();
 			layeredPane.repaint();
 		}
+//		layeredPane.setVisible(true);
 		BufferedImage image = outLayer.toImage();
-		MapPanel map = new MapPanel(image, TestGUI.scale);
+		MapPanel map = new MapPanel(image, 3);
 		layeredPane.add(map);
-		map.setBounds(TestGUI.mapStartX, TestGUI.mapStartY, 2000, 2000);	
-//		map.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//		map.setVisible(true);
+		layeredPane.revalidate();
+		layeredPane.repaint();
+		map.setBounds(0, 0, 2000, 2000);	
+		map.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 //		TestGUI.layeredPane.revalidate();
 //		TestGUI.layeredPane.repaint();

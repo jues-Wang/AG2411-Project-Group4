@@ -177,6 +177,38 @@ public class ZonalWindow extends JFrame {
 
 					fileName=fileChooser.getSelectedFile().getName();
 					outLayerName = fileName;
+					
+					// If name already exists
+					// Initial condition
+					boolean inList = false;
+					for (int i = 0; i < TestGUI.layerNameList.size(); i++) {
+						if (fileName.equals(TestGUI.layerNameList.getElementAt(i))) {
+							inList = true;
+						}
+					}
+					// Find new name
+					while (inList) {
+						String tempName = fileName;
+						String tempDir = outputFileName;
+						int counter = 1;
+						
+						for(int i = 0; i < TestGUI.layerNameList.size(); i++) {
+							if(fileName.equals(TestGUI.layerNameList.getElementAt(i))) {
+								fileName = tempName + "_" + counter;
+								outputFileName = tempDir + "_" + counter;
+								outLayerName = fileName;
+								counter++;
+								inList = false;
+							}
+						}
+						
+						for(int i = 0; i < TestGUI.layerNameList.size(); i++) {
+							if(fileName.equals(TestGUI.layerNameList.getElementAt(i))) {
+								inList = true;
+							}
+						}
+					}
+					
 					if(fileName.indexOf(".txt")==-1) {
 						outputFileName=outputFileName+".txt";
 						fileName=fileName+".txt";
