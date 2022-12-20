@@ -18,6 +18,7 @@ import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 
 
 
@@ -348,6 +349,32 @@ public class Layer {
 			}
 		}
 		return outLayer;
+	}
+	
+	public void localSumTest(Layer inLayer, String outLayerName, JLayeredPane layeredPane){
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		for(int i = 0; i < nRows; i++){
+			for (int j = 0; j < nCols; j++) {
+				outLayer.values[i][j] = values[i][j] + inLayer.values[i][j];
+			}
+		}
+		TestGUI.getMapStartX();
+		TestGUI.getMapStartY();
+		
+		if (TestGUI.mPanel != null) {
+			layeredPane.remove(TestGUI.mPanel);
+			layeredPane.revalidate();
+			layeredPane.repaint();
+		}
+		BufferedImage image = outLayer.toImage();
+		MapPanel map = new MapPanel(image, TestGUI.scale);
+		layeredPane.add(map);
+		map.setBounds(TestGUI.mapStartX, TestGUI.mapStartY, 2000, 2000);	
+		map.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+		layeredPane.revalidate();
+		layeredPane.repaint();
+		
 	}
 	
 	// LocolDifference: 
@@ -791,7 +818,7 @@ public class Layer {
 		return outDistances;
 	}
 	
-	// Not finished
+	// This is not the fastest implementation but it works
 	public Layer dijkstra(String outLayerName, int startIndex) {
 		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
 		int startRow = startIndex / nCols;
@@ -1036,6 +1063,87 @@ public class Layer {
 	}
 	
 	// Learning visualizations
+	public void localSumLearningTest(
+			Layer inLayer, String outLayerName, 
+			int scale, double visitValue,
+			String path, JLayeredPane layeredPane) throws InterruptedException {
+//		JFrame appFrame = new JFrame();
+//		Dimension dimension = new Dimension(800, 500);
+//		appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		TestGUI.getMapStartX();
+		TestGUI.getMapStartY();
+		
+		Layer outLayer = new Layer(outLayerName, nRows, nCols, origin, resolution, nullValue);
+		Layer sumLayer = localSum(inLayer, outLayerName);
+		
+		String fileName = getFileName(path);
+		
+		double maxNum = sumLayer.getMax();
+		double minNum = sumLayer.getMin();
+		
+		if (TestGUI.mPanel != null) {
+			layeredPane.remove(TestGUI.mPanel);
+			layeredPane.revalidate();
+			layeredPane.repaint();
+		}
+		
+		BufferedImage image = outLayer.toImage();
+		MapPanel map = new MapPanel(image, scale);
+		layeredPane.add(map);
+		map.setBounds(TestGUI.mapStartX, TestGUI.mapStartY, 2000, 2000);	
+		map.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		layeredPane.revalidate();
+		layeredPane.repaint();
+//		map.setPreferredSize(dimension);
+//		appFrame.pack();
+//		appFrame.setVisible(true);
+		
+		for(int i = 0; i < nRows; i++){
+			for (int j = 0; j < nCols; j++) {
+				// Slow down to visualize animation for smaller layer
+                if (fileName.equals("raster3x4.txt")) {
+                	Thread.sleep(200);
+                }
+                
+				outLayer.values[i][j] = visitValue;
+				
+				layeredPane.remove(map);
+				layeredPane.revalidate();
+				layeredPane.repaint();
+				
+				BufferedImage image2 = outLayer.toImageLearning(maxNum, minNum, visitValue, visitValue - 10000);
+				MapPanel map2 = new MapPanel(image2, scale);
+				layeredPane.add(map2);
+				map2.setBounds(TestGUI.mapStartX, TestGUI.mapStartY, 2000, 2000);	
+				map2.setExtendedState(JFrame.MAXIMIZED_BOTH);
+				layeredPane.revalidate();
+				layeredPane.repaint();
+//				appFrame.setVisible(true);
+				map = map2;
+				
+				outLayer.values[i][j] = values[i][j] + inLayer.values[i][j];
+			}
+		}
+		
+		// Slow down to visualize animation for smaller layer
+        if (fileName.equals("raster3x4.txt")) {
+        	Thread.sleep(200);
+        }
+
+		layeredPane.remove(TestGUI.mPanel);
+		layeredPane.revalidate();
+		layeredPane.repaint();
+        
+		BufferedImage image2 = outLayer.toImageLearning(maxNum, minNum, visitValue, visitValue - 10000);
+		MapPanel map2 = new MapPanel(image2, scale);
+		layeredPane.add(map2);
+		map2.setBounds(TestGUI.mapStartX, TestGUI.mapStartY, 2000, 2000);	
+		map2.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		layeredPane.revalidate();
+		layeredPane.repaint();
+//		appFrame.setVisible(true);
+//		map = map2;
+	}
 	
 	public void localSumLearning(Layer inLayer, String outLayerName, int scale, double visitValue, String path) throws InterruptedException {
 		JFrame appFrame = new JFrame();
