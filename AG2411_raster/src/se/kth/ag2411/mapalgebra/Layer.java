@@ -362,18 +362,18 @@ public class Layer {
 		TestGUI.getMapStartY();
 		
 		if (TestGUI.mPanel != null) {
-			layeredPane.remove(TestGUI.mPanel);
-			layeredPane.revalidate();
-			layeredPane.repaint();
+			TestGUI.layeredPane.remove(TestGUI.mPanel);
+			TestGUI.layeredPane.revalidate();
+			TestGUI.layeredPane.repaint();
 		}
 		BufferedImage image = outLayer.toImage();
 		MapPanel map = new MapPanel(image, TestGUI.scale);
-		layeredPane.add(map);
+		TestGUI.layeredPane.add(map);
 		map.setBounds(TestGUI.mapStartX, TestGUI.mapStartY, 2000, 2000);	
 		map.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-		layeredPane.revalidate();
-		layeredPane.repaint();
+		TestGUI.layeredPane.revalidate();
+		TestGUI.layeredPane.repaint();
 		
 	}
 	
