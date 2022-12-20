@@ -108,6 +108,7 @@ public class Layer {
 		this.nullValue = nullValue;
 		values = new double[nRows][nCols];
 		prev = new int[nRows][nCols];
+		pathValue = nullValue;
 			// to be continued...
 	}
 	
@@ -250,9 +251,16 @@ public class Layer {
 		minColor[2] = 255;
 		
 		int[] noValueColor = new int[3];
-		noValueColor[0] = 0;
-		noValueColor[1] = 0;
-		noValueColor[1] = 0;
+		if(color.equals(new Color(255, 255, 0))) {
+			noValueColor[0] = 0;
+			noValueColor[1] = 0;
+			noValueColor[1] = 0;
+		}
+		else {
+			noValueColor[0] = TestGUI.highlightColor.getRed();
+			noValueColor[1] = TestGUI.highlightColor.getGreen();
+			noValueColor[2] = TestGUI.highlightColor.getBlue();
+		}
 		
 		int[] pathColor = new int[3];
 		pathColor[0] = 255 - maxColor[0];

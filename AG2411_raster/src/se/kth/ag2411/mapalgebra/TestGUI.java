@@ -77,6 +77,7 @@ public class TestGUI extends JFrame {
 	public String[] pixel_select = {"   ","   ","   ","   ",};
 	
 	public static JLayeredPane layeredPane = new JLayeredPane();
+	public static JLabel lblLocationChoice;
 	
 	// For coloring other windows
 	public static Color mainColor2;
@@ -280,6 +281,14 @@ public class TestGUI extends JFrame {
 						}
 					});
 		panelMAP.add(layeredPane, "name_927277592538900");
+		
+		lblLocationChoice = new JLabel("New label");
+		lblLocationChoice.setBackground(new Color(255, 255, 255));
+		lblLocationChoice.setBounds(12, 12, 293, 34);
+		layeredPane.add(lblLocationChoice);
+		lblLocationChoice.setForeground(new Color(0, 0, 0));
+		lblLocationChoice.setFont(new Font("Dialog", Font.BOLD, 26));
+		lblLocationChoice.setVisible(false);
 		
 		// Defining the pop-up menu on right click
 		final JPopupMenu popupMenuRC = new JPopupMenu();
@@ -681,6 +690,8 @@ public class TestGUI extends JFrame {
 			mntmExport.setFont(new Font(mainFont, Font.PLAIN, 12));
 			mnFile.add(mntmExport);
 			
+			
+			
 			JButton btnGetLearnt = new JButton("GET LEARNT");
 			btnGetLearnt.addMouseListener(new MouseAdapter() {
 				@Override
@@ -931,6 +942,36 @@ public class TestGUI extends JFrame {
 
 							//visualization
 							selectedIDLabel.setText(pixel_select[1]);//id
+							
+							// x and y have to be flipped for some reason, Viva is not available to answer questions about her code
+							if (DijkstraWindow.choosingOrigin) {
+								DijkstraWindow.originX = y;
+								DijkstraWindow.textFieldOriginX.setText(Integer.toString(y));
+								
+								DijkstraWindow.originY = x;
+								DijkstraWindow.textFieldOriginY.setText(Integer.toString(x));
+								DijkstraWindow.newWindow.setVisible(true);
+								
+								lblLocationChoice.setVisible(false);
+								DijkstraWindow.choosingOrigin = false;
+							} 
+							else if (DijkstraWindow.choosingDestination) {
+								DijkstraWindow.destinationX = y;
+								DijkstraWindow.textFieldDestinationX.setText(Integer.toString(y));
+								
+								DijkstraWindow.destinationY = x;
+								DijkstraWindow.textFieldDestinationY.setText(Integer.toString(x));
+								DijkstraWindow.newWindow.setVisible(true);
+								
+								lblLocationChoice.setVisible(false);
+								DijkstraWindow.choosingDestination = false;
+							}
+//							else if (DistanceWindow.choosingOrigin) {
+//								
+//							}
+//							else if (DistanceWindow.choosingDestination) {
+//								
+//							}
 						}
 					}
 				}

@@ -29,13 +29,13 @@ import javax.swing.JButton;
 
 public class DijkstraWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private JFrame newWindow;
+	public static JFrame newWindow;
 	public String inputFile;
 	public String inputAlgorithm;
-	private JTextField textFieldOriginX;
-	private JTextField textFieldOriginY;
-	private JTextField textFieldDestinationX;
-	private JTextField textFieldDestinationY;
+	public static JTextField textFieldOriginX;
+	public static JTextField textFieldOriginY;
+	public static JTextField textFieldDestinationX;
+	public static JTextField textFieldDestinationY;
 
 	public String outputFileName;
 	public String fileName;
@@ -49,6 +49,10 @@ public class DijkstraWindow extends JFrame {
 	public static int destinationY;
 	public static int destination;
 	private JTextField textFieldOutput;
+	
+	public static boolean isVisible;
+	public static boolean choosingOrigin;
+	public static boolean choosingDestination;
 	
 	// Launch the application
 		public static void main() {
@@ -67,7 +71,7 @@ public class DijkstraWindow extends JFrame {
 		public DijkstraWindow() {
 			newWindow = new JFrame();
 			newWindow.setTitle("Shortest Path");
-			newWindow.setBounds(400, 100, 386, 468);
+			newWindow.setBounds(400, 100, 386, 426);
 
 			JPanel panel = new JPanel();
 			panel.setLayout(null);
@@ -80,7 +84,7 @@ public class DijkstraWindow extends JFrame {
 			panel.add(lblInputFile);
 			
 			JComboBox<String> comboBoxLayer = new JComboBox<String>();
-			comboBoxLayer.setBounds(60, 50, 250, 23);
+			comboBoxLayer.setBounds(60, 50, 266, 23);
 			panel.add(comboBoxLayer);
 			
 			for (int i = 0; i < TestGUI.layerList.size(); i++) {
@@ -99,7 +103,7 @@ public class DijkstraWindow extends JFrame {
 			});
 			
 			JComboBox<String> comboBoxAlgorithm = new JComboBox<String>();
-			comboBoxAlgorithm.setBounds(60, 248, 250, 23);
+			comboBoxAlgorithm.setBounds(60, 248, 266, 23);
 			comboBoxAlgorithm.addItem("Dijkstra");
 			panel.add(comboBoxAlgorithm);
 			
@@ -130,7 +134,7 @@ public class DijkstraWindow extends JFrame {
 			
 			JLabel lblOriginY = new JLabel("Y:");
 			lblOriginY.setFont(new Font("Dialog", Font.PLAIN, 14));
-			lblOriginY.setBounds(148, 116, 18, 23);
+			lblOriginY.setBounds(129, 116, 18, 23);
 			panel.add(lblOriginY);
 			
 			textFieldOriginX = new JTextField();
@@ -142,7 +146,7 @@ public class DijkstraWindow extends JFrame {
 					}
 				}
 			});
-			textFieldOriginX.setBounds(89, 120, 49, 19);
+			textFieldOriginX.setBounds(83, 120, 30, 19);
 			panel.add(textFieldOriginX);
 			textFieldOriginX.setColumns(10);
 			
@@ -156,7 +160,7 @@ public class DijkstraWindow extends JFrame {
 				}
 			});
 			textFieldOriginY.setColumns(10);
-			textFieldOriginY.setBounds(172, 120, 49, 19);
+			textFieldOriginY.setBounds(157, 120, 30, 19);
 			panel.add(textFieldOriginY);
 			
 			JLabel lblDestinationX = new JLabel("X:");
@@ -174,12 +178,12 @@ public class DijkstraWindow extends JFrame {
 				}
 			});
 			textFieldDestinationX.setColumns(10);
-			textFieldDestinationX.setBounds(89, 186, 49, 19);
+			textFieldDestinationX.setBounds(83, 186, 30, 19);
 			panel.add(textFieldDestinationX);
 			
 			JLabel lblDestinationY = new JLabel("Y:");
 			lblDestinationY.setFont(new Font("Dialog", Font.PLAIN, 14));
-			lblDestinationY.setBounds(148, 182, 18, 23);
+			lblDestinationY.setBounds(129, 182, 18, 23);
 			panel.add(lblDestinationY);
 			
 			textFieldDestinationY = new JTextField();
@@ -192,7 +196,7 @@ public class DijkstraWindow extends JFrame {
 				}
 			});
 			textFieldDestinationY.setColumns(10);
-			textFieldDestinationY.setBounds(172, 186, 49, 19);
+			textFieldDestinationY.setBounds(157, 186, 30, 19);
 			panel.add(textFieldDestinationY);
 			
 			JLabel lblAlgorithm = new JLabel("Choose algorithm:");
@@ -201,13 +205,42 @@ public class DijkstraWindow extends JFrame {
 			panel.add(lblAlgorithm);
 			
 			JButton btnOriginPick = new JButton("PICK FROM MAP");
+			btnOriginPick.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (TestGUI.mPanel == null) {
+						JOptionPane.showMessageDialog(new JFrame(),"Error: No layer to choose origin from.");
+						return;
+					}
+					TestGUI.lblLocationChoice.setText("Choose origin:");
+					TestGUI.lblLocationChoice.setVisible(true);
+					choosingOrigin = true;
+					newWindow.setVisible(false);
+				}
+			});
+			btnOriginPick.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+			});
 			btnOriginPick.setFont(new Font("Dialog", Font.BOLD, 12));
-			btnOriginPick.setBounds(231, 117, 138, 23);
+			btnOriginPick.setBounds(197, 117, 129, 23);
 			panel.add(btnOriginPick);
 			
 			JButton btnDestinationPick = new JButton("PICK FROM MAP");
+			btnDestinationPick.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (TestGUI.mPanel == null) {
+						JOptionPane.showMessageDialog(new JFrame(),"Error: No layer to choose origin from.");
+						return;
+					}
+					TestGUI.lblLocationChoice.setText("Choose destination:");
+					TestGUI.lblLocationChoice.setVisible(true);
+					choosingDestination = true;
+					newWindow.setVisible(false);
+				}
+			});
 			btnDestinationPick.setFont(new Font("Dialog", Font.BOLD, 12));
-			btnDestinationPick.setBounds(231, 185, 138, 23);
+			btnDestinationPick.setBounds(197, 183, 129, 23);
 			panel.add(btnDestinationPick);
 			
 			JLabel lblOutput = new JLabel("Output file name and location:");
@@ -217,7 +250,7 @@ public class DijkstraWindow extends JFrame {
 			
 			textFieldOutput = new JTextField();
 			textFieldOutput.setColumns(10);
-			textFieldOutput.setBounds(60, 305, 146, 23);
+			textFieldOutput.setBounds(60, 305, 168, 23);
 			panel.add(textFieldOutput);
 			
 			JButton btnOutputFile = new JButton("Browse");
@@ -255,7 +288,7 @@ public class DijkstraWindow extends JFrame {
 					}				
 				}
 			});
-			btnOutputFile.setBounds(222, 305, 88, 23);
+			btnOutputFile.setBounds(238, 305, 88, 23);
 			panel.add(btnOutputFile);
 			
 			JButton btnRun = new JButton("RUN");
@@ -305,7 +338,7 @@ public class DijkstraWindow extends JFrame {
 				}
 			});
 			btnRun.setFont(new Font("Dialog", Font.BOLD, 12));
-			btnRun.setBounds(280, 373, 88, 23);
+			btnRun.setBounds(274, 356, 88, 23);
 			panel.add(btnRun);
 			
 			JButton btnCancel = new JButton("CANCEL");
@@ -316,7 +349,7 @@ public class DijkstraWindow extends JFrame {
 				}
 			});
 			btnCancel.setFont(new Font("Dialog", Font.BOLD, 12));
-			btnCancel.setBounds(182, 373, 88, 23);
+			btnCancel.setBounds(176, 356, 88, 23);
 			panel.add(btnCancel);
 			
 			

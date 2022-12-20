@@ -133,7 +133,15 @@ public class ColorWindow extends JFrame {
 					int recolorIndex = comboBoxLayer.getSelectedIndex();
 					TestGUI.imageList.remove(recolorIndex);
 					Layer recolorLayer = TestGUI.layerList.get(recolorIndex);
-					BufferedImage outputImage = recolorLayer.toImage(hmColor.get(inputColor));
+					
+					BufferedImage outputImage;
+					if (inputColor.equals("Grayscale")) {
+						outputImage = recolorLayer.toImage();
+					}
+					else {
+						outputImage = recolorLayer.toImage(hmColor.get(inputColor));
+					}
+					
 					TestGUI.imageList.add(recolorIndex, outputImage);
 					
 					TestGUI.chosenIndex = 0;
