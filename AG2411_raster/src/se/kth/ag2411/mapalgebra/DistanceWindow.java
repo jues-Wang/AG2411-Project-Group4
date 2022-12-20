@@ -27,7 +27,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 
-public class DijkstraWindow extends JFrame {
+public class DistanceWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 	public static JFrame newWindow;
 	public String inputFile;
@@ -48,18 +48,18 @@ public class DijkstraWindow extends JFrame {
 	public static int destinationX;
 	public static int destinationY;
 	public static int destination;
-	private JTextField textFieldOutput;
+	private JTextField textFieldManhattan;
 	
-	public static boolean isVisible;
 	public static boolean choosingOrigin;
 	public static boolean choosingDestination;
+	private JTextField textFieldEuclidean;
 	
 	// Launch the application
 		public static void main() {
 			EventQueue.invokeLater(new Runnable() {
 				public void run() {
 					try {
-						DijkstraWindow window = new DijkstraWindow();
+						DistanceWindow window = new DistanceWindow();
 						window.newWindow.setVisible(true);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -68,9 +68,9 @@ public class DijkstraWindow extends JFrame {
 			});
 		}
 		
-		public DijkstraWindow() {
+		public DistanceWindow() {
 			newWindow = new JFrame();
-			newWindow.setTitle("Shortest Path");
+			newWindow.setTitle("Distance");
 			newWindow.setBounds(400, 100, 386, 426);
 
 			JPanel panel = new JPanel();
@@ -101,21 +101,6 @@ public class DijkstraWindow extends JFrame {
 					inputFile = (String) comboBoxLayer.getSelectedItem();
 				}			
 			});
-			
-			JComboBox<String> comboBoxAlgorithm = new JComboBox<String>();
-			comboBoxAlgorithm.setBounds(60, 248, 266, 23);
-			comboBoxAlgorithm.addItem("Dijkstra");
-			panel.add(comboBoxAlgorithm);
-			
-			comboBoxAlgorithm.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-					inputAlgorithm = (String) comboBoxAlgorithm.getSelectedItem();
-				}			
-			});
-			
-			inputAlgorithm = comboBoxAlgorithm.getItemAt(0);
 			
 			JLabel lblOrigin = new JLabel("Choose origin (x, y):");
 			lblOrigin.setFont(new Font("Dialog", Font.PLAIN, 14));
@@ -199,10 +184,10 @@ public class DijkstraWindow extends JFrame {
 			textFieldDestinationY.setBounds(157, 186, 30, 19);
 			panel.add(textFieldDestinationY);
 			
-			JLabel lblAlgorithm = new JLabel("Choose algorithm:");
-			lblAlgorithm.setFont(new Font("Dialog", Font.PLAIN, 14));
-			lblAlgorithm.setBounds(60, 215, 250, 23);
-			panel.add(lblAlgorithm);
+			JLabel lblEuclidean = new JLabel("Euclidean distance:");
+			lblEuclidean.setFont(new Font("Dialog", Font.PLAIN, 14));
+			lblEuclidean.setBounds(60, 215, 250, 23);
+			panel.add(lblEuclidean);
 			
 			JButton btnOriginPick = new JButton("PICK FROM MAP");
 			btnOriginPick.addActionListener(new ActionListener() {
@@ -243,53 +228,15 @@ public class DijkstraWindow extends JFrame {
 			btnDestinationPick.setBounds(197, 183, 129, 23);
 			panel.add(btnDestinationPick);
 			
-			JLabel lblOutput = new JLabel("Output file name and location:");
-			lblOutput.setFont(new Font("Dialog", Font.PLAIN, 14));
-			lblOutput.setBounds(60, 281, 239, 14);
-			panel.add(lblOutput);
+			JLabel lblManhattan = new JLabel("Manhattan distance:");
+			lblManhattan.setFont(new Font("Dialog", Font.PLAIN, 14));
+			lblManhattan.setBounds(60, 281, 239, 14);
+			panel.add(lblManhattan);
 			
-			textFieldOutput = new JTextField();
-			textFieldOutput.setColumns(10);
-			textFieldOutput.setBounds(60, 305, 168, 23);
-			panel.add(textFieldOutput);
-			
-			JButton btnOutputFile = new JButton("Browse");
-			final JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setAcceptAllFileFilterUsed(false);
-			fileChooser.setCurrentDirectory(new File("."));
-			fileChooser.addChoosableFileFilter(new FileFilter() {
-				public String getDescription() {
-					return "ASCII (*.txt)";
-				}
-				public boolean accept(File f) {
-					if (f.isDirectory()) {
-
-						return true;
-					} else {
-						return f.getName().toLowerCase().endsWith(".txt");
-					}
-				}
-			});
-			btnOutputFile.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {		
-					int result = fileChooser.showSaveDialog(DijkstraWindow.this);
-					if (result == JFileChooser.APPROVE_OPTION) {					
-						outputFileName=fileChooser.getSelectedFile().getPath();
-						
-						fileName=fileChooser.getSelectedFile().getName();
-						outLayerName = fileName;
-						if(fileName.indexOf(".txt")==-1) {
-							outputFileName=outputFileName+".txt";
-							fileName=fileName+".txt";
-						}
-						fileChooser.setVisible(true);
-						textFieldOutput.setText(outputFileName);
-					}				
-				}
-			});
-			btnOutputFile.setBounds(238, 305, 88, 23);
-			panel.add(btnOutputFile);
+			textFieldManhattan = new JTextField();
+			textFieldManhattan.setColumns(10);
+			textFieldManhattan.setBounds(60, 305, 266, 23);
+			panel.add(textFieldManhattan);
 			
 			JButton btnRun = new JButton("RUN");
 			btnRun.addMouseListener(new MouseAdapter() {
@@ -306,35 +253,9 @@ public class DijkstraWindow extends JFrame {
 					origin = originX + originY * selectedLayer.nCols;
 					destination = destinationX + destinationY * selectedLayer.nCols;
 					
-					Layer outputLayer = selectedLayer.dijkstra(outLayerName, origin, destination);
-					
-					BufferedImage outputImage = outputLayer.toImage();
-					
-					TestGUI.layerList.add(outputLayer);
-					TestGUI.imageList.add(outputLayer.toImage());
-					TestGUI.layerNameList.addElement(outLayerName);
-					
-					// Reset map pan changes
-					TestGUI.mapMovedX = 0;
-					TestGUI.mapMovedY = 0;
-					
-					TestGUI.layeredPane.remove(TestGUI.mPanel);
-					
-					TestGUI.getScale(TestGUI.aboveLayer);
-					TestGUI.mPanel = new MapPanel(outputImage, TestGUI.scale);
-					
-					TestGUI.getMapStartX();
-					TestGUI.getMapStartY();
-					TestGUI.mPanel.setBounds(TestGUI.mapStartX, TestGUI.mapStartY, 2000, 2000);	
-					TestGUI.mPanel.setExtendedState(JFrame.MAXIMIZED_BOTH);
-					
-					TestGUI.layeredPane.add(TestGUI.mPanel);
-					TestGUI.layeredPane.revalidate();
-					TestGUI.layeredPane.repaint();
-
-					outputLayer.save(outputFileName);
-					
-					newWindow.dispose();
+					double[] distances = selectedLayer.getDistance(origin, destination);
+					textFieldEuclidean.setText(Double.toString(distances[0]));
+					textFieldManhattan.setText(Double.toString(distances[1]));
 				}
 			});
 			btnRun.setFont(new Font("Dialog", Font.BOLD, 12));
@@ -352,6 +273,9 @@ public class DijkstraWindow extends JFrame {
 			btnCancel.setBounds(176, 356, 88, 23);
 			panel.add(btnCancel);
 			
-			
+			textFieldEuclidean = new JTextField();
+			textFieldEuclidean.setColumns(10);
+			textFieldEuclidean.setBounds(60, 248, 266, 23);
+			panel.add(textFieldEuclidean);
 		}
 }

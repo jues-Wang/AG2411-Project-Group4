@@ -526,12 +526,7 @@ public class TestGUI extends JFrame {
 			mnToolbox.add(mnDistance);
 			mnDistance.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(
-					app,
-					"Unfortunately, this window is still a work in progress. \nTry the local, focal or zonal operations instead!",
-					"SORRY",
-					JOptionPane.OK_OPTION
-					);
+					DistanceWindow.main();
 				}
 			});
 			
@@ -541,13 +536,7 @@ public class TestGUI extends JFrame {
 			mnToolbox.add(mnShortestPath);
 			mnShortestPath.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-//					JOptionPane.showMessageDialog(
-//					app,
-//					"Unfortunately, this window is still a work in progress. \nTry the local, focal or zonal operations instead!",
-//					"SORRY",
-//					JOptionPane.OK_OPTION
-//					);
-					DijkstraWindow.main();
+					ShortestPathWindow.main();
 				}
 			});
 
@@ -944,34 +933,50 @@ public class TestGUI extends JFrame {
 							selectedIDLabel.setText(pixel_select[1]);//id
 							
 							// x and y have to be flipped for some reason, Viva is not available to answer questions about her code
-							if (DijkstraWindow.choosingOrigin) {
-								DijkstraWindow.originX = y;
-								DijkstraWindow.textFieldOriginX.setText(Integer.toString(y));
+							if (ShortestPathWindow.choosingOrigin) {
+								ShortestPathWindow.originX = y;
+								ShortestPathWindow.textFieldOriginX.setText(Integer.toString(y));
 								
-								DijkstraWindow.originY = x;
-								DijkstraWindow.textFieldOriginY.setText(Integer.toString(x));
-								DijkstraWindow.newWindow.setVisible(true);
+								ShortestPathWindow.originY = x;
+								ShortestPathWindow.textFieldOriginY.setText(Integer.toString(x));
+								ShortestPathWindow.newWindow.setVisible(true);
 								
 								lblLocationChoice.setVisible(false);
-								DijkstraWindow.choosingOrigin = false;
+								ShortestPathWindow.choosingOrigin = false;
 							} 
-							else if (DijkstraWindow.choosingDestination) {
-								DijkstraWindow.destinationX = y;
-								DijkstraWindow.textFieldDestinationX.setText(Integer.toString(y));
+							else if (ShortestPathWindow.choosingDestination) {
+								ShortestPathWindow.destinationX = y;
+								ShortestPathWindow.textFieldDestinationX.setText(Integer.toString(y));
 								
-								DijkstraWindow.destinationY = x;
-								DijkstraWindow.textFieldDestinationY.setText(Integer.toString(x));
-								DijkstraWindow.newWindow.setVisible(true);
+								ShortestPathWindow.destinationY = x;
+								ShortestPathWindow.textFieldDestinationY.setText(Integer.toString(x));
+								ShortestPathWindow.newWindow.setVisible(true);
 								
 								lblLocationChoice.setVisible(false);
-								DijkstraWindow.choosingDestination = false;
+								ShortestPathWindow.choosingDestination = false;
 							}
-//							else if (DistanceWindow.choosingOrigin) {
-//								
-//							}
-//							else if (DistanceWindow.choosingDestination) {
-//								
-//							}
+							else if (DistanceWindow.choosingOrigin) {
+								DistanceWindow.originX = y;
+								DistanceWindow.textFieldOriginX.setText(Integer.toString(y));
+								
+								DistanceWindow.originY = x;
+								DistanceWindow.textFieldOriginY.setText(Integer.toString(x));
+								DistanceWindow.newWindow.setVisible(true);
+								
+								lblLocationChoice.setVisible(false);
+								DistanceWindow.choosingOrigin = false;
+							}
+							else if (DistanceWindow.choosingDestination) {
+								DistanceWindow.destinationX = y;
+								DistanceWindow.textFieldDestinationX.setText(Integer.toString(y));
+								
+								DistanceWindow.destinationY = x;
+								DistanceWindow.textFieldDestinationY.setText(Integer.toString(x));
+								DistanceWindow.newWindow.setVisible(true);
+								
+								lblLocationChoice.setVisible(false);
+								DistanceWindow.choosingDestination = false;
+							}
 						}
 					}
 				}
