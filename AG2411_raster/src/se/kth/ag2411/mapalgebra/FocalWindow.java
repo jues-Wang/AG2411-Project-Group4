@@ -203,7 +203,6 @@ public class FocalWindow extends JFrame {
 				String text = txtRadius.getText();
 				if(!text.equals("")) {
 					radius = Integer.parseInt(text);
-					System.out.println(radius);
 				}
 			}
 		});
