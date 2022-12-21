@@ -165,17 +165,17 @@ public class Layer {
 		WritableRaster raster = image.getRaster();
 		double maxNum = this.getMax();
 		double minNum = this.getMin();
-		double range = maxNum - minNum;
+		double range = maxNum - minNum; // (255, 208, 47); (223, 81, 79);
 		
 		int[] noValueColor = new int[3];
-		noValueColor[0] = TestGUI.highlightColor.getRed();
-		noValueColor[1] = TestGUI.highlightColor.getGreen();
-		noValueColor[2] = TestGUI.highlightColor.getBlue();
+		noValueColor[0] = 255; // TestGUI.highlightColor.getRed();
+		noValueColor[1] = 208; // TestGUI.highlightColor.getGreen();
+		noValueColor[2] = 47; // TestGUI.highlightColor.getBlue();
 		
 		int[] pathColor = new int[3];
-		pathColor[0] = TestGUI.crazyColor.getRed();
-		pathColor[1] = TestGUI.crazyColor.getGreen();
-		pathColor[2] = TestGUI.crazyColor.getBlue();
+		pathColor[0] = 223; // TestGUI.crazyColor.getRed();
+		pathColor[1] = 81; // TestGUI.crazyColor.getGreen();
+		pathColor[2] = 79; // TestGUI.crazyColor.getBlue();
 		
 		
 		for (int i = 0; i < nRows; i++) {

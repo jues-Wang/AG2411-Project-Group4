@@ -10,9 +10,9 @@ import javax.swing.JFrame;
 public class ProjectTest {
 	public static void main(String[] args) throws InterruptedException {
 		// Local animation
-		Layer layer = new Layer("", "elevation.txt");
-		Layer inLayer = new Layer("", "elevation.txt");
-		layer.localSumLearning(inLayer, "", 3, -10000, "rr3x4.txt");
+//		Layer layer = new Layer("", "elevation.txt");
+//		Layer inLayer = new Layer("", "elevation.txt");
+//		layer.localSumLearning(inLayer, "", 3, -10000, "rr3x4.txt");
 		
 		// Focal animation
 //		Layer layer = new Layer("", "elevation.txt");
