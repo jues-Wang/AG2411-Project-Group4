@@ -205,6 +205,12 @@ public class GetLearntWindow extends JFrame{
 		btnZonal.setBackground(crazyColor);
 		panel.add(btnZonal);
 		
+		JLabel lblWIP = new JLabel("Work in Progress");
+		lblWIP.setForeground(new Color(255, 255, 255));
+		lblWIP.setFont(new Font("Tahoma", Font.BOLD, 35));
+		lblWIP.setBounds(330, 223, 373, 96);
+		panel.add(lblWIP);
+		
 		// Event handlers
 		btnLocal.addMouseListener(new MouseAdapter() {
 			@Override
@@ -365,16 +371,16 @@ public class GetLearntWindow extends JFrame{
 		btnLocalRun.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int layer1Index = comboBoxInput1.getSelectedIndex();
-				Layer layer1 = TestGUI.layerList.get(layer1Index);
-
-				int layer2Index = comboBoxInput2.getSelectedIndex();
-				Layer layer2 = TestGUI.layerList.get(layer2Index);
-				
-				TestGUI.getScale(layer2);
-				
-				newWindow.setVisible(false);
-				
+//				int layer1Index = comboBoxInput1.getSelectedIndex();
+//				Layer layer1 = TestGUI.layerList.get(layer1Index);
+//
+//				int layer2Index = comboBoxInput2.getSelectedIndex();
+//				Layer layer2 = TestGUI.layerList.get(layer2Index);
+//				
+//				TestGUI.getScale(layer2);
+//				
+//				newWindow.setVisible(false);
+//				
 //				try {
 //					layer1.localSumLearningTest(
 //							layer2, "",
@@ -384,10 +390,10 @@ public class GetLearntWindow extends JFrame{
 //					// TODO Auto-generated catch block
 //					e1.printStackTrace();
 //				}
-				
+//				
 //				layer1.localSumTest(layer2, "", TestGUI.layeredPane);
-				
-				newWindow.dispose();
+//				
+//				newWindow.dispose();
 			}
 		});
 		
