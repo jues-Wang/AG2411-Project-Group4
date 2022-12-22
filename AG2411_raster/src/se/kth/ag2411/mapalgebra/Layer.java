@@ -1113,8 +1113,8 @@ public class Layer {
 				outLayer.values[i][j] = visitValue;
 				
 				layeredPane.remove(map);
-				layeredPane.revalidate();
-				layeredPane.repaint();
+//				layeredPane.revalidate();
+//				layeredPane.repaint();
 				map = null;
 				
 				BufferedImage image2 = outLayer.toImageLearning(maxNum, minNum, visitValue, visitValue - 10000);
@@ -1122,8 +1122,8 @@ public class Layer {
 				layeredPane.add(map2);
 				map2.setBounds(TestGUI.mapStartX, TestGUI.mapStartY, 2000, 2000);	
 				map2.setExtendedState(JFrame.MAXIMIZED_BOTH);
-				layeredPane.revalidate();
-				layeredPane.repaint();
+//				layeredPane.revalidate();
+//				layeredPane.repaint();
 //				appFrame.setVisible(true);
 				map = map2;
 				
