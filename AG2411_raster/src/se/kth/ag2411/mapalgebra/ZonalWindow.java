@@ -231,7 +231,7 @@ public class ZonalWindow extends JFrame {
 
 		cbStatisticType.addItem("SUM");
 		cbStatisticType.addItem("VARIETY");
-		cbStatisticType.addItem("PRODUCT");
+//		cbStatisticType.addItem("PRODUCT"); // Does not work properly
 		cbStatisticType.addItem("MEAN");
 		cbStatisticType.addItem("MIN");
 		cbStatisticType.addItem("MAX");
@@ -242,7 +242,6 @@ public class ZonalWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {			
 				statisticType = (String) cbStatisticType.getSelectedItem();
-				System.out.println(statisticType);
 			}			
 		});
 

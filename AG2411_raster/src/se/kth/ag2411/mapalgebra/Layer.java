@@ -434,6 +434,7 @@ public class Layer {
 		return outLayer;
 	}
 	
+	// DOES NOT WORK
 	// FocalProduct:
 	// Create a new Layer in which the value of each pixel is the product of 
 	// its neighborhood in this Layer. The radius and shape of neighborhood
@@ -464,6 +465,7 @@ public class Layer {
 		return outLayer;
 	}
 	
+	// DOES NOT WORK
 	// FocalRanking:
 	// Create a new Layer in which the value of each pixel is its rank in
 	// its neighborhood in this Layer. The radius and shape of neighborhood
@@ -713,6 +715,7 @@ public class Layer {
 		return outLayer;
 	}
 	
+	// DOES NOT WORK
 	// ZonalProduct
 	// Create a new Layer in which the value of each pixel is the product of 
 	// its zone in this Layer. 

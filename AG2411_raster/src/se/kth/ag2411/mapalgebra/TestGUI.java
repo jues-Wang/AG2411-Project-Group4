@@ -195,7 +195,7 @@ public class TestGUI extends JFrame {
 		
 		// Create the frame.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 500);
+//		setBounds(100, 100, 900, 500); // For working in the window builder
 		// spinners in bottom panel
 		JSpinner zoomSpinner = new JSpinner(); // for %
 		JSpinner scaleSpinner = new JSpinner(); //for scale
@@ -261,25 +261,25 @@ public class TestGUI extends JFrame {
 		splitPane.setRightComponent(panelMAP);
 		panelMAP.setLayout(new CardLayout(0, 0));
 		// Panning the map around
-					layeredPane.addMouseListener(new MouseAdapter() {
-						@Override
-						public void mousePressed(MouseEvent e) {
-							dx = e.getX() - mPanel.getLocation().x;
-							dy = e.getY() - mPanel.getLocation().y;
-						}
-					});
-					layeredPane.addMouseMotionListener(new MouseMotionAdapter() {
-						@Override
-						public void mouseDragged(MouseEvent e) {
-							int mouseX = e.getX();
-							int mouseY = e.getY();
-							mPanel.setLocation(mouseX - dx, mouseY - dy);
-							
-							// Keep track of map displacement for zooming purposes
-							mapMovedX = mapStartX - mPanel.getLocation().x;
-							mapMovedY = mapStartY - mPanel.getLocation().y;
-						}
-					});
+		layeredPane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				dx = e.getX() - mPanel.getLocation().x;
+				dy = e.getY() - mPanel.getLocation().y;
+			}
+		});
+		layeredPane.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				int mouseX = e.getX();
+				int mouseY = e.getY();
+				mPanel.setLocation(mouseX - dx, mouseY - dy);
+
+				// Keep track of map displacement for zooming purposes
+				mapMovedX = mapStartX - mPanel.getLocation().x;
+				mapMovedY = mapStartY - mPanel.getLocation().y;
+			}
+		});
 		panelMAP.add(layeredPane, "name_927277592538900");
 		
 		lblLocationChoice = new JLabel("New label");
