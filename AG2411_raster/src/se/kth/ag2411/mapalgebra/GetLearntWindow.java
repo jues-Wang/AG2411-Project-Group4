@@ -370,7 +370,7 @@ public class GetLearntWindow extends JFrame{
 		// Local
 		btnLocalRun.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) { // Does not work, do not know why
 //				int layer1Index = comboBoxInput1.getSelectedIndex();
 //				Layer layer1 = TestGUI.layerList.get(layer1Index);
 //

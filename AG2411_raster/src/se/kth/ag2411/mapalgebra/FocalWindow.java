@@ -252,7 +252,7 @@ public class FocalWindow extends JFrame {
 		cbStatisticType.addItem("SUM");
 		cbStatisticType.addItem("VARIETY");
 		cbStatisticType.addItem("PRODUCT");
-		cbStatisticType.addItem("RANKING");
+//		cbStatisticType.addItem("RANKING"); // Does not work properly
 				
 		statisticType=(String) cbStatisticType.getItemAt(0); 
 
