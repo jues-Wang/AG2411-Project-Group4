@@ -191,7 +191,10 @@ public class TestGUI extends JFrame {
 	
 	public TestGUI() {
 		setTitle("My Little FunGIS");
-		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\AG2411\\AG2411-Project-Group4\\AG2411_raster\\media\\logo-04.png"));
+		java.net.URL imgURL = getClass().getResource("/resources/logo-04.png");
+		ImageIcon icon = new ImageIcon(imgURL, "");
+		setIconImage(icon.getImage());
+//		setIconImage(Toolkit.getDefaultToolkit().getImage(".\\media\\logo-04.png"));
 		
 		// Create the frame.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -565,7 +568,8 @@ public class TestGUI extends JFrame {
 			
 			// HELP = MANUAL
 			JMenu mnHelp = new JMenu("Help");
-			mnHelp.setIcon(new ImageIcon(".\\media\\icon-06.png"));
+			imgURL = getClass().getResource("/resources/icon-06.png");
+			mnHelp.setIcon(new ImageIcon(imgURL, ""));
 			mnHelp.setForeground(highlightColor);
 			mnHelp.setFont(new Font(mainFont, Font.PLAIN, 14));
 			mnHelp.setBorder(new LineBorder(highlightColor, 1, true));
@@ -821,7 +825,9 @@ public class TestGUI extends JFrame {
 			bottomPanel.add(bottomGap3);
 			
 			JLabel txtrValue_1 = new JLabel();
-			txtrValue_1.setIcon(new ImageIcon("C:\\AG2411\\AG2411-Project-Group4\\AG2411_raster\\media\\cursor-06.png"));
+			imgURL = getClass().getResource("/resources/cursor-06.png");
+			icon = new ImageIcon(imgURL, "");
+			txtrValue_1.setIcon(icon);
 			txtrValue_1.setOpaque(false);
 			txtrValue_1.setForeground(new Color(187, 202, 192));
 			bottomPanel.add(txtrValue_1);

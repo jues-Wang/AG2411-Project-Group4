@@ -50,22 +50,26 @@ public class landingPage extends JFrame {
 		panel.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(".\\media\\landing-07.png"));
+		java.net.URL imgURL = getClass().getResource("/resources/landing-07.png");
+		lblNewLabel.setIcon(new ImageIcon(imgURL, ""));
 		lblNewLabel.setBounds(54, 256, 83, 77);
 		panel.add(lblNewLabel);
 
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(".\\media\\landing-10.png"));
+		imgURL = getClass().getResource("/resources/landing-10.png");
+		lblNewLabel_1.setIcon(new ImageIcon(imgURL, ""));
 		lblNewLabel_1.setBounds(253, 245, 83, 77);
 		panel.add(lblNewLabel_1);
 
 		JLabel lblNewLabel_1_1 = new JLabel("");
-		lblNewLabel_1_1.setIcon(new ImageIcon(".\\media\\landing-09.png"));
+		imgURL = getClass().getResource("/resources/landing-09.png");
+		lblNewLabel_1_1.setIcon(new ImageIcon(imgURL, ""));
 		lblNewLabel_1_1.setBounds(0, 242, 83, 77);
 		panel.add(lblNewLabel_1_1);
 
 		JLabel lblNewLabel_1_2_1 = new JLabel("");
-		lblNewLabel_1_2_1.setIcon(new ImageIcon(".\\media\\landing-11.png"));
+		imgURL = getClass().getResource("/resources/landing-11.png");
+		lblNewLabel_1_2_1.setIcon(new ImageIcon(imgURL, ""));
 		lblNewLabel_1_2_1.setBounds(166, 231, 83, 77);
 		panel.add(lblNewLabel_1_2_1);
 
@@ -105,7 +109,8 @@ public class landingPage extends JFrame {
 		JLabel label = new JLabel("");
 		label.setBounds(0, 0, 350, 300);
 		panel.add(label);
-		label.setIcon(new ImageIcon(".\\media\\color2.png"));
+		imgURL = getClass().getResource("/resources/color2.png");
+		label.setIcon(new ImageIcon(imgURL, ""));
 		label.setVerticalAlignment(SwingConstants.TOP);
 
 		Button button = new Button("Get started!");
